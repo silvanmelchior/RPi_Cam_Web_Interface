@@ -1,3 +1,7 @@
+BETA
+====
+
+THIS REPOSITORY IS NOT ACTUAL AND CORRECT YET, THE REAL VERSION IS HERE: http://www.raspberrypi.org/phpBB3/viewtopic.php?f=43&t=63276
 
 RPi_Cam_Browser_Control
 =======================
