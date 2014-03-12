@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RPi Cam Control</title>
+    <script src="script.js"></script>
+  </head>
+  <body onload="setTimeout('init();', 100);">
+    <center>
+      <h1>RPi Cam Control</h1>
+      <div><img id="mjpeg_dest"></div>
+      <input id="video_button" type="button">
+      <input id="image_button" type="button">
+      <input id="md_button" type="button">
+      <input id="halt_button" type="button">
+      <input id="mode_button" type="button">
+      <p><a href="preview.php">Download Videos and Images</a></p>
+      <h2>Settings</h2>
+      <table border=1 width=600>
+        <tr>
+          <td>Sharpness (-100...100), default 0:</td>
+          <td><input type="text" size=4 id="sharpness"><input type="button" value="OK" onclick="send_cmd('sh ' + document.getElementById('sharpness').value)"></td>
+        </tr>
+        <tr>
+          <td>Contrast (-100...100), default 0:</td>
+          <td><input type="text" size=4 id="contrast"><input type="button" value="OK" onclick="send_cmd('co ' + document.getElementById('contrast').value)"></td>
+        </tr>
+        <tr>
+          <td>Brightness (0...100), default 50:</td>
+          <td><input type="text" size=4 id="brightness"><input type="button" value="OK" onclick="send_cmd('br ' + document.getElementById('brightness').value)"></td>
+        </tr>
+        <tr>
+          <td>Saturation (-100...100), default 0:</td>
+          <td><input type="text" size=4 id="saturation"><input type="button" value="OK" onclick="send_cmd('sa ' + document.getElementById('saturation').value)"></td>
+        </tr>
+        <tr>
+          <td>ISO (100...800), default 0:</td>
+          <td><input type="text" size=4 id="iso"><input type="button" value="OK" onclick="send_cmd('is ' + document.getElementById('iso').value)"></td>
+        </tr>
+        <tr>
+          <td>Video Stabilisation</td>
+          <td><input type="button" value="ON" onclick="send_cmd('vs 1')"><input type="button" value="OFF" onclick="send_cmd('vs 0')"></td>
+        </tr>
+        <tr>
+          <td>Exposure Compensation (-10...10), default 0:</td>
+          <td><input type="text" size=4 id="comp"><input type="button" value="OK" onclick="send_cmd('ec ' + document.getElementById('comp').value)"></td>
+        </tr>
+        <tr>
+          <td>Exposure Mode, default 'auto':</td>
+          <td>
+            <select onclick="send_cmd('em ' + this.value)">
+              <option value="auto">Select option...</option>
+              <option value="off">Off</option>
+              <option value="auto">Auto</option>
+              <option value="night">Night</option>
+              <option value="nightpreview">Nightpreview</option>
+              <option value="backlight">Backlight</option>
+              <option value="spotlight">Spotlight</option>
+              <option value="sports">Sports</option>
+              <option value="snow">Snow</option>
+              <option value="beach">Beach</option>
+              <!--<option value="verylong">Verylong</option>--> <!-- crashes cam-module -->
+              <option value="fixedfps">Fixedfps</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>White Balance, default 'auto':</td>
+          <td>
+            <select onclick="send_cmd('wb ' + this.value)">
+              <option value="auto">Select option...</option>
+              <option value="off">Off</option>
+              <option value="auto">Auto</option>
+              <option value="sun">Sun</option>
+              <option value="cloudy">Cloudy</option>
+              <option value="shade">Shade</option>
+              <option value="tungsten">Tungsten</option>
+              <option value="fluorescent">Fluorescent</option>
+              <option value="incandescent">Incandescent</option>
+              <option value="flash">Flash</option>
+              <option value="horizon">Horizon</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Rotation, default 0:</td>
+          <td>
+            <select onclick="send_cmd('ro ' + this.value)">
+              <option value="0">Select option...</option>
+              <option value="0">0</option>
+              <option value="90">90</option>
+              <option value="180">180</option>
+              <option value="270">270</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Image quality (0...100), default 85:</td>
+          <td><input type="text" size=4 id="quality"><input type="button" value="OK" onclick="send_cmd('qu ' + document.getElementById('quality').value)"></td>
+        </tr>
+        <tr>
+          <td>Video bitrate (0...25000000), default 17000000:</td>
+          <td><input type="text" size=10 id="bitrate"><input type="button" value="OK" onclick="send_cmd('bi ' + document.getElementById('bitrate').value)"></td>
+        </tr>
+      </table>
+    </center>
+  </body>
+</html>
