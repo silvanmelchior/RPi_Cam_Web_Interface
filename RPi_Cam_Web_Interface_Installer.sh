@@ -61,7 +61,7 @@ case "$1" in
         echo "Changed autostart"
         ;;
 
-
+  
   autostart_fp)
         sudo cp -r etc/rc_local_fp/rc.local /etc/
         sudo chmod 755 /etc/rc.local
@@ -79,9 +79,9 @@ case "$1" in
         git pull origin master
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
-        sudo rm -rf /var/www
-        sudo cp -r www /var/        
-        sudo mkdir /var/www/media
+        sudo rm /var/www/*
+        sudo cp -r www/* /var/www/
+        sudo mkdir -p /var/www/media
         sudo chown -R www-data:www-data /var/www
         sudo mknod /var/www/FIFO p
         sudo chmod 666 /var/www/FIFO
