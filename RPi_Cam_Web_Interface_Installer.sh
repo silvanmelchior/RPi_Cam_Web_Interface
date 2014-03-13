@@ -64,13 +64,22 @@ case "$1" in
         echo "Changed autostart"
         ;;
 
-  autostart_no)
+  
+  autostart_fp)
+        cd /etc
+        sudo cp -r etc/rc_local_fp/rc.local /etc
+        sudo chmod 755 rc.local
+        echo "Changed autostart"
+        ;;
+
+autostart_no)
         sudo cp -r  etc/rc_local_std/rc.local /etc/
         sudo chmod 755 /etc/rc.local
         echo "Changed autostart"
         ;;
 
   install)
+	sudo killall raspimjpeg
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
 	sudo rm -rf /var/www

@@ -10,12 +10,17 @@
       <div><img id="mjpeg_dest"></div>
       <input id="video_button" type="button">
       <input id="image_button" type="button">
-      <input id="md_button" type="button">
+      <input id="timelapse_button" type="button">
+      <input id="md_button" type="button"><br>
       <input id="halt_button" type="button">
       <input id="mode_button" type="button">
       <p><a href="preview.php">Download Videos and Images</a></p>
       <h2>Settings</h2>
       <table border=1 width=600>
+        <tr>
+          <td>Timelapse-Interval (0.1...3200):</td>
+          <td><input type="text" size=4 id="tl_interval" value="3">s</td>
+        </tr>
         <tr>
           <td>Sharpness (-100...100), default 0:</td>
           <td><input type="text" size=4 id="sharpness"><input type="button" value="OK" onclick="send_cmd('sh ' + document.getElementById('sharpness').value)"></td>
