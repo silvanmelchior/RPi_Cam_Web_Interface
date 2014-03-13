@@ -39,7 +39,7 @@ case "$1" in
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/*
-        sudo rm /usr/local/sbin/raspimjpeg
+        sudo rm /usr/local/bin/raspimjpeg
         sudo cp -r etc/rc_local_std/rc.local /etc/
         sudo chmod 755 /etc/rc.local
 
@@ -75,7 +75,7 @@ case "$1" in
 
 	sudo rm -rf /var/www
 	sudo cp -r www /var/        
-	
+	sudo mkdir /var/www/media	
         sudo chown -R www-data:www-data /var/www
         sudo mknod /var/www/FIFO p
         sudo chmod 666 /var/www/FIFO
