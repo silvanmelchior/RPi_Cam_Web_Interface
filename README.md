@@ -9,7 +9,9 @@ RPi_Cam_Browser_Control
 Raspberry Pi Camera control, feed and motion capture
 
 This code is now designed to sit around a git repository rather than downloads of tarballs.
+
 Wiki page can be found here:
+
 http://elinux.org/RPi-Cam-Web-Interface
 
 Installation
