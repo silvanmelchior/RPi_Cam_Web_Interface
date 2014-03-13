@@ -26,13 +26,10 @@
 # This script installs a browser-interface to control the RPi Cam. It can be run
 # on any Raspberry Pi with a newly installed raspbian and enabled camera-support.
 #
-# Copyright retained by Silvan Melchior but this has been heavily modified to work in a git repository
+# Edited by jfarcher to work with github
+
 case "$1" in
-  update)
-	echo "Current version `cat www/Version.txt`"
-	git pull origin master
-	echo "updated to `cat www/Version.txt`"
-	;;
+
   remove)
         sudo killall raspimjpeg
         sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion
@@ -66,25 +63,25 @@ case "$1" in
 
   
   autostart_fp)
-        cd /etc
-        sudo cp -r etc/rc_local_fp/rc.local /etc
-        sudo chmod 755 rc.local
+        sudo cp -r etc/rc_local_fp/rc.local /etc/
+        sudo chmod 755 /etc/rc.local
         echo "Changed autostart"
         ;;
 
-autostart_no)
+  autostart_no)
         sudo cp -r  etc/rc_local_std/rc.local /etc/
         sudo chmod 755 /etc/rc.local
         echo "Changed autostart"
         ;;
 
   install)
-	sudo killall raspimjpeg
+        sudo killall raspimjpeg
+        git pull origin master
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
-	sudo rm -rf /var/www
-	sudo cp -r www /var/        
-	sudo mkdir /var/www/media	
+        sudo rm /var/www/*
+        sudo cp -r www/* /var/www/
+        sudo mkdir -p /var/www/media
         sudo chown -R www-data:www-data /var/www
         sudo mknod /var/www/FIFO p
         sudo chmod 666 /var/www/FIFO
@@ -100,7 +97,7 @@ autostart_no)
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
 
-	sudo cp -r etc/motion/motion.conf /etc/motion/
+        sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
 
         echo "Installer finished"
@@ -126,7 +123,7 @@ autostart_no)
         shopt -u nullglob
 
         sudo mkdir -p /dev/shm/mjpeg
-        sudo raspimjpeg -w 512 -h 288 -d 1 -q 25 -of /dev/shm/mjpeg/cam.jpg -cf /var/www/FIFO -sf /var/www/status_mjpeg.txt -vf /var/www/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4 -if /var/www/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg -p -ic $image -vc $video > /dev/null &
+        sudo raspimjpeg -w 512 -h 288 -wp 512 -hp 384 -d 1 -q 25 -of /dev/shm/mjpeg/cam.jpg -cf /var/www/FIFO -sf /var/www/status_mjpeg.txt -vf /var/www/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4 -if /var/www/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg -p -ic $image -vc $video > /dev/null &
         echo "Started"
         ;;
 
