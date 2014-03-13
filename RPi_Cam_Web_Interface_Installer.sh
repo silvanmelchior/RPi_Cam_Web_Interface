@@ -76,13 +76,13 @@ autostart_no)
         ;;
 
   install)
-	      sudo killall raspimjpeg
-	      git pull origin master
+        sudo killall raspimjpeg
+        git pull origin master
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
-	      sudo rm -rf /var/www
-	      sudo cp -r www /var/        
-	      sudo mkdir /var/www/media	
+        sudo rm -rf /var/www
+        sudo cp -r www /var/        
+        sudo mkdir /var/www/media
         sudo chown -R www-data:www-data /var/www
         sudo mknod /var/www/FIFO p
         sudo chmod 666 /var/www/FIFO
@@ -98,7 +98,7 @@ autostart_no)
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
 
-	      sudo cp -r etc/motion/motion.conf /etc/motion/
+        sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
 
         echo "Installer finished"
