@@ -11,12 +11,22 @@
       <input id="video_button" type="button">
       <input id="image_button" type="button">
       <input id="timelapse_button" type="button">
-      <input id="md_button" type="button"><br>
+      <input id="md_button" type="button">
       <input id="halt_button" type="button">
-      <input id="mode_button" type="button">
       <p><a href="preview.php">Download Videos and Images</a></p>
       <h2>Settings</h2>
       <table border=1 width=600>
+        <tr>
+          <td>Preview/Video FOV:</td>
+          <td>
+            <select onclick="send_cmd('pm ' + this.value)">
+              <option value="16_9_STD">Select option...</option>
+              <option value="16_9_STD">16:9 std FOV, 1920x1080 px</option>
+              <option value="16_9_WIDE">16:9 wide FOV, 1296x730 px</option>
+              <option value="4_3">4:3 full FOV, no video</option>
+            </select>
+          </td>
+        </tr>
         <tr>
           <td>Timelapse-Interval (0.1...3200):</td>
           <td><input type="text" size=4 id="tl_interval" value="3">s</td>
