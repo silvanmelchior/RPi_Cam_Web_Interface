@@ -79,7 +79,6 @@ case "$1" in
         git pull origin master
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
-        sudo rm /var/www/*
         sudo cp -r www/* /var/www/
         sudo mkdir -p /var/www/media
         sudo chown -R www-data:www-data /var/www

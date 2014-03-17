@@ -29,7 +29,7 @@ else {
 ajax_status.onreadystatechange = function() {
   if(ajax_status.readyState == 4 && ajax_status.status == 200) {
 
-    if(ajax_status.responseText == "ready_vid") {
+    if(ajax_status.responseText == "ready") {
       document.getElementById("video_button").disabled = false;
       document.getElementById("video_button").value = "record video start";
       document.getElementById("video_button").onclick = function() {send_cmd("ca 1");};
@@ -45,30 +45,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = false;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 0");};
-      document.getElementById("mode_button").disabled = false;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {send_cmd("pm");};
-      halted = 0;
-    }
-    else if(ajax_status.responseText == "ready_img") {
-      document.getElementById("video_button").disabled = true;
-      document.getElementById("video_button").value = "record video start";
-      document.getElementById("video_button").onclick = function() {};
-      document.getElementById("image_button").disabled = false;
-      document.getElementById("image_button").value = "record image";
-      document.getElementById("image_button").onclick = function() {send_cmd("im");};
-      document.getElementById("timelapse_button").disabled = false;
-      document.getElementById("timelapse_button").value = "timelapse start";
-      document.getElementById("timelapse_button").onclick = function() {send_cmd("tl " + (document.getElementById("tl_interval").value*10));};
-      document.getElementById("md_button").disabled = true;
-      document.getElementById("md_button").value = "motion detection start";
-      document.getElementById("md_button").onclick = function() {};
-      document.getElementById("halt_button").disabled = false;
-      document.getElementById("halt_button").value = "stop camera";
-      document.getElementById("halt_button").onclick = function() {send_cmd("ru 0");};
-      document.getElementById("mode_button").disabled = false;
-      document.getElementById("mode_button").value = "change mode to video";
-      document.getElementById("mode_button").onclick = function() {send_cmd("vm");};
       halted = 0;
     }
     else if(ajax_status.responseText == "md_ready") {
@@ -87,9 +63,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
       halted = 0;
     }
     else if(ajax_status.responseText == "video") {
@@ -108,9 +81,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
     }
     else if(ajax_status.responseText == "timelapse") {
       document.getElementById("video_button").disabled = true;
@@ -128,9 +98,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
     }
     else if(ajax_status.responseText == "md_video") {
       document.getElementById("video_button").disabled = true;
@@ -148,9 +115,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
     }
     else if(ajax_status.responseText == "image") {
       document.getElementById("video_button").disabled = true;
@@ -168,9 +132,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to video";
-      document.getElementById("mode_button").onclick = function() {};
     }
     else if(ajax_status.responseText == "boxing") {
       document.getElementById("video_button").disabled = true;
@@ -188,9 +149,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
     }
     else if(ajax_status.responseText == "md_boxing") {
       document.getElementById("video_button").disabled = true;
@@ -208,9 +166,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = true;
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
     }
     else if(ajax_status.responseText == "halted") {
       document.getElementById("video_button").disabled = true;
@@ -228,9 +183,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").disabled = false;
       document.getElementById("halt_button").value = "start camera";
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 1");};
-      document.getElementById("mode_button").disabled = true;
-      document.getElementById("mode_button").value = "change mode to image";
-      document.getElementById("mode_button").onclick = function() {};
       halted = 1;
     }
     else if(ajax_status.responseText == "error") alert("Error: RaspiMJPEG terminated");
