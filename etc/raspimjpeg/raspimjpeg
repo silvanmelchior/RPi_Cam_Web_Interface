@@ -1,0 +1,78 @@
+################################
+#  Config File for raspimjpeg  #
+################################
+# Syntax: "Command Param", no spaces before/after line allowed
+
+#
+# Camera Options
+#
+sharpness 0
+contrast 0
+brightness 50
+saturation 0
+iso 0
+metering_mode average
+video_stabilisation false
+exposure_compensation 0
+exposure_mode auto
+white_balance auto
+image_effect none
+colour_effect_en false
+colour_effect_u 128
+colour_effect_v 128
+rotation 0
+hflip false
+vflip false
+sensor_region_x 0
+sensor_region_y 0
+sensor_region_w 65536
+sensor_region_h 65536
+shutter_speed 0
+raw_layer false
+
+#
+# Preview Options
+#
+# fps_preview = video_fps (below) / divider
+#
+width 512
+quality 25
+divider 1
+
+#
+# Video Options
+#
+video_width 1920
+video_height 1080
+video_fps 25
+video_bitrate 17000000
+MP4Box true
+MP4Box_fps 25
+
+#
+# Image Options
+#
+image_width 2592
+image_height 1944
+image_quality 85
+
+#
+# File Locations
+#
+# preview path: add %d for number
+# image+video path: add %d for number, year, month, day, hour, minute, second
+#
+preview_path /dev/shm/mjpeg/cam.jpg
+image_path /var/www/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg
+video_path /var/www/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4
+status_file /var/www/status_mjpeg.txt
+control_file /var/www/FIFO
+
+#
+# Autostart
+#
+# autostart: standard/idle
+# motion detection can only be true if autostart is standard
+#
+autostart standard
+motion_detection false

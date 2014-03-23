@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2013, Silvan Melchior
+# Copyright (c) 2014, Silvan Melchior
 # All rights reserved.
 
 # Redistribution and use, with or without modification, are permitted provided
@@ -37,33 +37,15 @@ case "$1" in
 
         sudo rm -r /var/www/*
         sudo rm /usr/local/bin/raspimjpeg
+        sudo rm /etc/raspimjpeg
         sudo cp -r etc/rc_local_std/rc.local /etc/
         sudo chmod 755 /etc/rc.local
 
         echo "Removed everything"
         ;;
 
-  autostart_run)
+  autostart_yes)
         sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-        echo "Changed autostart"
-        ;;
-
-  autostart_idle)
-        sudo cp -r  etc/rc_local_idle/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-        echo "Changed autostart"
-        ;;
-
-  autostart_md)
-        sudo cp -r  etc/rc_local_md/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-        echo "Changed autostart"
-        ;;
-
-  
-  autostart_fp)
-        sudo cp -r etc/rc_local_fp/rc.local /etc/
         sudo chmod 755 /etc/rc.local
         echo "Changed autostart"
         ;;
@@ -92,6 +74,10 @@ case "$1" in
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+
+        sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
+        sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
+        sudo chmod 644 /etc/raspimjpeg
 
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
@@ -122,7 +108,7 @@ case "$1" in
         shopt -u nullglob
 
         sudo mkdir -p /dev/shm/mjpeg
-        sudo raspimjpeg -w 512 -h 288 -wp 512 -hp 384 -d 1 -q 25 -of /dev/shm/mjpeg/cam.jpg -cf /var/www/FIFO -sf /var/www/status_mjpeg.txt -vf /var/www/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4 -if /var/www/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg -p -ic $image -vc $video > /dev/null &
+        raspimjpeg -ic $image -vc $video > /dev/null &
         echo "Started"
         ;;
 
