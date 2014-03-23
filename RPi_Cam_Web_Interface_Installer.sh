@@ -108,7 +108,7 @@ case "$1" in
         shopt -u nullglob
 
         sudo mkdir -p /dev/shm/mjpeg
-        raspimjpeg -ic $image -vc $video > /dev/null &
+        sudo raspimjpeg -ic $image -vc $video > /dev/null &
         echo "Started"
         ;;
 
