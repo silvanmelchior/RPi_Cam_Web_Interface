@@ -233,7 +233,7 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 1");};
       halted = 1;
     }
-    else if(ajax_status.responseText == "error") alert("Error: RaspiMJPEG terminated");
+    else if(ajax_status.responseText.substr(0,5) == "Error") alert("Error in RaspiMJPEG: " + ajax_status.responseText.substr(7) + "\nRestart RaspiMJPEG (./RPi_Cam_Web_Interface_Installer.sh start) or the whole RPi.");
     
     reload_ajax(ajax_status.responseText);
 
