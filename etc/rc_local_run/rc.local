@@ -36,6 +36,6 @@ image=$((image+1))
 shopt -u nullglob
 
 mkdir /dev/shm/mjpeg
-raspimjpeg -w 512 -h 288 -wp 512 -hp 384 -d 1 -q 25 -of /dev/shm/mjpeg/cam.jpg -cf /var/www/FIFO -sf /var/www/status_mjpeg.txt -vf /var/www/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4 -if /var/www/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg -p -ic $image -vc $video > /dev/null &
+raspimjpeg -ic $image -vc $video > /dev/null &
 
 exit 0

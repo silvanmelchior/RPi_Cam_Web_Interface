@@ -15,16 +15,22 @@
       <input id="halt_button" type="button">
       <p><a href="preview.php">Download Videos and Images</a></p>
       <h2>Settings</h2>
-      <table border=1 width=600>
+      <table border=1 width=650>
         <tr>
-          <td>Preview/Video FOV:</td>
+          <td>Resolutions:</td>
           <td>
-            <select onclick="send_cmd('pm ' + this.value)">
-              <option value="16_9_STD">Select option...</option>
-              <option value="16_9_STD">16:9 std FOV, 1920x1080 px</option>
-              <option value="16_9_WIDE">16:9 wide FOV, 1296x730 px</option>
-              <option value="4_3">4:3 full FOV, 1296x976 px</option>
-            </select>
+            Load Preset: <select onclick="set_preset(this.value)">
+              <option value="1920 1080 25 25 2592 1944">Select option...</option>
+              <option value="1920 1080 25 25 2592 1944">Std FOV</option>
+              <option value="1296 0730 25 25 2592 1944">16:9 wide FOV</option>
+              <option value="1296 0976 25 25 2592 1944">4:3 full FOV</option>
+              <option value="1920 1080 01 30 2592 1944">Std FOV, x30 Timelapse</option>
+            </select><br>
+            Custom Values:<br>
+            Video res: <input type="text" size=4 id="video_width">x<input type="text" size=4 id="video_height">px<br>
+            Video fps: <input type="text" size=2 id="video_fps">recording, <input type="text" size=2 id="MP4Box_fps">boxing<br>
+            Image res: <input type="text" size=4 id="image_width">x<input type="text" size=4 id="image_height">px<br>
+            <input type="button" value="OK" onclick="set_res();">
           </td>
         </tr>
         <tr>
@@ -52,7 +58,19 @@
           <td><input type="text" size=4 id="iso"><input type="button" value="OK" onclick="send_cmd('is ' + document.getElementById('iso').value)"></td>
         </tr>
         <tr>
-          <td>Video Stabilisation</td>
+          <td>Metering Mode, default 'average':</td>
+          <td>
+            <select onclick="send_cmd('mm ' + this.value)">
+              <option value="average">Select option...</option>
+              <option value="average">Average</option>
+              <option value="spot">Spot</option>
+              <option value="backlit">Backlit</option>
+              <option value="matrix">Matrix</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Video Stabilisation, default: 'off'</td>
           <td><input type="button" value="ON" onclick="send_cmd('vs 1')"><input type="button" value="OFF" onclick="send_cmd('vs 0')"></td>
         </tr>
         <tr>
@@ -97,6 +115,45 @@
           </td>
         </tr>
         <tr>
+          <td>Image Effect, default 'none':</td>
+          <td>
+            <select onclick="send_cmd('ie ' + this.value)">
+              <option value="none">Select option...</option>
+              <option value="none">None</option>
+              <option value="negative">Negative</option>
+              <option value="solarise">Solarise</option>
+              <option value="sketch">Sketch</option>
+              <option value="denoise">Denoise</option>
+              <option value="emboss">Emboss</option>
+              <option value="oilpaint">Oilpaint</option>
+              <option value="hatch">Hatch</option>
+              <option value="gpen">Gpen</option>
+              <option value="pastel">Pastel</option>
+              <option value="watercolour">Watercolour</option>
+              <option value="film">Film</option>
+              <option value="blur">Blur</option>
+              <option value="saturation">Saturation</option>
+              <option value="colourswap">Colourswap</option>
+              <option value="washedout">Washedout</option>
+              <option value="posterise">Posterise</option>
+              <option value="colourpoint">Colourpoint</option>
+              <option value="colourbalance">Colourbalance</option>
+              <option value="cartoon">Cartoon</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Colour Effect, default 'disabled':</td>
+          <td>
+            <select id="ce_en">
+              <option value="0">Disabled</option>
+              <option value="1">Enabled</option>
+            </select>
+            u:v = <input type="text" size=3 id="ce_u">:<input type="text" size=3 id="ce_v">
+            <input type="button" value="OK" onclick="set_ce();">
+          </td>
+        </tr>
+        <tr>
           <td>Rotation, default 0:</td>
           <td>
             <select onclick="send_cmd('ro ' + this.value)">
@@ -109,8 +166,34 @@
           </td>
         </tr>
         <tr>
+          <td>Flip, default 'none':</td>
+          <td>
+            <select onclick="send_cmd('fl ' + this.value)">
+              <option value="0">Select option...</option>
+              <option value="0">None</option>
+              <option value="1">Horizonal</option>
+              <option value="2">Vertical</option>
+              <option value="3">Both</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Sensor Region, default 0/0/65536/65536:</td>
+          <td>
+            x<input type="text" size=5 id="roi_x"> y<input type="text" size=5 id="roi_y"> w<input type="text" size=5 id="roi_w"> h<input type="text" size=5 id="roi_h"> <input type="button" value="OK" onclick="set_roi();">
+          </td>
+        </tr>
+        <tr>
+          <td>Shutter speed (0...330000), default 0:</td>
+          <td><input type="text" size=4 id="shutter_speed"><input type="button" value="OK" onclick="send_cmd('ss ' + document.getElementById('shutter_speed').value)"></td>
+        </tr>
+        <tr>
           <td>Image quality (0...100), default 85:</td>
           <td><input type="text" size=4 id="quality"><input type="button" value="OK" onclick="send_cmd('qu ' + document.getElementById('quality').value)"></td>
+        </tr>
+        <tr>
+          <td>Raw Layer, default: 'off'</td>
+          <td><input type="button" value="ON" onclick="send_cmd('rl 1')"><input type="button" value="OFF" onclick="send_cmd('rl 0')"></td>
         </tr>
         <tr>
           <td>Video bitrate (0...25000000), default 17000000:</td>

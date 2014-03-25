@@ -1,4 +1,52 @@
 //
+// Interface
+//
+function set_preset(value) {
+
+  document.getElementById("video_width").value = value.substr(0, 4);
+  document.getElementById("video_height").value = value.substr(5, 4);
+  document.getElementById("video_fps").value = value.substr(10, 2);
+  document.getElementById("MP4Box_fps").value = value.substr(13, 2);
+  document.getElementById("image_width").value = value.substr(16, 4);
+  document.getElementById("image_height").value = value.substr(21, 4);
+  send_cmd("px " + value);
+
+}
+
+function set_res() {
+  
+  while(document.getElementById("video_width").value.length < 4) document.getElementById("video_width").value = "0" + document.getElementById("video_width").value;
+  while(document.getElementById("video_height").value.length < 4) document.getElementById("video_height").value = "0" + document.getElementById("video_height").value;
+  while(document.getElementById("video_fps").value.length < 2) document.getElementById("video_fps").value = "0" + document.getElementById("video_fps").value;
+  while(document.getElementById("MP4Box_fps").value.length < 2) document.getElementById("MP4Box_fps").value = "0" + document.getElementById("MP4Box_fps").value;
+  while(document.getElementById("image_width").value.length < 4) document.getElementById("image_width").value = "0" + document.getElementById("image_width").value;
+  while(document.getElementById("image_height").value.length < 4) document.getElementById("image_height").value = "0" + document.getElementById("image_height").value;
+  
+  send_cmd("px " + document.getElementById("video_width").value + " " + document.getElementById("video_height").value + " " + document.getElementById("video_fps").value + " " + document.getElementById("MP4Box_fps").value + " " + document.getElementById("image_width").value + " " + document.getElementById("image_height").value);
+
+}
+
+function set_ce() {
+  
+  while(document.getElementById("ce_u").value.length < 3) document.getElementById("ce_u").value = "0" + document.getElementById("ce_u").value;
+  while(document.getElementById("ce_v").value.length < 3) document.getElementById("ce_v").value = "0" + document.getElementById("ce_v").value;
+  
+  send_cmd("ce " + document.getElementById("ce_en").value + " " + document.getElementById("ce_u").value + " " + document.getElementById("ce_v").value);
+
+}
+
+function set_roi() {
+  
+  while(document.getElementById("roi_x").value.length < 5) document.getElementById("roi_x").value = "0" + document.getElementById("roi_x").value;
+  while(document.getElementById("roi_y").value.length < 5) document.getElementById("roi_y").value = "0" + document.getElementById("roi_y").value;
+  while(document.getElementById("roi_w").value.length < 5) document.getElementById("roi_w").value = "0" + document.getElementById("roi_w").value;
+  while(document.getElementById("roi_h").value.length < 5) document.getElementById("roi_h").value = "0" + document.getElementById("roi_h").value;
+  
+  send_cmd("ri " + document.getElementById("roi_x").value + " " + document.getElementById("roi_y").value + " " + document.getElementById("roi_w").value + " " + document.getElementById("roi_h").value);
+
+}
+
+//
 // MJPEG
 //
 var mjpeg_img;
@@ -185,7 +233,7 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 1");};
       halted = 1;
     }
-    else if(ajax_status.responseText == "error") alert("Error: RaspiMJPEG terminated");
+    else if(ajax_status.responseText.substr(0,5) == "Error") alert("Error in RaspiMJPEG: " + ajax_status.responseText.substr(7) + "\nRestart RaspiMJPEG (./RPi_Cam_Web_Interface_Installer.sh start) or the whole RPi.");
     
     reload_ajax(ajax_status.responseText);
 
