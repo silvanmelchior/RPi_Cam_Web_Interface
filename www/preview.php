@@ -15,7 +15,7 @@
       }
       else if(isset($_GET["file"])) {
         echo "<h1>Preview</h1>";
-        if(substr($_GET["file"], -3) == "jpg") echo "<img src='media/" . $_GET["file"] . "' width='640'>";
+        if(substr($_GET["file"], -3) == "jpg") echo "<a href='media/" . $_GET["file"] . "' target='_blank'><img src='media/" . $_GET["file"] . "' width='640'></a>";
         else echo "<video width='640' controls><source src='media/" . $_GET["file"] . "' type='video/mp4'>Your browser does not support the video tag.</video>";
         echo "<p><input type='button' value='Download' onclick='window.open(\"download.php?file=" . $_GET["file"] . "\", \"_blank\");'> ";
         echo "<input type='button' value='Delete' onclick='window.location=\"preview.php?delete=" . $_GET["file"] . "\";'></p>";
