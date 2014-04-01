@@ -79,6 +79,7 @@ case "$1" in
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
 
+        sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
 
