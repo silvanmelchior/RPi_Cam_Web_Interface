@@ -87,6 +87,11 @@ case "$1" in
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
 
+        cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+        echo -e "image_path /var/www/$rpicamdir/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg" >> etc/raspimjpeg/raspimjpeg
+        echo -e "video_path /var/www/$rpicamdir/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4" >> etc/raspimjpeg/raspimjpeg
+        echo -e "status_file /var/www/$rpicamdir/status_mjpeg.txt" >> etc/raspimjpeg/raspimjpeg
+        echo -e "control_file /var/www/$rpicamdir/FIFO" >> etc/raspimjpeg/raspimjpeg
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
