@@ -73,11 +73,7 @@ case "$1" in
         sudo mknod /var/www/$rpicamdir/FIFO p
         sudo chmod 666 /var/www/$rpicamdir/FIFO
 
-        cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
-        echo -e "\tDocumentRoot /var/www/$rpicamdir" >> etc/apache2/sites-available/default
-        cat etc/apache2/sites-available/default.2 >> etc/apache2/sites-available/default
-        echo -e "\t<Directory /var/www/$rpicamdir/>" >> etc/apache2/sites-available/default
-        cat etc/apache2/sites-available/default.2 >> etc/apache2/sites-available/default
+        sed -e "s/www/www\/$rpicamdir/" etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         sudo cp -r etc/apache2/sites-available/default /etc/apache2/sites-available/
         sudo chmod 644 /etc/apache2/sites-available/default
         sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
@@ -87,20 +83,12 @@ case "$1" in
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
 
-        cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
-        echo -e "image_path /var/www/$rpicamdir/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg" >> etc/raspimjpeg/raspimjpeg
-        echo -e "video_path /var/www/$rpicamdir/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4" >> etc/raspimjpeg/raspimjpeg
-        echo -e "status_file /var/www/$rpicamdir/status_mjpeg.txt" >> etc/raspimjpeg/raspimjpeg
-        echo -e "control_file /var/www/$rpicamdir/FIFO" >> etc/raspimjpeg/raspimjpeg
+        sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
 
-        cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
-        echo -e "for f in /var/www/$rpicamdir/media/video_*.mp4; do" >> etc/rc_local_run/rc.local
-        cat etc/rc_local_run/rc.local.2 >> etc/rc_local_run/rc.local
-        echo -e "for f in /var/www/$rpicamdir/media/image_*.jpg; do" >> etc/rc_local_run/rc.local
-        cat etc/rc_local_run/rc.local.3 >> etc/rc_local_run/rc.local
+        sed -e "s/www/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
         sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
