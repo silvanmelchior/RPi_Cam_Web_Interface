@@ -1,0 +1,6 @@
+  video=`echo $f | cut -d '_' -f2 | cut -d '.' -f1`
+done
+video=`echo $video | sed 's/^0*//'`
+video=$((video+1))
+
+image=-1

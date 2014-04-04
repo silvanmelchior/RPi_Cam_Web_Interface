@@ -96,6 +96,11 @@ case "$1" in
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
 
+        cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+        echo -e "for f in /var/www/$rpicamdir/media/video_*.mp4; do" >> etc/rc_local_run/rc.local
+        cat etc/rc_local_run/rc.local.2 >> etc/rc_local_run/rc.local
+        echo -e "for f in /var/www/$rpicamdir/media/image_*.jpg; do" >> etc/rc_local_run/rc.local
+        cat etc/rc_local_run/rc.local.3 >> etc/rc_local_run/rc.local
         sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
