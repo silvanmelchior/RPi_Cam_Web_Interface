@@ -67,8 +67,8 @@ case "$1" in
         git pull origin master
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
-        sudo cp -r www/$rpicamdir/* /var/www/$rpicamdir/
         sudo mkdir -p /var/www/$rpicamdir/media
+        sudo cp -r www/$rpicamdir/* /var/www/$rpicamdir/
         sudo chown -R www-data:www-data /var/www/$rpicamdir
         sudo mknod /var/www/$rpicamdir/FIFO p
         sudo chmod 666 /var/www/$rpicamdir/FIFO
