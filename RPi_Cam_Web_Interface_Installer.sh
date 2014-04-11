@@ -29,10 +29,17 @@
 # Edited by jfarcher to work with github
 
 # Configure below the folder name where to install the software to,
-# or leave empty to install to the root of the webserver.
-# Default upstream behaviour: rpicamdir=""
-#
+#  or leave empty to install to the root of the webserver.
+# The folder name must be a subfolder of /var/www/ which will be created
+#  accordingly, and must not include leading nor trailing / character.
+# The folder name can also be specified as second parameter of this script.
+# Default upstream behaviour: rpicamdir="" (installs in /var/www/)
+
 rpicamdir=""
+
+if [ $# -eq 2 ] ; then
+        rpicamdir=$2
+fi
 
 case "$1" in
 
