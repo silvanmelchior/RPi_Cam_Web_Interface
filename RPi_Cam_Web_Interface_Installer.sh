@@ -51,7 +51,7 @@ case "$1" in
         sudo rm -r /var/www/$rpicamdir/*
         sudo rm /usr/local/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
-        sudo cp -r etc/rc_local_std/rc.local /etc/
+        sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
 
         echo "Removed everything"
@@ -64,7 +64,7 @@ case "$1" in
         ;;
 
   autostart_no)
-        sudo cp -r  etc/rc_local_std/rc.local /etc/
+        sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
         echo "Changed autostart"
         ;;
