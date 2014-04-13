@@ -49,7 +49,7 @@ case "$1" in
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/$rpicamdir/*
-        sudo rm /usr/local/bin/raspimjpeg
+        sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
         sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
