@@ -1,0 +1,3 @@
+# allow 'shutdown' command via web server
+www-data ALL=/sbin/shutdown
+www-data ALL=NOPASSWD: /sbin/shutdown

@@ -36,6 +36,7 @@ case "$1" in
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/*
+        sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/local/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
         sudo cp -r etc/rc_local_std/rc.local /etc/
@@ -62,14 +63,19 @@ case "$1" in
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
 
         sudo cp -r www/* /var/www/
+        sudo rm /var/www/index.html
         sudo mkdir -p /var/www/media
         sudo chown -R www-data:www-data /var/www
         sudo mknod /var/www/FIFO p
         sudo chmod 666 /var/www/FIFO
+        sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/cam.jpg
         sudo cp -r etc/apache2/sites-available/default /etc/apache2/sites-available/
         sudo chmod 644 /etc/apache2/sites-available/default
         sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
         sudo chmod 644 /etc/apache2/conf.d/other-vhosts-access-log
+
+        sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
+        sudo chmod 0440 /etc/sudoers.d/RPI_Cam_Web_Interface
 
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
