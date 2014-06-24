@@ -1,5 +1,8 @@
 <?php
   
+  // version string
+  define('APP_VERSION', 'v4.2');
+  
   // name of this application
   define('APP_NAME', 'RPi Cam Control');
   
@@ -10,6 +13,6 @@
   define('CAM_NAME', 'mycam');
   
   // unique camera string build from application name, camera name, host name
-  define('CAM_STRING', APP_NAME . ": " . CAM_NAME . '@' . HOST_NAME);
+  define('CAM_STRING', APP_NAME . " " . APP_VERSION . ": " . CAM_NAME . '@' . HOST_NAME);
 
 ?>
