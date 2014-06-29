@@ -28,11 +28,27 @@
 #
 # Edited by jfarcher to work with github
 
+NGINX_DISABLE_LOGGING=false
+
 case "$1" in
 
   remove)
         sudo killall raspimjpeg
         sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion
+        sudo apt-get autoremove -y
+
+        sudo rm -r /var/www/*
+        sudo rm /usr/local/bin/raspimjpeg
+        sudo rm /etc/raspimjpeg
+        sudo cp -r etc/rc_local_std/rc.local /etc/
+        sudo chmod 755 /etc/rc.local
+
+        echo "Removed everything"
+        ;;
+
+    remove_nginx}
+        sudo killall raspimjpeg
+        sudo apt-get purge -y nginx php5 php5-fpm php5-common php-apc gpac motion
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/*
@@ -88,6 +104,53 @@ case "$1" in
         echo "Installer finished"
         ;;
 
+  install_nginx)
+        # Update and ensure the program is not running and all prerequisites are installed
+        sudo killall raspimjpeg
+        git pull origin master
+        sudo apt-get install -y nginx php5-fpm php5-common php-apc
+
+        # Move web interface code into place
+        sudo cp -r www/* /var/www/
+        sudo mkdir -p /var/www/media
+        sudo chown -R www-data:www-data /var/www
+        sudo mknod /var/www/FIFO p
+        sudo chmod 666 /var/www/FIFO
+        # Install nginx server file
+        sudo cp -r etc/nginx/sites-available/picamwebint /etc/nginx/sites-available/picamwebint
+        sudo chmod 644 /etc/nginx/sites-available/picamwebint
+        sudo ln -s /etc/nginx/sites-available/picamwebint /etc/nginx/sites-enabled/picamwebint
+        # Update nginx main config file
+        sudo sed -i "s/worker_processes 4;/worker_processes 2;/g" /etc/nginx/nginx.conf
+        sudo sed -i "s/worker_connections 768;/worker_connections 128;/g" /etc/nginx/nginx.conf
+        if ["$NGINX_DISABLE_LOGGING"]; then
+            sudo sed -i "s:access_log /var/log/nginx/nginx/access.log;:access_log /dev/null;:g" /etc/nginx/nginx.conf
+        fi
+        # Configure php-apc
+        sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> /etc/php5/fpm/php.ini"
+        sudo cp etc/php5/apc.ini /etc/php5/conf.d/20-apc.ini
+        sudo chmod 644 /etc/php5/conf.d/20-apc.ini
+
+        sudo cp -r bin/raspimjpeg /opt/vc/bin/
+        sudo chmod 755 /opt/vc/bin/raspimjpeg
+        sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+
+        sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
+        sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
+        sudo chmod 644 /etc/raspimjpeg
+
+        sudo cp -r etc/rc_local_run/rc.local /etc/
+        sudo chmod 755 /etc/rc.local
+
+        sudo cp -r etc/motion/motion.conf /etc/motion/
+        sudo chmod 640 /etc/motion/motion.conf
+
+        # Restart nginx and php5-fpm to apply changes
+        service nginx restart
+        service php5-fpm restart
+
+        echo "Installer finished"
+        ;;
   start)
         shopt -s nullglob
 
