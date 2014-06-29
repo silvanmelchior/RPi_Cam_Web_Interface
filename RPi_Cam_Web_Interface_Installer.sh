@@ -123,6 +123,7 @@ case "$1" in
         # Update nginx main config file
         sudo sed -i "s/worker_processes 4;/worker_processes 2;/g" /etc/nginx/nginx.conf
         sudo sed -i "s/worker_connections 768;/worker_connections 128;/g" /etc/nginx/nginx.conf
+        sudo sed -i "s/gzip on;/gzip off;/g" /etc/nginx/nginx.conf
         if ["$NGINX_DISABLE_LOGGING"]; then
             sudo sed -i "s:access_log /var/log/nginx/nginx/access.log;:access_log /dev/null;:g" /etc/nginx/nginx.conf
         fi
