@@ -51,6 +51,7 @@ case "$1" in
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/$rpicamdir/*
+        sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
         sudo cp -r /etc/rc.local.bak /etc/rc.local
@@ -97,6 +98,7 @@ case "$1" in
         sudo chown -R www-data:www-data /var/www/$rpicamdir
         sudo mknod /var/www/$rpicamdir/FIFO p
         sudo chmod 666 /var/www/$rpicamdir/FIFO
+        sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
 
         if [ $rpicamdir == "" ] ; then
                 cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
@@ -107,6 +109,9 @@ case "$1" in
         sudo chmod 644 /etc/apache2/sites-available/default
         sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
         sudo chmod 644 /etc/apache2/conf.d/other-vhosts-access-log
+
+        sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
+        sudo chmod 0440 /etc/sudoers.d/RPI_Cam_Web_Interface
 
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg

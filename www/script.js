@@ -47,6 +47,19 @@ function set_roi() {
 }
 
 //
+// Shutdown
+//
+function sys_shutdown() {
+  ajax_status.open("GET", "cmd_func.php?cmd=shutdown", true);
+  ajax_status.send();
+}
+
+function sys_reboot() {
+  ajax_status.open("GET", "cmd_func.php?cmd=reboot", true);
+  ajax_status.send();
+}
+
+//
 // MJPEG
 //
 var mjpeg_img;

@@ -4,7 +4,7 @@
     <title>RPi Cam Download</title>
   </head>
   <body>
-    <p><a href="index.html">Back</a></p>
+    <p><a href="index.php">Back</a></p>
     <?php
       if(isset($_GET["delete"])) {
         unlink("media/" . $_GET["delete"]);

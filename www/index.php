@@ -1,12 +1,16 @@
 <!DOCTYPE html>
+<?php
+  define('BASE_DIR', dirname(__FILE__));
+  require_once(BASE_DIR.'/config.php');
+?>
 <html>
   <head>
-    <title>RPi Cam Control</title>
+    <title><?php echo CAM_STRING; ?></title>
     <script src="script.js"></script>
   </head>
   <body onload="setTimeout('init();', 100);">
     <center>
-      <h1>RPi Cam Control</h1>
+      <h1><?php echo CAM_STRING; ?></h1>
       <div><img id="mjpeg_dest"></div>
       <input id="video_button" type="button">
       <input id="image_button" type="button">
@@ -200,6 +204,10 @@
           <td><input type="text" size=10 id="bitrate"><input type="button" value="OK" onclick="send_cmd('bi ' + document.getElementById('bitrate').value)"></td>
         </tr>
       </table>
+      <p>
+        <input id="shutdown_button" type="button" value="shutdown system" onclick="sys_shutdown();">
+        <input id="reboot_button" type="button" value="reboot system" onclick="sys_reboot();">
+      </p>
     </center>
   </body>
 </html>
