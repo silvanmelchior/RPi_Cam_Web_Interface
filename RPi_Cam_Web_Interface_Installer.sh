@@ -78,7 +78,7 @@ case "$1" in
 
         # Move web interface code into place
         sudo mkdir -p /var/www/$rpicamdir/media
-        sudo cp -r www/$rpicamdir/* /var/www/$rpicamdir/
+        sudo cp -r www/* /var/www/$rpicamdir/
         sudo chown -R www-data:www-data /var/www/$rpicamdir
         sudo mknod /var/www/$rpicamdir/FIFO p
         sudo chmod 666 /var/www/$rpicamdir/FIFO
