@@ -27,6 +27,6 @@
 	# alert, emerg.
 	LogLevel warn
 
-	SetEnvIf Request_URI "^/cam_pic.php$|^/status_mjpeg.php$" dontlog
+	SetEnvIf Request_URI "/cam_pic.php$|/status_mjpeg.php$" dontlog
 	CustomLog ${APACHE_LOG_DIR}/access.log common env=!dontlog
 </VirtualHost>
