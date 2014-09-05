@@ -35,7 +35,7 @@
 # The folder name must be a subfolder of /var/www/ which will be created
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
-rpicamdir=""
+rpicamdir="camera"
 
 
 case "$1" in
@@ -83,7 +83,7 @@ case "$1" in
         if [ $rpicamdir == "" ]; then
           cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         else
-          sed -e "s/www/www\/$rpicamdir/" etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
+          sed -e "s/Directory \/var\/www/Directory \/var\/www\/$rpicamdir/" etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         fi
         sudo cp -r etc/apache2/sites-available/default /etc/apache2/sites-available/
         sudo chmod 644 /etc/apache2/sites-available/default
@@ -116,6 +116,11 @@ case "$1" in
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
 
+        if [ $rpicamdir == "" ]; then
+          cat etc/motion/motion.conf.1 > etc/motion/motion.conf
+        else
+          sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+        fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
 
