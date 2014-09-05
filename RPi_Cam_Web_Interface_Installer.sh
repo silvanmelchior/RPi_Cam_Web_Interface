@@ -50,7 +50,7 @@ case "$1" in
 
         sudo rm -r /var/www/$rpicamdir/*
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
-        sudo rm /usr/bin/raspimjpeg
+        sudo rm /usr/local/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
         sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
@@ -99,7 +99,7 @@ case "$1" in
 
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
-        sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+        sudo ln -s /opt/vc/bin/raspimjpeg /usr/local/bin/raspimjpeg
 
         if [ $rpicamdir == "" ] ; then
                 cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
