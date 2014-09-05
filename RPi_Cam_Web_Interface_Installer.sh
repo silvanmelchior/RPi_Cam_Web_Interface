@@ -35,7 +35,7 @@
 # The folder name must be a subfolder of /var/www/ which will be created
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
-rpicamdir="camera"
+rpicamdir=""
 
 
 case "$1" in
