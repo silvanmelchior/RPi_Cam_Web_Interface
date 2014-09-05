@@ -42,6 +42,10 @@
           <td><input type="text" size=4 id="tl_interval" value="3">s</td>
         </tr>
         <tr>
+          <td>Annotation (max 31 characters):</td>
+          <td><input type="text" size=30 id="annotation"><input type="button" value="OK" onclick="send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"></td>
+        </tr>
+        <tr>
           <td>Sharpness (-100...100), default 0:</td>
           <td><input type="text" size=4 id="sharpness"><input type="button" value="OK" onclick="send_cmd('sh ' + document.getElementById('sharpness').value)"></td>
         </tr>
