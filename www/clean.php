@@ -5,7 +5,7 @@
 ?>
 <html>
   <head>
-    <title>Car</title>
+    <title><?php echo CAM_STRING; ?></title>
     <script src="script.js"></script>
   </head>
   <body onload="setTimeout('init();', 100);">
