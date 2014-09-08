@@ -105,6 +105,7 @@ case "$1" in
           sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
         fi
 
+
         if [ "$rpicamdir" == "" ]; then
           cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         else
