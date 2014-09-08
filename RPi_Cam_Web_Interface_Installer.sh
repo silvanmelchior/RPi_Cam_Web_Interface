@@ -37,6 +37,7 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 rpicamdir=""
 
+
 case "$1" in
 
   remove)
