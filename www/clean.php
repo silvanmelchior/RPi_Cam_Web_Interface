@@ -10,7 +10,7 @@
   </head>
   <body onload="setTimeout('init();', 100);">
     <center>
-      <div><img id="mjpeg_dest"></div>
+      <div><img id="mjpeg_dest" /></div>
     </center>
   </body>
 </html>
