@@ -74,12 +74,18 @@ case "$1" in
 
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
-        sudo rm /var/www/$rpicamdir/index.html
+        if [ -e /var/www/$rpicamdir/index.html ]; then
+          sudo rm /var/www/$rpicamdir/index.html
+        fi
         sudo chown -R www-data:www-data /var/www/$rpicamdir
-        sudo mknod /var/www/$rpicamdir/FIFO p
+        if [ ! -e /var/www/$rpicamdir/FIFO ]; then
+          sudo mknod /var/www/$rpicamdir/FIFO p
+        fi
         sudo chmod 666 /var/www/$rpicamdir/FIFO
 
-        sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
+        if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
+          sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
+        fi
         if [ "$rpicamdir" == "" ]; then
           cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         else
@@ -95,7 +101,9 @@ case "$1" in
 
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
-        sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+        if [ ! -e /usr/bin/raspimjpeg ]; then
+          sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+        fi
 
         if [ "$rpicamdir" == "" ]; then
           cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
