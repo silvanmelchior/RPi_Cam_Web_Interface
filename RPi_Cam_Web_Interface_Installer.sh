@@ -86,6 +86,7 @@ case "$1" in
         if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
           sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
         fi
+
         if [ "$rpicamdir" == "" ]; then
           cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         else
@@ -163,11 +164,9 @@ case "$1" in
         echo "Stopped"
         ;;
 
-
   *)
         echo "No option selected"
         ;;
 
 esac
-
 
