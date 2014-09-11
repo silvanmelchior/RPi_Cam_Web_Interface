@@ -1,7 +1,7 @@
 <?php
   
   // version string
-  define('APP_VERSION', 'v4.2.2');
+  define('APP_VERSION', 'v4.2.3');
   
   // name of this application
   define('APP_NAME', 'RPi Cam Control');
