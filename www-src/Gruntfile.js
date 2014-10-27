@@ -4,5 +4,5 @@ module.exports = function(grunt) {
 	require('load-grunt-config')(grunt);
 
 	// Task definition
-	grunt.registerTask('default', ['less', 'uglify']);
+	grunt.registerTask('default', ['less', 'uglify', 'copy']);
 };
