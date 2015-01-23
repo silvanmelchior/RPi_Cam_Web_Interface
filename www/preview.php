@@ -29,7 +29,8 @@
         foreach($files as $file) {
           if(($file != '.') && ($file != '..')) {
             $fsz = round ((filesize("media/" . $file)) / (1024 * 1024));
-            echo "<p><a href='preview.php?file=$file'>$file</a> ($fsz MB)</p>";
+            echo "<p><a href='preview.php?file=$file'>$file</a> ($fsz MB) ";
+            echo "<input type='button' value='Delete' onclick='if(confirm(\"Delete $file?\")) {window.location=\"preview.php?delete=$file\";}'></p>";
           }
         }
         echo "<p><input type='button' value='Delete all' onclick='if(confirm(\"Delete all?\")) {window.location=\"preview.php?delete_all\";}'></p>";
