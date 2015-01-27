@@ -10,8 +10,7 @@ module.exports = {
       {
         '../www/js/style_minified.js': [
           'node_modules/jquery/dist/jquery.js',
-          'node_modules/bootstrap/dist/js/bootstrap.js',
-          'js/**/*.js'
+          'node_modules/bootstrap/dist/js/bootstrap.js'
         ]
       }
     ]
