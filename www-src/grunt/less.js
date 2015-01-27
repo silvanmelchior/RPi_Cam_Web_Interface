@@ -6,7 +6,7 @@ module.exports = {
 	},
 	build: {
 		files: {
-			"../www/css/app.css":"less/app.less"
+			"../www/css/style_minified.css":"less/app.less"
 		}
 	}
 };

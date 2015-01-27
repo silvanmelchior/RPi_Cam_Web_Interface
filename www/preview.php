@@ -7,7 +7,7 @@
   <head>
   	<meta name="viewport" content="width=550, initial-scale=1">
     <title>RPi Cam Download</title>
-    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/style_minified.css" />
   </head>
   <body>
   	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

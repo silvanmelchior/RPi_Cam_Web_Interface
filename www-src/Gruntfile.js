@@ -1,4 +1,4 @@
-//Gruntfile
+// Gruntfile
 module.exports = function(grunt) {
 	// Plugin loading
 	require('load-grunt-config')(grunt);

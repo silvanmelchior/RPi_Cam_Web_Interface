@@ -8,7 +8,7 @@ module.exports = {
 	build: {
 		files: [
 			{
-				'../www/js/app.js': [
+				'../www/js/style_minified.js': [
 					'bower_components/jquery/dist/jquery.js',
 					'bower_components/bootstrap/dist/js/bootstrap.js',
 					'js/**/*.js'

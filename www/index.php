@@ -7,9 +7,9 @@
   <head>
   	<meta name="viewport" content="width=550, initial-scale=1">
     <title><?php echo CAM_STRING; ?></title>
-    <link rel="stylesheet" href="css/app.css" />
-    <script src="js/app.js"></script>
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="css/style_minified.css" />
+    <script src="js/style_minified.js"></script>
+    <script src="js/script.js"></script>
   </head>
   <body onload="setTimeout('init();', 100);">
   	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
