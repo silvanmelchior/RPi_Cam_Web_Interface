@@ -161,6 +161,7 @@ case "$1" in
 
   stop)
         sudo killall raspimjpeg
+	sudo killall motion
         echo "Stopped"
         ;;
 
