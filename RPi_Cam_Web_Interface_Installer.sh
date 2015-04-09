@@ -121,8 +121,8 @@ case "$1" in
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
-        if [ ! -e /var/www/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/raspimjpeg
+        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
 
