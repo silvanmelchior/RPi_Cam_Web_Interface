@@ -1,0 +1,1 @@
+avconv -r 5 -i i_%05d.jpg -r 5 -vcodec libx264 -crf 20 -g 5
