@@ -96,7 +96,7 @@
          case 'downloadlog':
             if (file_exists($logFile)) {
                header("Content-Type: text/plain");
-               header("Content-Disposition: attachment; filename=\"" . date('Ymd-His-'). $schedulePars[SCHEDULE_LOGFILE] . "\"");
+               header("Content-Disposition: attachment; filename=\"" . date('Ymd-His-') . LOGFILE_SCHEDULE . "\"");
                readfile("$logFile");
                return;
             }
@@ -568,7 +568,7 @@ function cmdHelp() {
       $timeout = 0;
       $timeoutMax = 0; //Loop test will terminate after this (seconds) (used in test), set to 0 forever
       while($timeoutMax == 0 || $timeout < $timeoutMax) {
-         $logFile = BASE_DIR . '/' . $schedulePars[SCHEDULE_LOGFILE];
+         $logFile = BASE_DIR . '/' . LOGFILE_SCHEDULE;
          writeLog("Scheduler loop is started");
          $pollTime = $schedulePars[SCHEDULE_CMDPOLL];
          $modeTimeInterval = $schedulePars[SCHEDULE_MODEPOLL];
