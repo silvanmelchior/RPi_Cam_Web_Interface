@@ -300,24 +300,20 @@
                            <td><select onclick="send_cmd('bo ' + this.value)"><?php makeOptions($options_bo, 'MP4Box'); ?></select></td>
                         </tr>
                         <tr>
-                           <td>Annotation version :</td>
-                           <td><select onclick="send_cmd('av ' + this.value)"><?php makeOptions($options_av, 'anno_version'); ?></select></td>
-                        </tr>
-                        <tr>
-                           <td>Annotation size v3 (0-60):</td>
+                           <td>Annotation size(0-99):</td>
                            <td>
                               <?php makeInput('anno_text_size', 3); ?><input type="button" value="OK" onclick="send_cmd('as ' + document.getElementById('anno_text_size').value)">
                            </td>
                         </tr>
                         <tr>
-                           <td>Custom text color v3:</td>
+                           <td>Custom text color:</td>
                            <td><select id="at_en"><?php makeOptions($options_at_en, 'anno3_custom_text_colour'); ?></select>
                               y:u:v = <?php makeInput('at_y', 3, 'anno3_custom_text_Y'); ?>:<?php makeInput('at_u', 4, 'anno3_custom_text_U'); ?>:<?php makeInput('at_v', 4, 'anno3_custom_text_V'); ?>
                               <input type="button" value="OK" onclick="set_at();">
                            </td>
                         </tr>
                         <tr>
-                           <td>Custom background color v3:</td>
+                           <td>Custom background color:</td>
                            <td><select id="ac_en"><?php makeOptions($options_ac_en, 'anno3_custom_background_colour'); ?></select>
                               y:u:v = <?php makeInput('ac_y', 3, 'anno3_custom_background_Y'); ?>:<?php makeInput('ac_u', 4, 'anno3_custom_background_U'); ?>:<?php makeInput('ac_v', 4, 'anno3_custom_background_V'); ?>
                               <input type="button" value="OK" onclick="set_ac();">
