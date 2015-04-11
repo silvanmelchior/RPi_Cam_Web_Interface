@@ -164,25 +164,30 @@ case "$1" in
         ;;
 
   start)
+        ./$0 stop
         sudo mkdir -p /dev/shm/mjpeg
-        sudo raspimjpeg > /dev/null &
+        sleep 1;sudo raspimjpeg > /dev/null &
+        sleep 1;sudo -u www-data php /var/www/schedule.php > /dev/null &
         echo "Started"
         ;;
 
   debug)
-        sudo killall raspimjpeg
-        sudo raspimjpeg  &
+        ./$0 stop
+        sudo mkdir -p /dev/shm/mjpeg
+        sleep 1;sudo raspimjpeg &
+        sleep 1;sudo -u www-data php /var/www/schedule.php &
         echo "Started with debug"
         ;;
 
   stop)
         sudo killall raspimjpeg
+        sudo killall php
         sudo killall motion
         echo "Stopped"
         ;;
 
   *)
-        echo "No option selected"
+        echo "No or invalid option selected"
         ;;
 
 esac

@@ -6,14 +6,15 @@
 # Make sure that the script will "exit 0" on success or any other
 # value on error.
 #
-#START RASPIMJPEG SECTION
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-mkdir /dev/shm/mjpeg
+#START RASPIMJPEG SECTION
+mkdir -p /dev/shm/mjpeg
 sleep 4;raspimjpeg > /dev/null &
 sleep 4;su www-data -c 'php /var/www/schedule.php > /dev/null &'
 #END RASPIMJPEG SECTION
+
 exit 0
