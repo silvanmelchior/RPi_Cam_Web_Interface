@@ -174,8 +174,8 @@ case "$1" in
   debug)
         ./$0 stop
         sudo mkdir -p /dev/shm/mjpeg
-        sleep 1;sudo raspimjpeg > /dev/null
-        sleep 1;sudo -u www-data php /var/www/schedule.php > /dev/null
+        sleep 1;sudo raspimjpeg &
+        sleep 1;sudo -u www-data php /var/www/schedule.php &
         echo "Started with debug"
         ;;
 
