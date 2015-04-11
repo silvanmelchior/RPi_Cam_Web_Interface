@@ -1,7 +1,7 @@
 <?php
    define('BASE_DIR', dirname(__FILE__));
    require_once(BASE_DIR.'/config.php');
-   //Text labels here
+   //Text labels here 
    define('BTN_START', 'Start');
    define('BTN_STOP', 'Stop');
    define('BTN_SAVE', 'Save Settings');
