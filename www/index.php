@@ -139,7 +139,7 @@
       <script src="js/pipan.js"></script>
    </head>
    <body onload="setTimeout('init();', 100);">
-      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation"<?php echo $displayStyle; ?>>
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" <?php echo $displayStyle; ?>>
          <div class="container">
             <div class="navbar-header">
                <a class="navbar-brand" href="#"><?php echo CAM_STRING; ?></a>
@@ -343,7 +343,7 @@
                         <select name='extrastyle' id='extrastyle'>
                            <?php getExtraStyles(); ?>
                         </select>
-                        &nbsp<button type="submit" name="OK" value="OK" >OK</button>
+                        &nbsp;<button type="submit" name="OK" value="OK" >OK</button>
                      </form>
                   </div>
                </div>

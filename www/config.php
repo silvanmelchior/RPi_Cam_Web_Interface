@@ -1,4 +1,6 @@
 <?php
+   //Local define of base diretory for routines here
+   define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
    define('APP_VERSION', 'v5.1.0');
@@ -35,7 +37,7 @@
 
    // debug log function
    function writeDebugLog($msg) {
-      $log = fopen(LOGFILE_DEBUG, 'a');
+      $log = fopen(LBASE_DIR . '/' . LOGFILE_DEBUG, 'a');
       $time = date('[Y/m/d H:i:s]');
       fwrite($log, "$time $msg" . PHP_EOL);
       fclose($log);
@@ -43,7 +45,7 @@
 
    // schedule log function
    function writeLog($msg) {
-      $log = fopen(LOGFILE_SCHEDULE, 'a');
+      $log = fopen(LBASE_DIR . '/' . LOGFILE_SCHEDULE, 'a');
       $time = date('[Y/m/d H:i:s]');
       fwrite($log, "$time $msg" . PHP_EOL);
       fclose($log);
@@ -75,7 +77,7 @@
          $cstring .= $key . ' ' . $value . "\n";
       }
       if (cstring != "") {
-         $fp = fopen(CONFIG_FILE2, 'w');
+         $fp = fopen(LBASE_DIR . '/' . CONFIG_FILE2, 'w');
          fwrite($fp, "#User config file\n");
          fwrite($fp, $cstring);
          fclose($fp);
@@ -90,7 +92,7 @@
    function findLapseFiles($d) {
       //return an arranged in time order and then must have a matching 4 digit batch and an incrementing lapse number
       $batch = sprintf('%04d', substr($d, -11, 4));
-      $fullname = MEDIA_PATH . '/' . dataFilename($d);
+      $fullname = LBASE_DIR . '/' . MEDIA_PATH . '/' . dataFilename($d);
       $path = dirname($fullname);
       $start = filemtime("$fullname");
       $files = array();
@@ -132,10 +134,10 @@
          }
       } else {
          $tFile = dataFilename($d);
-         if (file_exists(MEDIA_PATH . "/$tFile")) {
-            unlink(MEDIA_PATH . "/$tFile");
+         if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile")) {
+            unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
          }
       }
-      unlink(MEDIA_PATH . "/$d");
+      unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
    }
 ?>

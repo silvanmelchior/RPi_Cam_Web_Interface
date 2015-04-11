@@ -234,7 +234,7 @@
       foreach($columns as $column) {
             echo '<td>' . $column . '</td>';
       }
-      echo '</h3></tr>';
+      echo '</tr>';
       $times = $pars[SCHEDULE_TIMES];
       $cmdsOn = $pars[SCHEDULE_COMMANDSON];
       $cmdsOff = $pars[SCHEDULE_COMMANDSOFF];
