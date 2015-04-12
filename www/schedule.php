@@ -296,7 +296,7 @@
                      if ($showLog) {
                         echo '<a class="navbar-brand" href="schedule.php">';
                      } else {
-                        echo '<a class="navbar-brand" href="index.php">';
+                        echo '<a class="navbar-brand" href="' . ROOT_PHP . '">';
                      }
                      echo '<span class="glyphicon glyphicon-chevron-left"></span>Back - ' . CAM_STRING . '</a>';
                   echo '</div>';
