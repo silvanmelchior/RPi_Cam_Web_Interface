@@ -1,7 +1,7 @@
 <?php
    define('BASE_DIR', dirname(__FILE__));
    require_once(BASE_DIR.'/config.php');
-   //Text labels here
+   //Text labels here 
    define('BTN_START', 'Start');
    define('BTN_STOP', 'Stop');
    define('BTN_SAVE', 'Save Settings');
@@ -175,12 +175,12 @@
          SCHEDULE_DUSKENDMINUTES => '180',
          SCHEDULE_LATITUDE => '52.00',
          SCHEDULE_LONGTITUDE => '0.00',
-         SCHEDULE_MAXCAPTURE => '30',
-         SCHEDULE_DAYMODE => '0',
+         SCHEDULE_MAXCAPTURE => '0',
+         SCHEDULE_DAYMODE => '1',
          SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","13:00"),
-         SCHEDULE_COMMANDSON => array("","","ca 1",""),
-         SCHEDULE_COMMANDSOFF => array("","","ca 0",""),
-         SCHEDULE_MODES => array("md 0;em night","md 0;em night","md 0;em auto;md 1","md 0;em night")
+         SCHEDULE_COMMANDSON => array("","","ca 1","","","","","","",""),
+         SCHEDULE_COMMANDSOFF => array("","","ca 0","","","","","","",""),
+         SCHEDULE_MODES => array("em night","md 1;em night","em auto","md 0;em night","","","","","","")
       );
       return $pars;
    }
@@ -296,7 +296,7 @@
                      if ($showLog) {
                         echo '<a class="navbar-brand" href="schedule.php">';
                      } else {
-                        echo '<a class="navbar-brand" href="index.php">';
+                        echo '<a class="navbar-brand" href="' . ROOT_PHP . '">';
                      }
                      echo '<span class="glyphicon glyphicon-chevron-left"></span>Back - ' . CAM_STRING . '</a>';
                   echo '</div>';

@@ -10,6 +10,9 @@
 
    // the host running the application
    define('HOST_NAME', php_uname('n'));
+   
+   //define main starting php
+   define('ROOT_PHP', 'index.php');
 
    // name of this camera
    define('CAM_NAME', 'mycam');

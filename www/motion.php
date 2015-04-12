@@ -133,7 +133,7 @@
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
          <div class="container">
             <div class="navbar-header">
-               <a class="navbar-brand" href="index.php"><span class="glyphicon glyphicon-chevron-left"></span>Back - <?php echo CAM_STRING; ?></a>
+               <a class="navbar-brand" href="<?php echo ROOT_PHP; ?>"><span class="glyphicon glyphicon-chevron-left"></span>Back - <?php echo CAM_STRING; ?></a>
             </div>
          </div>
       </div>
