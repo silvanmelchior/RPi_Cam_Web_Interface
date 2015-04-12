@@ -128,8 +128,7 @@ function pipan_stop () {
   document.body.removeEventListener('touchmove', pipan_move, false)
   document.body.removeEventListener('touchend', pipan_stop, false)
   touch = false;
- 
-  if(pipan_mouse_x == null) led_switch();
+  
 }
 
 function init_pt(p,t){
