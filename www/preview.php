@@ -257,8 +257,8 @@
       <?php
          if ($pFile != "") {
             echo "<h1>" . TXT_PREVIEW . ":  " . substr($tFile,-12,5);
-            echo "&nbsp;&nbsp;<button class='btn btn-danger' type='submit' name='download1' value='$tFile'>" . BTN_DOWNLOAD . "</button>";
-            echo "&nbsp;<button class='btn btn-primary' type='submit' name='delete1' value='$tFile'>" . BTN_DELETE . "</button>";
+            echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='download1' value='$tFile'>" . BTN_DOWNLOAD . "</button>";
+            echo "&nbsp;<button class='btn btn-danger' type='submit' name='delete1' value='$tFile'>" . BTN_DELETE . "</button>";
             if(substr($tFile, -12, 1) == "t") {
                $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
                echo "&nbsp;<button class='btn btn-primary' type='submit' name='convert' value='$tFile'>" . BTN_CONVERT . "</button>";
