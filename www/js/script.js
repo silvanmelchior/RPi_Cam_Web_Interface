@@ -70,12 +70,13 @@ function set_preset(value) {
   document.getElementById("MP4Box_fps").value = values[3];
   document.getElementById("image_width").value = values[4];
   document.getElementById("image_height").value = values[5];
-  send_cmd("px " + value);
-
+  
+  set_res();
 }
 
 function set_res() {
   send_cmd("px " + document.getElementById("video_width").value + " " + document.getElementById("video_height").value + " " + document.getElementById("video_fps").value + " " + document.getElementById("MP4Box_fps").value + " " + document.getElementById("image_width").value + " " + document.getElementById("image_height").value);
+  updatePreview(true);
 }
 
 function set_ce() {
@@ -113,14 +114,29 @@ function sys_reboot() {
 //
 var mjpeg_img;
 var halted = 0;
+var previous_halted = 99;
 
-function reload_img () {
-  if(!halted) mjpeg_img.src = "cam_pic.php?time=" + new Date().getTime();
-  else setTimeout("reload_img()", 500);
-}
-
-function error_img () {
-  setTimeout("mjpeg_img.src = 'cam_pic.php?time=' + new Date().getTime();", 100);
+function updatePreview(cycle)
+{
+	if (cycle !== undefined && cycle == true)
+	{
+		mjpeg_img.src = "/updating.jpg";
+		setTimeout("mjpeg_img.src = \"cam_pic_new.php?time=\" + new Date().getTime();", 1000);
+		return;
+	}
+	
+	if (previous_halted != halted)
+	{
+		if(!halted)
+		{
+			mjpeg_img.src = "cam_pic_new.php?time=" + new Date().getTime();			
+		}
+		else
+		{
+			mjpeg_img.src = "/unavailable.jpg";
+		}
+	}
+	previous_halted = halted;
 }
 
 //
@@ -156,6 +172,7 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 0");};
       halted = 0;
+	  updatePreview();
     }
     else if(ajax_status.responseText == "md_ready") {
       document.getElementById("video_button").disabled = true;
@@ -174,6 +191,7 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
       halted = 0;
+	  updatePreview();
     }
     else if(ajax_status.responseText == "video") {
       document.getElementById("video_button").disabled = false;
@@ -294,6 +312,7 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").value = "start camera";
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 1");};
       halted = 1;
+	  updatePreview();
     }
     else if(ajax_status.responseText.substr(0,5) == "Error") alert("Error in RaspiMJPEG: " + ajax_status.responseText.substr(7) + "\nRestart RaspiMJPEG (./RPi_Cam_Web_Interface_Installer.sh start) or the whole RPi.");
     
@@ -372,9 +391,6 @@ function init() {
 
   // mjpeg
   mjpeg_img = document.getElementById("mjpeg_dest");
-  mjpeg_img.onload = reload_img;
-  mjpeg_img.onerror = error_img;
-  reload_img();
   // status
   reload_ajax("");
 

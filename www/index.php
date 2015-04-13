@@ -136,7 +136,7 @@
       </div>
       <input id="toggle_display" type="button" class="btn btn-primary" value="<?php echo $toggleButton; ?>" style="position:absolute;top:60px;right:10px;" onclick="set_display(this.value);">
       <div class="container-fluid text-center liveimage">
-         <div><img id="mjpeg_dest" <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);"></div>
+         <div><img id="mjpeg_dest" <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="/loading.jpg"></div>
          <div id="main-buttons" <?php echo $displayStyle; ?> >
             <input id="video_button" type="button" class="btn btn-primary">
             <input id="image_button" type="button" class="btn btn-primary">
@@ -167,7 +167,7 @@
                      <table class="settingsTable">
                         <tr>
                            <td>Resolutions:</td>
-                           <td>Load Preset: <select onclick="set_preset(this.value)">
+                           <td>Load Preset: <select onchange="set_preset(this.value)">
                                  <option value="1920 1080 25 25 2592 1944">Select option...</option>
                                  <option value="1920 1080 25 25 2592 1944">Std FOV</option>
                                  <option value="1296 730 25 25 2592 1944">16:9 wide FOV</option>
@@ -189,7 +189,7 @@
                            <td>Annotation (max 31 characters):</td>
                            <td>
                               Text: <?php makeInput('annotation', 20); ?><input type="button" value="OK" onclick="send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"><input type="button" value="Default" onclick="document.getElementById('annotation').value = 'RPi Cam %Y.%M.%D_%h:%m:%s'; send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"><br>
-                              Background: ><select onclick="send_cmd('ab ' + this.value)"><?php makeOptions($options_ab, 'anno_background'); ?></select>
+                              Background: ><select onchange="send_cmd('ab ' + this.value)"><?php makeOptions($options_ab, 'anno_background'); ?></select>
                            </td>
                         </tr>
                         <?php if (file_exists("pilight_on")) pilight_controls(); ?>
@@ -219,11 +219,11 @@
                         </tr>
                         <tr>
                            <td>Metering Mode, default 'average':</td>
-                           <td><select onclick="send_cmd('mm ' + this.value)"><?php makeOptions($options_mm, 'metering_mode'); ?></select></td>
+                           <td><select onchange="send_cmd('mm ' + this.value)"><?php makeOptions($options_mm, 'metering_mode'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Video Stabilisation, default: 'off'</td>
-                           <td><select onclick="send_cmd('vs ' + this.value)"><?php makeOptions($options_vs, 'video_stabilisation'); ?></select></td>
+                           <td><select onchange="send_cmd('vs ' + this.value)"><?php makeOptions($options_vs, 'video_stabilisation'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Exposure Compensation (-10...10), default 0:</td>
@@ -231,15 +231,15 @@
                         </tr>
                         <tr>
                            <td>Exposure Mode, default 'auto':</td>
-                           <td><select onclick="send_cmd('em ' + this.value)"><?php makeOptions($options_em, 'exposure_mode'); ?></select></td>
+                           <td><select onchange="send_cmd('em ' + this.value)"><?php makeOptions($options_em, 'exposure_mode'); ?></select></td>
                         </tr>
                         <tr>
                            <td>White Balance, default 'auto':</td>
-                           <td><select onclick="send_cmd('wb ' + this.value)"><?php makeOptions($options_wb, 'white_balance'); ?></select></td>
+                           <td><select onchange="send_cmd('wb ' + this.value)"><?php makeOptions($options_wb, 'white_balance'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Image Effect, default 'none':</td>
-                           <td><select onclick="send_cmd('ie ' + this.value)"><?php makeOptions($options_ie, 'image_effect'); ?></select></td>
+                           <td><select onchange="send_cmd('ie ' + this.value)"><?php makeOptions($options_ie, 'image_effect'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Colour Effect, default 'disabled':</td>
@@ -250,11 +250,11 @@
                         </tr>
                         <tr>
                            <td>Rotation, default 0:</td>
-                           <td><select onclick="send_cmd('ro ' + this.value)"><?php makeOptions($options_ro, 'rotation'); ?></select></td>
+                           <td><select onchange="send_cmd('ro ' + this.value)"><?php makeOptions($options_ro, 'rotation'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Flip, default 'none':</td>
-                           <td><select onclick="send_cmd('fl ' + this.value)"><?php makeOptions($options_fl, 'flip'); ?></select></td>
+                           <td><select onchange="send_cmd('fl ' + this.value)"><?php makeOptions($options_fl, 'flip'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Sensor Region, default 0/0/65536/65536:</td>
@@ -275,7 +275,7 @@
                         </tr>
                         <tr>
                            <td>Raw Layer, default: 'off'</td>
-                           <td><select onclick="send_cmd('rl ' + this.value)"><?php makeOptions($options_rl, 'raw_layer'); ?></select></td>
+                           <td><select onchange="send_cmd('rl ' + this.value)"><?php makeOptions($options_rl, 'raw_layer'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Video bitrate (0...25000000), default 17000000:</td>
@@ -285,7 +285,7 @@
                         </tr>
                         <tr>
                            <td>MP4 Boxing mode :</td>
-                           <td><select onclick="send_cmd('bo ' + this.value)"><?php makeOptions($options_bo, 'MP4Box'); ?></select></td>
+                           <td><select onchange="send_cmd('bo ' + this.value)"><?php makeOptions($options_bo, 'MP4Box'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Annotation size(0-99):</td>
