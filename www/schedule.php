@@ -10,7 +10,7 @@
    define('BTN_SHOWLOG', 'Show Log');
    define('BTN_DOWNLOADLOG', 'Download Log');
    define('BTN_CLEARLOG', 'Clear Log');
-   define('LBL_PERIODS', 'Night;Dawn;Day;Dusk');
+   define('LBL_PERIODS', 'AllDay;Night;Dawn;Day;Dusk');
    define('LBL_COLUMNS', 'Period;Motion Start;Motion Stop;Period Start');
    define('LBL_PARAMETERS', 'Parameter;Value');
    define('LBL_DAWN', 'Dawn');
@@ -150,7 +150,14 @@
                   $pars[$key] = $input[$key];
                }
             }
+            //Backwards compatibility fixes go here
             if (array_key_exists(SCHEDULE_ALLDAY,$input)) $pars[SCHEDULE_DAYMODE] = '1';
+            //Duplicate old Day to First AllDay
+            if (count($pars[SCHEDULE_COMMANDSON]) < 11) {
+               array_unshift($pars[SCHEDULE_COMMANDSON], $pars[SCHEDULE_COMMANDSON][2]);
+               array_unshift($pars[SCHEDULE_COMMANDSOFF], $pars[SCHEDULE_COMMANDSOFF][2]);
+               array_unshift($pars[SCHEDULE_MODES], $pars[SCHEDULE_MODES][2]);
+            }
          } catch (Exception $e) {
          }
       }
@@ -177,10 +184,10 @@
          SCHEDULE_LONGTITUDE => '0.00',
          SCHEDULE_MAXCAPTURE => '0',
          SCHEDULE_DAYMODE => '1',
-         SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","13:00"),
-         SCHEDULE_COMMANDSON => array("","","ca 1","","","","","","",""),
-         SCHEDULE_COMMANDSOFF => array("","","ca 0","","","","","","",""),
-         SCHEDULE_MODES => array("em night","md 1;em night","em auto","md 0;em night","","","","","","")
+         SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","14:00"),
+         SCHEDULE_COMMANDSON => array("ca 1","","","ca 1","","","","","","",""),
+         SCHEDULE_COMMANDSOFF => array("ca 0","","","ca 0","","","","","","",""),
+         SCHEDULE_MODES => array("","em night","md 1;em night","em auto","md 0;em night","","","","","","")
       );
       return $pars;
    }
@@ -223,7 +230,7 @@
       echo '</table><br>';
       $d = dayPeriod();
       $periods = explode(';', LBL_PERIODS);
-      if ($d < 4) $period = $periods[$d]; else $period = $d-3;
+      if ($d < 5) $period = $periods[$d]; else $period = $d-4;
       echo '<table class="settingsTable">';
       echo '<tr style="text-align:center;"><td>Time Offset: ' . getTimeOffset() . '</td><td>Sunrise: ' . getSunrise(SUNFUNCS_RET_STRING) . '</td><td>Sunset: ' . getSunset(SUNFUNCS_RET_STRING) . '</td><td>Current: ' . getCurrentLocalTime(false) . "</td><td>Period: $period </td></tr></table>";
       
@@ -240,10 +247,10 @@
       $cmdsOff = $pars[SCHEDULE_COMMANDSOFF];
       $modes = $pars[SCHEDULE_MODES];
       $row = 0;
-      for($row = 0; $row < (count($times) + 4); $row++) {
-         if ($row == 2) {
+      for($row = 0; $row < (count($times) + 5); $row++) {
+         if ($row == 0) {
             $class = 'day';
-         } else if ($row < 4) {
+         } else if ($row < 5) {
             $class = 'sun';
          } else {
             $class = 'fixed';
@@ -254,10 +261,10 @@
          } else {
             echo '<td>';
          }
-         if($row < 4) {
+         if($row < 5) {
             echo $periods[$row] . '&nbsp;&nbsp;</td>';
          } else {
-            echo "<input type='text' autocomplete='off' size='10' name='" . SCHEDULE_TIMES . "[]' value='" . htmlspecialchars($times[$row -4], ENT_QUOTES) . "'/> &nbsp;&nbsp;</td>";
+            echo "<input type='text' autocomplete='off' size='10' name='" . SCHEDULE_TIMES . "[]' value='" . htmlspecialchars($times[$row -5], ENT_QUOTES) . "'/> &nbsp;&nbsp;</td>";
          }
          echo "<td><input type='text' autocomplete='off' size='24' name='" . SCHEDULE_COMMANDSON . "[]' value='" . htmlspecialchars($cmdsOn[$row], ENT_QUOTES) . "'/>&nbsp;&nbsp;</td>";
          echo "<td><input type='text' autocomplete='off' size='24' name='" . SCHEDULE_COMMANDSOFF . "[]' value='" . htmlspecialchars($cmdsOff[$row], ENT_QUOTES) . "'/>&nbsp;&nbsp;</td>";
@@ -467,19 +474,19 @@ function cmdHelp() {
             $sr = 60 * getSunrise(SUNFUNCS_RET_DOUBLE);
             $ss = 60 * getSunset(SUNFUNCS_RET_DOUBLE);
             if ($t < ($sr + $schedulePars[SCHEDULE_DAWNSTARTMINUTES])) {
-               $period = 0;
-            } else if ($t < ($sr + $schedulePars[SCHEDULE_DAYSTARTMINUTES])) {
                $period = 1;
-            } else if ($t > ($ss + $schedulePars[SCHEDULE_DUSKENDMINUTES])) {
-               $period = 0;
-            } else if ($t > ($ss + $schedulePars[SCHEDULE_DAYENDMINUTES])) {
-               $period = 3;
-            } else {
+            } else if ($t < ($sr + $schedulePars[SCHEDULE_DAYSTARTMINUTES])) {
                $period = 2;
+            } else if ($t > ($ss + $schedulePars[SCHEDULE_DUSKENDMINUTES])) {
+               $period = 1;
+            } else if ($t > ($ss + $schedulePars[SCHEDULE_DAYENDMINUTES])) {
+               $period = 4;
+            } else {
+               $period = 3;
             }
             break;
          case 1:
-            $period = 2;
+            $period = 0;
             break;
          case 2:
             $times = $schedulePars[SCHEDULE_TIMES];
@@ -497,7 +504,7 @@ function cmdHelp() {
                   }
                }
             }
-            $period += 4;
+            $period += 5;
             break;
       }
       return $period;

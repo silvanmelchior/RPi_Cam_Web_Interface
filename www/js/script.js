@@ -45,7 +45,7 @@ function schedule_rows() {
    var sun, day, fixed, mode;
    mode = parseInt(document.getElementById("DayMode").value);
    switch(mode) {
-      case 0: sun = 'table-row'; day = 'table-row'; fixed = 'none'; break;
+      case 0: sun = 'table-row'; day = 'none'; fixed = 'none'; break;
       case 1: sun = 'none'; day = 'table-row'; fixed = 'none'; break;
       case 2: sun = 'none'; day = 'none'; fixed = 'table-row'; break;
       default: sun = 'table-row'; day = 'table-row'; fixed = 'table-row'; break;

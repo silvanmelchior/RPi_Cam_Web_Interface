@@ -50,6 +50,10 @@
       }
    }
    
+   function getStyle() {
+      return 'css/' . file_get_contents(BASE_DIR . '/css/extrastyle.txt');
+   }
+   
    function makeOptions($options, $selKey) {
       global $config;
       switch ($selKey) {
@@ -75,7 +79,6 @@
       }
    }
 
-
    function makeInput($id, $size, $selKey='') {
       global $config, $debugString;
       if ($selKey == '') $selKey = $id;
@@ -93,11 +96,10 @@
    }
    
    if (isset($_POST['extrastyle'])) {
-      if (file_exists('css/extrastyle.css')) {
-         unlink('css/extrastyle.css');
-      }
       if (file_exists('css/' . $_POST['extrastyle'])) {
-         copy('css/' . $_POST['extrastyle'], 'css/extrastyle.css');
+         $fp = fopen(BASE_DIR . '/css/extrastyle.txt', "w");
+         fwrite($fp, $_POST['extrastyle']);
+         fclose($fp);
       }
    }
    
@@ -119,7 +121,7 @@
       <meta name="viewport" content="width=550, initial-scale=1">
       <title><?php echo CAM_STRING; ?></title>
       <link rel="stylesheet" href="css/style_minified.css" />
-      <link rel="stylesheet" href="css/extrastyle.css" />
+      <link rel="stylesheet" href="<?php echo getStyle(); ?>" />
       <script src="js/style_minified.js"></script>
       <script src="js/script.js"></script>
       <script src="js/pipan.js"></script>
