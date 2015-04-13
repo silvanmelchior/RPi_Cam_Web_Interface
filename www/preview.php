@@ -209,8 +209,13 @@
          case 'i': $fIcon = 'image.png'; break;
          default : $fIcon = 'image.png'; break;
       }
-      $fsz = round ((filesize(MEDIA_PATH . "/$rFile")) / 1024);
-      $fModTime = filemtime(MEDIA_PATH . "/$rFile");
+      if (file_exists(MEDIA_PATH . "/$rFile")) {
+         $fsz = round ((filesize(MEDIA_PATH . "/$rFile")) / 1024);
+         $fModTime = filemtime(MEDIA_PATH . "/$rFile");
+      } else {
+         $fsz = 0;
+         $fModTime = filemtime(MEDIA_PATH . "/$f");
+      }
       $fDate = @date('Y-m-d', $fModTime);
       $fTime = @date('H:i:s', $fModTime);
       $fWidth = max($ts + 4, 140);
