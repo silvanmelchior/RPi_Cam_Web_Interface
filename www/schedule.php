@@ -535,7 +535,7 @@ function cmdHelp() {
 
    function purgeFiles($videoHours, $imageHours, $lapseHours) {
       global $logFile;
-      if ($videoHours > 0 || $imageHours > 0) {
+      if ($videoHours > 0 || $imageHours > 0 || $lapseHours > 0) {
          $files = scandir(MEDIA_PATH);
          $purgeCount = 0;
          $currentHours = time() / 3600;

@@ -36,7 +36,7 @@ set_time_limit(0);
 while(true) 
 {
 	echo "--$boundary\n";
-	echo "Content-type: image/jpeg\n\n";
+	echo "Content-type: image/jpeg\r\n\r\n";
 	
 	// Per-image header, note the two new-lines
 	ob_start();
