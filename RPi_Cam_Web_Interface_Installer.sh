@@ -70,7 +70,7 @@ case "$1" in
   install)
         sudo killall raspimjpeg
         git pull origin master
-        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
+        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip libav-tools incron
 
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
@@ -142,6 +142,11 @@ case "$1" in
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
+        
+        sudo echo "www-data" >> /etc/incron.allow
+        sudo echo "/mnt/media IN_CLOSE_WRITE bash /var/www/thumbnail.sh $#" >> /var/spool/incron/www-data
+        sudo mkdir /var/www/media/thumbs
+        sudo chmod +x /var/www/thumbnail.sh && sudo chown www-data:www-data /var/www/thumbnail.sh
 
         echo "Installer finished"
         ;;
