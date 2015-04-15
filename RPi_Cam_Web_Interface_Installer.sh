@@ -88,7 +88,7 @@ case "$1" in
           sudo mknod /var/www/$rpicamdir/FIFO1 p
         fi
         sudo chmod 666 /var/www/$rpicamdir/FIFO1
-        sudo chmod 666 /var/www/$rpicamdir/raspizip.sh
+        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
 
         if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
           sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
@@ -158,7 +158,7 @@ case "$1" in
         if [ ! -e /var/www/raspimjpeg ]; then
           sudo ln -s /etc/raspimjpeg /var/www/raspimjpeg
         fi
-        sudo chmod 666 /var/www/$rpicamdir/raspizip.sh
+        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
 
         echo "Update finished"
         ;;
