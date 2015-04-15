@@ -204,7 +204,7 @@
                         </tr>
                         <?php if (file_exists("pilight_on")) pilight_controls(); ?>
                         <tr>
-                           <td>Buffer (in ms), default 0:</td>
+                           <td>Buffer (1000... ms), default 0:</td>
                            <td><?php makeInput('video_buffer', 4); ?><input type="button" value="OK" onclick="send_cmd('bu ' + document.getElementById('video_buffer').value)"></td>
                         </tr>                        <tr>
                            <td>Sharpness (-100...100), default 0:</td>
