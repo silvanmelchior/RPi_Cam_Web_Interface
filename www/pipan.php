@@ -20,6 +20,7 @@
         $pipe = fopen("FIFO_pipan","w");
         fwrite($pipe, "servo $pan $tilt ");
         fclose($pipe);
+        file_put_contents("pipan_bak.txt", $_GET["pan"] . " " . $_GET["tilt"]);
       }
     }
   }

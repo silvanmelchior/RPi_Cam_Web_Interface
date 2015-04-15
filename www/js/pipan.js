@@ -131,7 +131,7 @@ function pipan_stop () {
   
 }
 
-function init_pt(p,t){
-   pan = p;
-   tilt = 2*t-240;
+function init_pt(p,t) {
+  pan = p;
+  tilt = t;
 }

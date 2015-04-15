@@ -20,7 +20,19 @@
    $options_vs = array('Off' => '0', 'On' => '1');
    $options_rl = array('Off' => '0', 'On' => '1');
 
+   function initCamPos() {
+      $tr = fopen("pipan_bak.txt", "r");
+      if($tr){
+         while(($line = fgets($tr)) != false) {
+           $vals = explode(" ", $line);
+           echo '<script type="text/javascript">init_pt(',$vals[0],',',$vals[1],');</script>';
+         }
+         fclose($tr);
+      }
+   }
+
    function pipan_controls() {
+      initCamPos();
       echo "<div class='container-fluid text-center liveimage'>";
       echo "<input type='button' class='btn btn-primary' value='up' onclick='servo_up();'><br>";
       echo "&nbsp<input type='button' class='btn btn-primary' value='left' onclick='servo_left();'>";
