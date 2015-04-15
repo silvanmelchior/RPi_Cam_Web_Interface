@@ -167,8 +167,8 @@
             <input id="halt_button" type="button" class="btn btn-danger">
          </div>
       </div>
-      <?php  if (file_exists("pipan_on")) pipan_controls(); ?>
       <div id="secondary-buttons" class="container-fluid text-center" <?php echo $displayStyle; ?> >
+         <?php  if (file_exists("pipan_on")) pipan_controls(); ?>
          <a href="preview.php" class="btn btn-default">Download Videos and Images</a>
          &nbsp;&nbsp;
          <a href="motion.php" class="btn btn-default">Edit motion settings</a>
