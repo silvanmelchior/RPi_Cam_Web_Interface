@@ -92,6 +92,22 @@
       return str_replace(SUBDIR_CHAR, '/', substr($file, 0 , -13));
    }
    
+   function getSortedFiles($ascending = true) {
+      $scanfiles = scandir(LBASE_DIR . '/' . MEDIA_PATH);
+      $files = array();
+      foreach($scanfiles as $file) {
+         if(($file != '.') && ($file != '..') && (substr($file, -7) == '.th.jpg')) {
+            $fDate = filemtime(MEDIA_PATH . "/$file");
+            $files[$file] = $fDate;
+         } 
+      }
+      if ($ascending)
+         asort($files);
+      else
+         arsort($files);
+      return array_keys($files);
+   }
+   
    function findLapseFiles($d) {
       //return an arranged in time order and then must have a matching 4 digit batch and an incrementing lapse number
       $batch = sprintf('%04d', substr($d, -11, 4));
@@ -125,22 +141,27 @@
    }
 
    //function to delete all files associated with a thumb name
-   function deleteFile($d) {
+   //returns space freed in kB
+   //if $del = false just calculate space which would be freed
+   function deleteFile($d, $del = true) {
+      $size = 0;
       $t = substr($d,-12, 1); 
       if ($t == 't') {
          // For time lapse try to delete all from this batch
-         
-         //get file list in time order
          $files = findLapseFiles($d);
          foreach($files as $file) {
-            if(!unlink($file)) $debugString .= "F ";
+            $size += filesize($file);
+            if ($del) if(!unlink($file)) $debugString .= "F ";
          }
       } else {
          $tFile = dataFilename($d);
          if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile")) {
-            unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
+            $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
+            if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
          }
       }
-      unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
+      $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
+      if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
+      return $size / 1024;
    }
 ?>

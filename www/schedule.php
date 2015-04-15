@@ -13,6 +13,8 @@
    define('LBL_PERIODS', 'AllDay;Night;Dawn;Day;Dusk');
    define('LBL_COLUMNS', 'Period;Motion Start;Motion Stop;Period Start');
    define('LBL_PARAMETERS', 'Parameter;Value');
+   define('LBL_DAYMODES', 'Sun based;All Day;Fixed Times');
+   define('LBL_PURGESPACEMODES', 'Off;Min Space GB or %;Max Usage GB or %');
    define('LBL_DAWN', 'Dawn');
    define('LBL_DAY', 'Day');
    define('LBL_DUSK', 'Dusk');
@@ -46,6 +48,8 @@
    define('SCHEDULE_PURGEVIDEOHOURS', 'PurgeVideo_Hours');
    define('SCHEDULE_PURGEIMAGEHOURS', 'PurgeImage_Hours');
    define('SCHEDULE_PURGELAPSEHOURS', 'PurgeLapse_Hours');
+   define('SCHEDULE_PURGESPACEMODE', 'PurgeSpace_Mode');
+   define('SCHEDULE_PURGESPACELEVEL', 'PurgeSpace_Level');
    define('SCHEDULE_COMMANDSON', 'Commands_On');
    define('SCHEDULE_COMMANDSOFF', 'Commands_Off');
    define('SCHEDULE_MODES', 'Modes');
@@ -56,7 +60,6 @@
    $schedulePars = loadPars(BASE_DIR . '/' . SCHEDULE_CONFIG);
    
    $cliCall = isCli();
-   $logFile = BASE_DIR . '/' . LOGFILE_SCHEDULE;
    $showLog = false;
    $schedulePID = getSchedulePID();
    if (!$cliCall && isset($_POST['action'])) {
@@ -94,15 +97,15 @@
             $showLog = true;
             break;
          case 'downloadlog':
-            if (file_exists($logFile)) {
+            if (file_exists(BASE_DIR . '/' . LOGFILE_SCHEDULE)) {
                header("Content-Type: text/plain");
                header("Content-Disposition: attachment; filename=\"" . date('Ymd-His-') . LOGFILE_SCHEDULE . "\"");
-               readfile("$logFile");
+               readfile(BASE_DIR . '/' . LOGFILE_SCHEDULE);
                return;
             }
          case 'clearlog':
-            if (file_exists($logFile)) {
-               unlink($logFile);
+            if (file_exists(BASE_DIR . '/' . LOGFILE_SCHEDULE)) {
+               unlink(BASE_DIR . '/' . LOGFILE_SCHEDULE);
             }
             break;
       }
@@ -176,6 +179,8 @@
          SCHEDULE_PURGEIMAGEHOURS => '0',
          SCHEDULE_PURGELAPSEHOURS => '0',
          SCHEDULE_GMTOFFSET => '0',
+         SCHEDULE_PURGESPACEMODE => '0',
+         SCHEDULE_PURGESPACELEVEL => '10',
          SCHEDULE_DAWNSTARTMINUTES => '-180',
          SCHEDULE_DAYSTARTMINUTES => '0',
          SCHEDULE_DAYENDMINUTES => '0',
@@ -209,18 +214,29 @@
       foreach ($pars as $mKey => $mValue) {
          if ($column == 0) echo '<tr>';
          if (!is_array($mValue)) {
-            if ($mKey == SCHEDULE_DAYMODE) {
-               $dayOptions = array('Sun based','All Day','Fixed Times');
-               echo "<td>$mKey&nbsp;&nbsp;</td><td>Select Day Mode&nbsp;<select id='$mKey' name='$mKey'" .' onclick="schedule_rows();">';
-               for($i = 0; $i < 3; $i++) {
-                  if ($i == $mValue) $selected = ' selected'; else $selected ='';
-                  $dayOption = $dayOptions[$i];
-                  echo "<option value='$i'$selected>$dayOption</option>";
-               }
-               echo '</select></td>';
-            } else {
-               echo "<td>$mKey&nbsp;&nbsp;</td><td><input type='text' autocomplete='off' size='30' name='$mKey' value='" . htmlspecialchars($mValue, ENT_QUOTES) . "'/></td>";
-               
+            switch ($mKey) {
+               case SCHEDULE_DAYMODE:
+                  $options = explode(';', LBL_DAYMODES);
+                  echo "<td>$mKey&nbsp;&nbsp;</td><td>Select Mode&nbsp;<select id='$mKey' name='$mKey'" .' onclick="schedule_rows();">';
+                  for($i = 0; $i < count($options); $i++) {
+                     if ($i == $mValue) $selected = ' selected'; else $selected ='';
+                     $option = $options[$i];
+                     echo "<option value='$i'$selected>$option</option>";
+                  }
+                  echo '</select></td>';
+                  break;
+               case SCHEDULE_PURGESPACEMODE:
+                  $options = explode(';', LBL_PURGESPACEMODES);
+                  echo "<td>$mKey&nbsp;&nbsp;</td><td>Select Mode&nbsp;<select id='$mKey' name='$mKey'>";
+                  for($i = 0; $i < count($options); $i++) {
+                     if ($i == $mValue) $selected = ' selected'; else $selected ='';
+                     $option = $options[$i];
+                     echo "<option value='$i'$selected>$option</option>";
+                  }
+                  echo '</select></td>';
+                  break;
+               default:
+                  echo "<td>$mKey&nbsp;&nbsp;</td><td><input type='text' autocomplete='off' size='30' name='$mKey' value='" . htmlspecialchars($mValue, ENT_QUOTES) . "'/></td>";
             }
             $column++;
             if ($column == 2) {echo '</tr>';$column =0;}
@@ -275,9 +291,8 @@
    }
 
    function displayLog() {
-      global $logFile;
-      if (file_exists($logFile)) {
-         $logData = file_get_contents($logFile);
+      if (file_exists(BASE_DIR . '/' . LOGFILE_SCHEDULE)) {
+         $logData = file_get_contents(BASE_DIR . '/' . LOGFILE_SCHEDULE);
          echo str_replace(PHP_EOL, '<BR>', $logData);
       } else {
          echo "No log data found";
@@ -360,7 +375,6 @@ function cmdHelp() {
              echo "<tr><td>an</td><td>text</td><td>set annotation</td></tr>";
              echo "<tr><td>ab</td><td>0/1</td><td>annotation background</td></tr>";
              echo "<tr><td>px</td><td>AAAA BBBB CC DD EEEE FFFF</td><td>set video+img resolution  video = AxB px, C fps, boxed with D fps, image = ExF px)</td></tr>";
-             echo "<tr><td>av</td><td>2/3</td><td>set annotation version</td></tr>";
              echo "<tr><td>as</td><td>number</td><td>set text size (v3 only)  0-99</td></tr>";
              echo "<tr><td>at</td><td>E YYY UUU VVV</td><td>set custom text colour (v3 only)</td></tr>";
              echo "<tr><td>ac</td><td>E YYY UUU VVV</td><td>set custom background colour (v3 only)</td></tr>";
@@ -394,7 +408,7 @@ function cmdHelp() {
 }
  
    function sendReset() {
-      global $schedulePars, $logFile;
+      global $schedulePars;
       writeLog("Send Schedule reset");
       $fifo = fopen($schedulePars[SCHEDULE_FIFOIN], "w");
       fwrite($fifo, SCHEDULE_RESET);
@@ -403,7 +417,7 @@ function cmdHelp() {
    }
    
    function sendCmds($cmdString) {
-      global $schedulePars, $logFile;
+      global $schedulePars;
 
       $cmds = explode(';', $cmdString);
       foreach ($cmds as $cmd) {
@@ -447,7 +461,7 @@ function cmdHelp() {
    }
 
    function findFixedTimePeriod($cMins) {
-      global $schedulePars, $logFile;
+      global $schedulePars;
       $times = $schedulePars[SCHEDULE_TIMES];
       $maxLessI = count($times) - 1;$maxLessV = -1;
       for ($i=0; $i < count($times); $i++) {
@@ -467,7 +481,7 @@ function cmdHelp() {
    
    //Return period of day 0=Night,1=Dawn,2=Day,3=Dusk
    function dayPeriod() {
-      global $schedulePars, $logFile;
+      global $schedulePars;
       $t = getCurrentLocalTime(true);
       switch($schedulePars[SCHEDULE_DAYMODE]) {
          case 0:
@@ -511,7 +525,6 @@ function cmdHelp() {
    }
    
    function openPipe($pipeName) {
-      global $logFile;
       if (!file_exists($pipeName)) {
          writeLog("Making Pipe to receive capture commands $pipeName");
          posix_mkfifo($pipeName,0666);
@@ -533,11 +546,14 @@ function cmdHelp() {
       return $ret;
    }
 
-   function purgeFiles($videoHours, $imageHours, $lapseHours) {
-      global $logFile;
+   function purgeFiles() {
+      global $schedulePars;
+      $videoHours = $schedulePars[SCHEDULE_PURGEVIDEOHOURS];
+      $imageHours = $schedulePars[SCHEDULE_PURGEIMAGEHOURS];
+      $lapseHours = $schedulePars[SCHEDULE_PURGELAPSEHOURS];
+      $purgeCount = 0;
       if ($videoHours > 0 || $imageHours > 0 || $lapseHours > 0) {
          $files = scandir(MEDIA_PATH);
-         $purgeCount = 0;
          $currentHours = time() / 3600;
          foreach($files as $file) {
             if(($file != '.') && ($file != '..') && (substr($file, -7) == '.th.jpg')) {
@@ -560,12 +576,48 @@ function cmdHelp() {
                }
             } 
          }
-         writeLog("Purged $purgeCount Files");
+         
+      }
+      if ($schedulePars[SCHEDULE_PURGESPACEMODE] > 0) {
+         $totalSize = disk_total_space(BASE_DIR . '/' . MEDIA_PATH) / 1024; //KB
+         $level =  str_replace('%', '', $schedulePars[SCHEDULE_PURGESPACELEVEL]);
+         if (strlen($level) < strlen($schedulePars[SCHEDULE_PURGESPACELEVEL])) {
+            //percentage
+            $level = min(max($schedulePars[SCHEDULE_PURGESPACELEVEL], 3), 97) * $totalSize / 100;
+         } else {
+            $level = str_replace(array('G','B', 'g','b'), '', $level) * 1048576.0;
+         }
+         switch ($schedulePars[SCHEDULE_PURGESPACEMODE]) {
+            case 1: //Free Space
+               $currentAvailable = disk_free_space(BASE_DIR . '/' . MEDIA_PATH) / 1024; //KB
+               //writeLog(" free space purge total $totalSize current: $currentAvailable target: $level");
+               if ($currentAvailable < $level) {
+                  $pFiles = getSortedFiles(false); //files in latest to earliest order
+                  while($currentAvailable < $level && count($pFiles) > 0){
+                     $currentAvailable += deleteFile(array_pop($pFiles));
+                     $purgeCount++;
+                  }
+               }
+               //writeLog("Finished. Current now: $currentAvailable");
+               break;
+            case 2: // Max usage
+               $pFiles = getSortedFiles(false); //files in latest to earliest order
+               //writeLog(" Max space purge max: $level");
+               foreach ($pFiles as $pFile) {
+                  $del = ($level <= 0);
+                  $level -= deleteFile($pFile, $del);
+                  if ($del) $purgeCount++;
+               }
+               break;
+         }
+      }
+      if($purgeCount > 0){
+        writeLog("Purged $purgeCount Files");
       }
    }
 
    function mainCLI() {
-      global $schedulePars, $logFile;
+      global $schedulePars;
       writeLog("RaspiCam support started");
       $captureCount = 0;
       $pipeIn = openPipe($schedulePars[SCHEDULE_FIFOIN]);
@@ -575,7 +627,6 @@ function cmdHelp() {
       $timeout = 0;
       $timeoutMax = 0; //Loop test will terminate after this (seconds) (used in test), set to 0 forever
       while($timeoutMax == 0 || $timeout < $timeoutMax) {
-         $logFile = BASE_DIR . '/' . LOGFILE_SCHEDULE;
          writeLog("Scheduler loop is started");
          $pollTime = $schedulePars[SCHEDULE_CMDPOLL];
          $modeTimeInterval = $schedulePars[SCHEDULE_MODEPOLL];
@@ -649,7 +700,7 @@ function cmdHelp() {
                   // Run management tasks
                   writeLog('Scheduled management tasks');
                   $manageTimer = $schedulePars[SCHEDULE_MANAGEMENTINTERVAL];
-                  purgeFiles($schedulePars[SCHEDULE_PURGEVIDEOHOURS], $schedulePars[SCHEDULE_PURGEIMAGEHOURS], $schedulePars[SCHEDULE_PURGELAPSEHOURS]);
+                  purgeFiles();
                   $cmd = $schedulePars[SCHEDULE_MANAGEMENTCOMMAND];
                   if ($cmd != '') {
                      writeLog("exec: $cmd");
