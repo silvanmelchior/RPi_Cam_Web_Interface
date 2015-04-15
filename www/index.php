@@ -112,6 +112,16 @@
       }
    }
    
+   $streamButton = "MJPEG-Stream";
+   $mjpegmode = 0;
+   if(isset($_COOKIE["stream_mode"])) {
+      if($_COOKIE["stream_mode"] == "MJPEG-Stream") {
+         $streamButton = "Default-Stream";
+         $mjpegmode = 1;
+      }
+   }
+
+   
    $config = readConfig($config, CONFIG_FILE1);
    $config = readConfig($config, CONFIG_FILE2);
 
@@ -126,7 +136,7 @@
       <script src="js/script.js"></script>
       <script src="js/pipan.js"></script>
    </head>
-   <body onload="setTimeout('init();', 100);">
+   <body onload="setTimeout('init(<?php echo $mjpegmode; ?>);', 100);">
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" <?php echo $displayStyle; ?>>
          <div class="container">
             <div class="navbar-header">
@@ -319,6 +329,7 @@
                </div>
                <div id="collapseTwo" class="panel-collapse collapse">
                   <div class="panel-body">
+                     <input id="toggle_stream" type="button" class="btn btn-primary" value="<?php echo $streamButton; ?>" onclick="set_stream_mode(this.value);">
                      <input id="shutdown_button" type="button" value="shutdown system" onclick="sys_shutdown();" class="btn btn-danger">
                      <input id="reboot_button" type="button" value="reboot system" onclick="sys_reboot();" class="btn btn-danger">
                      <input id="reset_button" type="button" value="reset settings" onclick="send_cmd('rs 1');setTimeout(function(){location.reload(true);}, 1000);" class="btn btn-danger">

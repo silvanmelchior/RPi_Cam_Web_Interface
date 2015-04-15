@@ -41,6 +41,20 @@ function set_display(value) {
    document.cookie="display_mode=" + value + "; " + expires;
 }
 
+function set_stream_mode(value) {
+   var d = new Date();
+   d.setTime(d.getTime() + (365*24*60*60*1000));
+   var expires = "expires="+d.toUTCString();
+   
+   if (value == "DefaultStream") {
+      document.getElementById("toggle_stream").value = "MJPEG-Stream";
+   } else {
+      document.getElementById("toggle_stream").value = "Default-Stream";
+   }
+   document.cookie="stream_mode=" + value + "; " + expires;
+   document.location.reload(true);
+}
+
 function schedule_rows() {
    var sun, day, fixed, mode;
    mode = parseInt(document.getElementById("DayMode").value);
@@ -115,10 +129,20 @@ function sys_reboot() {
 var mjpeg_img;
 var halted = 0;
 var previous_halted = 99;
+var mjpeg_mode = 0;
+
+function reload_img () {
+  if(!halted) mjpeg_img.src = "cam_pic.php?time=" + new Date().getTime();
+  else setTimeout("reload_img()", 500);
+}
+
+function error_img () {
+  setTimeout("mjpeg_img.src = 'cam_pic.php?time=' + new Date().getTime();", 100);
+}
 
 function updatePreview(cycle)
 {
-	if (cycle !== undefined && cycle == true)
+	if (mjpegmode && cycle !== undefined && cycle == true)
 	{
 		mjpeg_img.src = "/updating.jpg";
 		setTimeout("mjpeg_img.src = \"cam_pic_new.php?time=\" + new Date().getTime();", 1000);
@@ -387,11 +411,17 @@ function send_cmd (cmd) {
 //
 // Init
 //
-function init() {
+function init(mjpeg) {
 
-  // mjpeg
   mjpeg_img = document.getElementById("mjpeg_dest");
-  // status
-  reload_ajax("");
 
+  if (mjpeg) {
+    mjpegmode = 1;
+  } else {
+     mjpegmode = 0;
+     mjpeg_img.onload = reload_img;
+     mjpeg_img.onerror = error_img;
+     reload_img();
+  }
+  reload_ajax("");
 }
