@@ -399,6 +399,7 @@ function cmdHelp() {
              echo "<tr><td>rl</td><td>0/1</td><td>0/1 disable / enable raw layer</td></tr>";
              echo "<tr><td>rs</td><td>1</td><td>Reset user config to default</td></tr>";
              echo "<tr><td>ru</td><td>0/1</td><td>0/1 halt/restart RaspiMJPEG and release camera</td></tr>";
+             echo "<tr><td>sc</td><td>1</td><td>Rescan for video and image indexes</td></tr>";
            echo "</table>";
          echo "</div>";
        echo "</div>";
