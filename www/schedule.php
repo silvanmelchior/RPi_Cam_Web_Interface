@@ -620,7 +620,7 @@ function cmdHelp() {
    function mainCLI() {
       global $schedulePars;
       writeLog("RaspiCam support started");
-      $captureCount = 0;
+      $captureStart = 0;
       $pipeIn = openPipe($schedulePars[SCHEDULE_FIFOIN]);
       $lastDayPeriod = -1;
       $cmdPeriod = -1;
@@ -630,9 +630,9 @@ function cmdHelp() {
       while($timeoutMax == 0 || $timeout < $timeoutMax) {
          writeLog("Scheduler loop is started");
          $pollTime = $schedulePars[SCHEDULE_CMDPOLL];
-         $modeTimeInterval = $schedulePars[SCHEDULE_MODEPOLL];
-         $manageTimer = 0;
-         $modetimeCount = 0;
+         $slowPoll = 0;
+         $managechecktime = time();
+         $modechecktime = $managechecktime;
 
          while($timeoutMax == 0 || $timeout < $timeoutMax) {
             usleep($pollTime * 1000000);
@@ -648,7 +648,7 @@ function cmdHelp() {
                   }
                } else {
                   writeLog('Stop capture request ignored, already stopped');
-                  $captureCount = 0;
+                  
                }
             } else if ($cmd == SCHEDULE_START) {
                if ($lastOnCommand < 0 && $lastDayPeriod >= 0) {
@@ -657,6 +657,7 @@ function cmdHelp() {
                   if ($send) {
                      sendCmds($send);
                      $lastOnCommand = $lastDayPeriod;
+                     $captureStart = time();
                   }
                } else {
                   writeLog('Start capture request ignored, already started');
@@ -669,38 +670,41 @@ function cmdHelp() {
             } else if ($cmd !="") {
                writeLog("Ignore FIFO char $cmd");
             }
-
-            //Action period time change checks at TIME_CHECK intervals
-            $modetimeCount -= $pollTime;
-            if ($modetimeCount < 0) {
-               $modetimeCount =  $modeTimeInterval;
-               $timeout += $modeTimeInterval;
-               if ($lastOnCommand < 0) {
-                  //No capture in progress, Check if day period changing
-                  $captureCount = 0;
-                  $newDayPeriod = dayPeriod();
-                  if ($newDayPeriod != $lastDayPeriod) {
-                     writeLog("New period detected $newDayPeriod");
-                     sendCmds($schedulePars[SCHEDULE_MODES][$newDayPeriod]);
-                     $lastDayPeriod = $newDayPeriod;
-                  }
-               } else {
-                  //Capture in progress, Check for maximum
-                  if ($schedulePars[SCHEDULE_MAXCAPTURE] > 0) {
-                     $captureCount += $modeTimeInterval;
-                     if ($captureCount > $schedulePars[SCHEDULE_MAXCAPTURE]) {
-                        writeLog("Maximum Capture reached. Sending off");
-                        sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
-                        $lastOnCommand = -1;
-                        $captureCount = 0;
+            
+            //slow Poll actions done every 10 fast loops times
+            $slowPoll--;
+            if ($slowPoll < 0) {
+               $slowPoll = 10;
+               $timenow = time();
+               //Action period time change checks at MODE_POLL intervals
+               if ($timenow > $modechecktime) {
+                  //Set next period check time
+                  $modechecktime = $timenow + $schedulePars[SCHEDULE_MODEPOLL];
+                  if ($lastOnCommand < 0) {
+                     //No capture in progress, Check if day period changing
+                     $newDayPeriod = dayPeriod();
+                     if ($newDayPeriod != $lastDayPeriod) {
+                        writeLog("New period detected $newDayPeriod");
+                        sendCmds($schedulePars[SCHEDULE_MODES][$newDayPeriod]);
+                        $lastDayPeriod = $newDayPeriod;
                      }
                   }
                }
-               $manageTimer -= $modeTimeInterval;
-               if ($manageTimer < 0) {
+               if ($lastOnCommand >= 0) {
+                  //Capture in progress, Check for maximum
+                  if ($schedulePars[SCHEDULE_MAXCAPTURE] > 0) {
+                     if (($timenow - $captureStart) >= $schedulePars[SCHEDULE_MAXCAPTURE]) {
+                        writeLog("Maximum Capture reached. Sending off command");
+                        sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
+                        $lastOnCommand = -1;
+                     }
+                  }
+               }
+               if ($timenow > $managechecktime) {
                   // Run management tasks
-                  writeLog('Scheduled management tasks');
-                  $manageTimer = $schedulePars[SCHEDULE_MANAGEMENTINTERVAL];
+                  //Set next check time
+                  $managechecktime = $timenow + $schedulePars[SCHEDULE_MANAGEMENTINTERVAL];
+                  writeLog("Scheduled management tasks. Next at $managechecktime");
                   purgeFiles();
                   $cmd = $schedulePars[SCHEDULE_MANAGEMENTCOMMAND];
                   if ($cmd != '') {

@@ -7,9 +7,9 @@ TOTAL=`awk 'END{print NR}' $FILELIST`
 
 while read line           
 do  
-    zip -q $ZIPNAME $line 
     COUNTER=$((COUNTER + 1))   
     echo $COUNTER "/" $TOTAL > $COUNTFILE 
+    zip -q $ZIPNAME $line 
 done <$FILELIST
 
 rm -f $COUNTFILE
