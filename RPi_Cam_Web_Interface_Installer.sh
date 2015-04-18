@@ -129,7 +129,7 @@ case "$1" in
         if [ "$rpicamdir" == "" ]; then
           cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
         else
-          sed -e "s/www/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+          sed -e "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
         fi
         sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
