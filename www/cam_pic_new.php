@@ -4,22 +4,15 @@
 
 define('BASE_DIR', dirname(__FILE__));
 require_once(BASE_DIR.'/config.php');
-$config = array();
 
-$config = readConfig($config, CONFIG_FILE1);
-$config = readConfig($config, CONFIG_FILE2);
+if (isset($_GET["pDelay"]))
+   {
+      $preview_delay = $_GET["pDelay"];
+   } else {
+      $preview_delay = 10000;
+   }
 
-$video_fps = $config['video_fps'];
-$preview_devider = $config['divider'];
-
-$preview_fps = ($video_fps / $preview_devider);
-$preview_delay = floor((1/$preview_fps * 1000000));
-
-if (isset($_GET["debug"]) && $_GET["debug"] == 'y')
-{
-	var_dump($preview_delay);
-	die();
-}
+//writeLog("mjpeg stream with $preview_delay delay");
 
 // Used to separate multipart
 $boundary = "PIderman";

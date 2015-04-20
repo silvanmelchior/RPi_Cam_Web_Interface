@@ -137,6 +137,8 @@
    $config = readConfig($config, CONFIG_FILE1);
    $config = readConfig($config, CONFIG_FILE2);
 
+   $video_fps = $config['video_fps'];
+   $divider = $config['divider'];
    ?>
 <html>
    <head>
@@ -148,7 +150,7 @@
       <script src="js/script.js"></script>
       <script src="js/pipan.js"></script>
    </head>
-   <body onload="setTimeout('init(<?php echo $mjpegmode; ?>);', 100);">
+   <body onload="setTimeout('init(<?php echo "$mjpegmode, $video_fps, $divider" ?>);', 100);">
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" <?php echo $displayStyle; ?>>
          <div class="container">
             <div class="navbar-header">
@@ -296,9 +298,13 @@
                            </td>
                         </tr>
                         <tr>
-                           <td>Preview quality (0...100), default 25:</td>
+                           <td>Preview quality (0...100) Default 25:<br>Width (128...1024) Default 512:<br>Divider (1-16) Default 1:</td>
                            <td>
-                              <?php makeInput('quality', 4); ?><input type="button" value="OK" onclick="send_cmd('qp ' + document.getElementById('quality').value)">
+
+                              Qu: <?php makeInput('quality', 4); ?>
+                              Wi: <?php makeInput('width', 4); ?>
+                              Di: <?php makeInput('divider', 4); ?>
+                              <input type="button" value="OK" onclick="set_preview();">
                            </td>
                         </tr>
                         <tr>

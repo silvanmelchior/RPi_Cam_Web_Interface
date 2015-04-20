@@ -394,6 +394,7 @@ function cmdHelp() {
              echo "<tr><td>fl</td><td>number</td><td>set flip (range: [0;3]; default: 0)</td></tr>";
              echo "<tr><td>ri</td><td>AAAAA BBBBB CCCCC DDDDD</td><td>set sensor region (x=A, y=B, w=C, h=D)</td></tr>";
              echo "<tr><td>qu</td><td>number</td><td>set output image quality (range: [0;100]; default: 85)</td></tr>";
+             echo "<tr><td>pv</td><td>QQ WWW DD</td><td>set preview quality (0-100) default 25, Width (128-1024) default 512, Divider (1-16) default 1</td></tr>";
              echo "<tr><td>bi</td><td>number</td><td>set output video bitrate (range: [0;25000000]; default: 17000000)</td></tr>";
              echo "<tr><td>bo</td><td>number</td><td>set MP4Box mode (0=off, 1=inline, 2=background";
              echo "<tr><td>rl</td><td>0/1</td><td>0/1 disable / enable raw layer</td></tr>";

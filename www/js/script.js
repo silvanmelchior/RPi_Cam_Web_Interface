@@ -90,12 +90,18 @@ function set_preset(value) {
 
 function set_res() {
   send_cmd("px " + document.getElementById("video_width").value + " " + document.getElementById("video_height").value + " " + document.getElementById("video_fps").value + " " + document.getElementById("MP4Box_fps").value + " " + document.getElementById("image_width").value + " " + document.getElementById("image_height").value);
+  update_preview_delay();
   updatePreview(true);
 }
 
 function set_ce() {
   send_cmd("ce " + document.getElementById("ce_en").value + " " + document.getElementById("ce_u").value + " " + document.getElementById("ce_v").value);
 
+}
+
+function set_preview() {
+  send_cmd("pv " + document.getElementById("quality").value + " " + document.getElementById("width").value + " " + document.getElementById("divider").value);
+  update_preview_delay();
 }
 
 function set_roi() {
@@ -130,9 +136,10 @@ var mjpeg_img;
 var halted = 0;
 var previous_halted = 99;
 var mjpeg_mode = 0;
+var preview_delay = 0;
 
 function reload_img () {
-  if(!halted) mjpeg_img.src = "cam_pic.php?time=" + new Date().getTime();
+  if(!halted) mjpeg_img.src = "cam_pic.php?time=" + new Date().getTime() + "&pDelay=" + preview_delay;
   else setTimeout("reload_img()", 500);
 }
 
@@ -145,7 +152,7 @@ function updatePreview(cycle)
 	if (mjpegmode && cycle !== undefined && cycle == true)
 	{
 		mjpeg_img.src = "/updating.jpg";
-		setTimeout("mjpeg_img.src = \"cam_pic_new.php?time=\" + new Date().getTime();", 1000);
+		setTimeout("mjpeg_img.src = \"cam_pic_new.php?time=\" + new Date().getTime()  + \"&pDelay=\" + preview_delay;", 1000);
 		return;
 	}
 	
@@ -153,7 +160,7 @@ function updatePreview(cycle)
 	{
 		if(!halted)
 		{
-			mjpeg_img.src = "cam_pic_new.php?time=" + new Date().getTime();			
+			mjpeg_img.src = "cam_pic_new.php?time=" + new Date().getTime() + "&pDelay=" + preview_delay;			
 		}
 		else
 		{
@@ -408,13 +415,19 @@ function send_cmd (cmd) {
   ajax_cmd.send();
 }
 
+function update_preview_delay() {
+   var video_fps = parseInt(document.getElementById("video_fps").value);
+   var divider = parseInt(document.getElementById("divider").value);
+   preview_delay = Math.floor(divider / Math.max(video_fps,1) * 1000000);
+}
+
 //
 // Init
 //
-function init(mjpeg) {
+function init(mjpeg, video_fps, divider) {
 
   mjpeg_img = document.getElementById("mjpeg_dest");
-
+  preview_delay = Math.floor(divider / Math.max(video_fps,1) * 1000000);
   if (mjpeg) {
     mjpegmode = 1;
   } else {
