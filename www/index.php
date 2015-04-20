@@ -296,6 +296,12 @@
                            </td>
                         </tr>
                         <tr>
+                           <td>Preview quality (0...100), default 25:</td>
+                           <td>
+                              <?php makeInput('quality', 4); ?><input type="button" value="OK" onclick="send_cmd('qp ' + document.getElementById('quality').value)">
+                           </td>
+                        </tr>
+                        <tr>
                            <td>Raw Layer, default: 'off'</td>
                            <td><select onchange="send_cmd('rl ' + this.value)"><?php makeOptions($options_rl, 'raw_layer'); ?></select></td>
                         </tr>
