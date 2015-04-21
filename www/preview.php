@@ -17,6 +17,8 @@
    define('TXT_FILES', 'Files');
    
    define('CONVERT_CMD', 'convertCmd.txt');
+   
+   
    //Set size defaults and try to get from cookies
    $previewSize = 640;
    $thumbSize = 96;
@@ -234,6 +236,24 @@
       if ($fsz > 0) echo "</a>";
       echo "</fieldset> ";
    }
+   
+   function diskUsage() {
+      //Get disk data
+      $totalSize = round(disk_total_space(BASE_DIR . '/' . MEDIA_PATH) / 1048576); //MB
+      $currentAvailable = round(disk_free_space(BASE_DIR . '/' . MEDIA_PATH) / 1048576); //MB
+      $percentUsed = round(($totalSize - $currentAvailable)/$totalSize * 100, 1);
+      if ($percentUsed > 98)
+         $colour = 'Red';
+      else if ($percentUsed > 90)
+         $colour = 'Orange';
+      else
+         $colour = 'LightGreen';
+      echo '<div style="margin-left:5px;position:relative;width:300px;border:1px solid #ccc;">';
+         echo "<span>Used:$percentUsed%  Total:$totalSize(MB)</span>";
+         echo "<div style='z-index:-1;position:absolute;top:0px;width:$percentUsed%;background-color:$colour;'>&nbsp;</div>";
+      echo '</div>';
+   }
+   
 ?>
 <!DOCTYPE html>
 <html>
@@ -283,7 +303,8 @@
          echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='zipSel'>" . BTN_GETZIP . "</button>";
          echo "&nbsp;&nbsp;<button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick=\"return confirm('Are you sure?');\">" . BTN_DELETESEL . "</button>";
          echo "&nbsp;&nbsp;<button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick=\"return confirm('Are you sure?');\">" . BTN_DELETEALL . "</button>";
-         echo "</h1><br>";
+         echo "</h1>";
+         diskUsage();
          if ($debugString !="") echo "$debugString<br>";
          $files = scandir(MEDIA_PATH);
          if(count($files) == 2) echo "<p>No videos/images saved</p>";
