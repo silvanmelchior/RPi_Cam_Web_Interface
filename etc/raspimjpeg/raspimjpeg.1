@@ -103,6 +103,12 @@ thumb_gen vit
 autostart standard
 motion_detection false
 
+# Watchdog
+# Interval in 0.1 secs
+# Errors is Number of times cam.jpg doesn't change before exit
+watchdog_interval 30
+watchdog_errors 3
+
 #optional user_config file to overwrite (persist) changes
 user_config /var/www/uconfig
 

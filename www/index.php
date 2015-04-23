@@ -102,6 +102,13 @@
                $value = 3;
             }
             break;
+         case 'watchdog_interval':
+            if (array_key_exists($selKey, $config)) {
+               $value = $config[$selKey] / 10;
+            } else {
+               $value = 0;
+            }
+            break;
          default: $value = $config[$selKey]; break;
       }
       echo "<input type='text' size=$size id='$id' value='$value'>";
@@ -341,6 +348,12 @@
                               <input type="button" value="OK" onclick="set_ac();">
                            </td>
                            </tr>
+                        <tr>
+                           <td>Watchdog, default interval 3s, errors 3</td>
+                           <td>Interval <?php makeInput('watchdog_interval', 3); ?>s&nbsp;&nbsp;&nbsp;&nbsp;Errors <?php makeInput('watchdog_errors', 3); ?>
+                           <input type="button" value="OK" onclick="send_cmd('wd ' + 10 * document.getElementById('watchdog_interval').value + ' ' + document.getElementById('watchdog_errors').value)">
+                           </td>
+                        </tr>
                      </table>
                   </div>
                </div>
