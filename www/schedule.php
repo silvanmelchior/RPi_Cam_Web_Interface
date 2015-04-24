@@ -14,7 +14,7 @@
    define('LBL_COLUMNS', 'Period;Motion Start;Motion Stop;Period Start');
    define('LBL_PARAMETERS', 'Parameter;Value');
    define('LBL_DAYMODES', 'Sun based;All Day;Fixed Times');
-   define('LBL_PURGESPACEMODES', 'Off;Min Space GB or %;Max Usage GB or %');
+   define('LBL_PURGESPACEMODES', 'Off;Min Space %;Max Usage %;Min Space GB;Max Usage GB');
    define('LBL_DAWN', 'Dawn');
    define('LBL_DAY', 'Day');
    define('LBL_DUSK', 'Dusk');
@@ -582,15 +582,20 @@ function cmdHelp() {
       }
       if ($schedulePars[SCHEDULE_PURGESPACEMODE] > 0) {
          $totalSize = disk_total_space(BASE_DIR . '/' . MEDIA_PATH) / 1024; //KB
-         $level =  str_replace('%', '', $schedulePars[SCHEDULE_PURGESPACELEVEL]);
-         if (strlen($level) < strlen($schedulePars[SCHEDULE_PURGESPACELEVEL])) {
-            //percentage
-            $level = min(max($schedulePars[SCHEDULE_PURGESPACELEVEL], 3), 97) * $totalSize / 100;
-         } else {
-            $level = str_replace(array('G','B', 'g','b'), '', $level) * 1048576.0;
+         $level =  str_replace(array('%','G','B', 'g','b'), '', $schedulePars[SCHEDULE_PURGESPACELEVEL]);
+         switch ($schedulePars[SCHEDULE_PURGESPACEMODE]) {
+            case 1:
+            case 2:
+               $level = min(max($schedulePars[SCHEDULE_PURGESPACELEVEL], 3), 97) * $totalSize / 100;
+               break;
+            case 3:
+            case 4:
+               $level = $level * 1048576.0;
+               break;
          }
          switch ($schedulePars[SCHEDULE_PURGESPACEMODE]) {
             case 1: //Free Space
+            case 3:
                $currentAvailable = disk_free_space(BASE_DIR . '/' . MEDIA_PATH) / 1024; //KB
                //writeLog(" free space purge total $totalSize current: $currentAvailable target: $level");
                if ($currentAvailable < $level) {
@@ -603,6 +608,7 @@ function cmdHelp() {
                //writeLog("Finished. Current now: $currentAvailable");
                break;
             case 2: // Max usage
+            case 4:
                $pFiles = getSortedFiles(false); //files in latest to earliest order
                //writeLog(" Max space purge max: $level");
                foreach ($pFiles as $pFile) {
