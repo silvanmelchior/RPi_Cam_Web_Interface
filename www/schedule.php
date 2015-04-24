@@ -48,7 +48,7 @@
    define('SCHEDULE_PURGEVIDEOHOURS', 'PurgeVideo_Hours');
    define('SCHEDULE_PURGEIMAGEHOURS', 'PurgeImage_Hours');
    define('SCHEDULE_PURGELAPSEHOURS', 'PurgeLapse_Hours');
-   define('SCHEDULE_PURGESPACEMODE', 'PurgeSpace_Mode');
+   define('SCHEDULE_PURGESPACEMODE', 'PurgeSpace_ModeEx');
    define('SCHEDULE_PURGESPACELEVEL', 'PurgeSpace_Level');
    define('SCHEDULE_COMMANDSON', 'Commands_On');
    define('SCHEDULE_COMMANDSOFF', 'Commands_Off');
