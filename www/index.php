@@ -12,7 +12,7 @@
    $options_ce_en = array('Disabled' => '0', 'Enabled' => '1');
    $options_ro = array('No rotate' => '0', 'Rotate_90' => '90', 'Rotate_180' => '180', 'Rotate_270' => '270');
    $options_fl = array('None' => '0', 'Horizontal' => '1', 'Vertical' => '2', 'Both' => '3');
-   $options_bo = array('Off' => '0', 'InLine' => '1', 'Background' => '2');
+   $options_bo = array('Off' => '0', 'Background' => '2');
    $options_av = array('V2' => '2', 'V3' => '3');
    $options_at_en = array('Disabled' => '0', 'Enabled' => '1');
    $options_ac_en = array('Disabled' => '0', 'Enabled' => '1');

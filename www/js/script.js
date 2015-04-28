@@ -292,40 +292,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").value = "stop camera";
       document.getElementById("halt_button").onclick = function() {};
     }
-    else if(ajax_status.responseText == "boxing") {
-      document.getElementById("video_button").disabled = true;
-      document.getElementById("video_button").value = "video processing...";
-      document.getElementById("video_button").onclick = function() {};
-      document.getElementById("image_button").disabled = false;
-      document.getElementById("image_button").value = "record image";
-      document.getElementById("image_button").onclick = function() {send_cmd("im");};
-      document.getElementById("timelapse_button").disabled = true;
-      document.getElementById("timelapse_button").value = "timelapse start";
-      document.getElementById("timelapse_button").onclick = function() {};
-      document.getElementById("md_button").disabled = true;
-      document.getElementById("md_button").value = "motion detection start";
-      document.getElementById("md_button").onclick = function() {};
-      document.getElementById("halt_button").disabled = true;
-      document.getElementById("halt_button").value = "stop camera";
-      document.getElementById("halt_button").onclick = function() {};
-    }
-    else if(ajax_status.responseText == "md_boxing") {
-      document.getElementById("video_button").disabled = true;
-      document.getElementById("video_button").value = "record video start";
-      document.getElementById("video_button").onclick = function() {};
-      document.getElementById("image_button").disabled = false;
-      document.getElementById("image_button").value = "record image";
-      document.getElementById("image_button").onclick = function() {send_cmd("im");};
-      document.getElementById("timelapse_button").disabled = true;
-      document.getElementById("timelapse_button").value = "timelapse start";
-      document.getElementById("timelapse_button").onclick = function() {};
-      document.getElementById("md_button").disabled = true;
-      document.getElementById("md_button").value = "video processing...";
-      document.getElementById("md_button").onclick = function() {};
-      document.getElementById("halt_button").disabled = true;
-      document.getElementById("halt_button").value = "stop camera";
-      document.getElementById("halt_button").onclick = function() {};
-    }
     else if(ajax_status.responseText == "halted") {
       document.getElementById("video_button").disabled = true;
       document.getElementById("video_button").value = "record video start";
