@@ -558,8 +558,8 @@ function cmdHelp() {
          $files = scandir(MEDIA_PATH);
          $currentHours = time() / 3600;
          foreach($files as $file) {
-            if(($file != '.') && ($file != '..') && (substr($file, -7) == '.th.jpg')) {
-               $fType = substr($file,-12, 1);
+            if(($file != '.') && ($file != '..') && isThumbnail($file)) {
+               $fType = getFileType($file);
                $purgeHours = 0;
                switch ($fType) {
                   case 'i': $purgeHours = $imageHours;

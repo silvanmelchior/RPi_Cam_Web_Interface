@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v5.1.3');
+   define('APP_VERSION', 'v5.1.4');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -31,6 +31,9 @@
    
    // character used to flatten file paths
    define('SUBDIR_CHAR', '@');
+
+   // character used to flatten file paths
+   define('THUMBNAIL_EXT', '.th.jpg');
    
    // file where a debug file is stored
    define('LOGFILE_DEBUG', 'debugLog.txt');
@@ -88,15 +91,12 @@
    }
 
    // functions to find and delete data files
-   function dataFilename($file) {
-      return str_replace(SUBDIR_CHAR, '/', substr($file, 0 , -13));
-   }
    
    function getSortedFiles($ascending = true) {
       $scanfiles = scandir(LBASE_DIR . '/' . MEDIA_PATH);
       $files = array();
       foreach($scanfiles as $file) {
-         if(($file != '.') && ($file != '..') && (substr($file, -7) == '.th.jpg')) {
+         if(($file != '.') && ($file != '..') && isThumbnail($file)) {
             $fDate = filemtime(MEDIA_PATH . "/$file");
             $files[$file] = $fDate;
          } 
@@ -110,7 +110,7 @@
    
    function findLapseFiles($d) {
       //return an arranged in time order and then must have a matching 4 digit batch and an incrementing lapse number
-      $batch = sprintf('%04d', substr($d, -11, 4));
+      $batch = getFileIndex($d);
       $fullname = LBASE_DIR . '/' . MEDIA_PATH . '/' . dataFilename($d);
       $path = dirname($fullname);
       $start = filemtime("$fullname");
@@ -119,7 +119,7 @@
       $lapsefiles = array();
       foreach($scanfiles as $file) {
          if (strpos($file, $batch) !== false) {
-            if (strpos($file, '.th.jpg') === false) {
+            if (!isThumbnail($file)) {
                $fDate = filemtime("$path/$file");
                if ($fDate >= $start) {
                   $files[$file] = $fDate;
@@ -145,7 +145,7 @@
    //if $del = false just calculate space which would be freed
    function deleteFile($d, $del = true) {
       $size = 0;
-      $t = substr($d,-12, 1); 
+      $t = getFileType($d); 
       if ($t == 't') {
          // For time lapse try to delete all from this batch
          $files = findLapseFiles($d);
@@ -164,4 +164,44 @@
       if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
       return $size / 1024;
    }
+   
+   //Support naming functions
+   function dataFilename($file) {
+      $i = strrpos($file, '.', -8);
+      if ($i !== false)
+         return str_replace(SUBDIR_CHAR, '/', substr($file, 0, $i));
+      else
+         return ""; 
+   }
+
+   function dataFileext($file) {
+      $f = dataFileName($file);
+      if ($f <> "") {
+         $i = strrpos($f, '.');
+         if ($i !== false)
+            return substr($f, $i+1);
+      }
+      return ""; 
+   }
+
+   function isThumbnail($file) {
+      return (substr($file, -7) == THUMBNAIL_EXT);
+   }
+   
+   function getFileType($file) {
+      $i = strrpos($file, '.', -8);
+      if ($i !== false)
+         return substr($file, $i + 1, 1);
+      else
+         return ""; 
+   }
+   
+   function getFileIndex($file) {
+      $i = strrpos($file, '.', -8);
+      if ($i !== false)
+         return substr($file, $i + 2, strlen($file) - $i - 9);
+      else
+         return ""; 
+   }
+
 ?>

@@ -72,14 +72,14 @@
       $tFile = "";
    } else if (isset($_POST['download1'])) {
       $dFile = $_POST['download1'];
-      if(substr($dFile, -12, 1) != 't') {
+      if(getFileType($dFile) != 't') {
          $dxFile = dataFilename($dFile);
-         if(substr($dFile, -16, 3) == "jpg") {
+         if(dataFileext($dFile) == "jpg") {
             header("Content-Type: image/jpeg");
          } else {
             header("Content-Type: video/mp4");
          }
-         header("Content-Disposition: attachment; filename=\"" . substr($dFile,0,-13) . "\"");
+         header("Content-Disposition: attachment; filename=\"" . dataFilename($dFile) . "\"");
          readfile(MEDIA_PATH . "/$dxFile");
          return;
       } else {
@@ -130,7 +130,7 @@
       writeLog("Making zip $zipname");
       $zipfiles = fopen($zipname.".files", "w");
       foreach ($files as $file) {
-         if (substr($file, -12, 1) == 't') {
+         if (getFileType($file) == 't') {
             $lapses = findLapseFiles($file);
             if (!empty($lapses)) {
                foreach($lapses as $lapse) {
@@ -153,7 +153,7 @@
    function startVideoConvert($bFile) {
       global $debugString;
       $tFiles = findLapseFiles($bFile);
-      $tmp = BASE_DIR . '/' . MEDIA_PATH . '/' . substr($bFile, -12, 5);
+      $tmp = BASE_DIR . '/' . MEDIA_PATH . '/' . getFileType($bFile) . getFileIndex($bFile);
       if (!file_exists($tmp)) {
          mkdir($tmp, 0777, true);
       }
@@ -170,7 +170,7 @@
       $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . ' ' . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
       writeLog("start lapse convert:$cmd");
       system($cmd);
-      copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . substr($bFile, 0, -16) . 'mp4.v' . substr($bFile, -11));
+      copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . $vFile . '.v' . getFileIndex($bFile) .THUMBNAIL_EXT);
       writeLog("Convert finished");
    }
 
@@ -198,9 +198,9 @@
    
    //function to draw 1 file on the page
    function drawFile($f, $ts, $sel) {
-      $fType = substr($f,-12, 1);
+      $fType = getFileType($f);
       $rFile = dataFilename($f);
-      $fNumber = substr($f,-11,4);
+      $fNumber = getFileIndex($f);
       $lapseCount = "";
       switch ($fType) {
          case 'v': $fIcon = 'video.png'; break;
@@ -281,10 +281,10 @@
       <form action="preview.php" method="POST">
       <?php
          if ($pFile != "") {
-            echo "<h1>" . TXT_PREVIEW . ":  " . substr($tFile,-12,5);
+            echo "<h1>" . TXT_PREVIEW . ":  " . getFileType($tFile) . getFileIndex($tFile);
             echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='download1' value='$tFile'>" . BTN_DOWNLOAD . "</button>";
             echo "&nbsp;<button class='btn btn-danger' type='submit' name='delete1' value='$tFile'>" . BTN_DELETE . "</button>";
-            if(substr($tFile, -12, 1) == "t") {
+            if(getFileType($tFile) == "t") {
                $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
                echo "&nbsp;<button class='btn btn-primary' type='submit' name='convert' value='$tFile'>" . BTN_CONVERT . "</button>";
                echo "<br></h1>Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='$convertCmd'><br><br>";
@@ -310,7 +310,7 @@
          if(count($files) == 2) echo "<p>No videos/images saved</p>";
          else {
             foreach($files as $file) {
-               if(($file != '.') && ($file != '..') && (substr($file, -7) == '.th.jpg')) {
+               if(($file != '.') && ($file != '..') && isThumbnail($file, -7)) {
                   drawFile($file, $thumbSize, $dSelect);
                } 
             }
