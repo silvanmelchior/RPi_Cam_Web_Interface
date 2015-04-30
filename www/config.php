@@ -111,6 +111,7 @@
    function findLapseFiles($d) {
       //return an arranged in time order and then must have a matching 4 digit batch and an incrementing lapse number
       $batch = getFileIndex($d);
+      $padlen = strlen($batch);
       $fullname = LBASE_DIR . '/' . MEDIA_PATH . '/' . dataFilename($d);
       $path = dirname($fullname);
       $start = filemtime("$fullname");
@@ -130,7 +131,7 @@
       asort($files);
       $lapseCount = 1;
       foreach($files as $key => $value) {
-         if (strpos($key, sprintf('%04d', $lapseCount)) !== false) {
+         if (strpos($key, str_pad($lapseCount, $padlen, 0, STR_PAD_LEFT)) !== false) {
             $lapsefiles[] = "$path/$key";
             $lapseCount++;
          } else {
