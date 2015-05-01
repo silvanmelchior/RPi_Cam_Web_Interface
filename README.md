@@ -1,7 +1,3 @@
-Web based interface for controlling the Raspberry Pi Camera, includes motion detection, time lapse, and image and video recording.
+Added a pan-tilt control (based in ServoBlaster) in the web-interface from http://elinux.org/RPi-Cam-Web-Interface
 
-All information on this project can be found here: http://www.raspberrypi.org/forums/viewtopic.php?f=43&t=63276
-
-The wiki page can be found here:
-
-http://elinux.org/RPi-Cam-Web-Interface
+Depends on ServoBlaster to move the servos, so you should install it first https://github.com/richardghirst/PiBits/tree/master/ServoBlaster
