@@ -23,3 +23,1507 @@
 [2015/05/01 00:26:41] New period detected 0
 [2015/05/01 00:26:41] Scheduled management tasks. Next at 1430443601
 [2015/05/01 01:26:42] Scheduled management tasks. Next at 1430447202
+{2015/05/01 01:56:16} Motion detection started
+{2015/05/01 01:56:29} Motion detection stopped
+[2015/05/01 01:56:29] Stop capture request ignored, already stopped
+[2015/05/01 02:26:43] Scheduled management tasks. Next at 1430450803
+[2015/05/01 03:26:44] Scheduled management tasks. Next at 1430454404
+[2015/05/01 04:26:45] Scheduled management tasks. Next at 1430458005
+[2015/05/01 05:26:46] Scheduled management tasks. Next at 1430461606
+[2015/05/01 06:26:47] Scheduled management tasks. Next at 1430465207
+[2015/05/01 07:26:48] Scheduled management tasks. Next at 1430468808
+[2015/05/01 08:26:49] Scheduled management tasks. Next at 1430472409
+[2015/05/01 09:26:50] Scheduled management tasks. Next at 1430476010
+[2015/05/01 10:26:51] Scheduled management tasks. Next at 1430479611
+{2015/05/01 10:17:15} RaspiMJPEG Version 5.1.3
+{2015/05/01 10:17:15} MJPEG streaming, ready to receive commands
+[2015/05/01 11:08:09] RaspiCam support started
+[2015/05/01 11:08:09] Capture Pipe already exists /var/www/FIFO1
+[2015/05/01 11:08:09] Scheduler loop is started
+[2015/05/01 11:08:10] New period detected 0
+[2015/05/01 11:08:10] Scheduled management tasks. Next at 1430482090
+{2015/05/01 10:17:15} RaspiMJPEG Version 5.1.3
+{2015/05/01 10:17:15} MJPEG streaming, ready to receive commands
+[2015/05/01 11:12:42] RaspiCam support started
+[2015/05/01 11:12:42] Capture Pipe already exists /var/www/FIFO1
+[2015/05/01 11:12:42] Scheduler loop is started
+[2015/05/01 11:12:43] New period detected 0
+[2015/05/01 11:12:43] Scheduled management tasks. Next at 1430482363
+{2015/05/01 11:22:45} Motion detection started
+[2015/05/01 11:22:49] Start capture requested
+[2015/05/01 11:22:49] Send ca 1
+{2015/05/01 11:22:49} Capturing started
+[2015/05/01 11:22:52] Stop capture requested
+[2015/05/01 11:22:52] Send ca 0
+{2015/05/01 11:22:52} Capturing stopped
+{2015/05/01 11:22:52} Add /var/www/media/vi_0000_20150501_112249.mp4 to Box Queue at pos 0
+{2015/05/01 11:22:52} Start boxing /var/www/media/vi_0000_20150501_112249.mp4 from Box Queue at pos 0
+{2015/05/01 11:22:53} Finished boxing /var/www/media/vi_0000_20150501_112249.mp4 from Box Queue at pos 0
+[2015/05/01 11:23:43] Start capture requested
+[2015/05/01 11:23:43] Send ca 1
+{2015/05/01 11:23:43} Capturing started
+[2015/05/01 11:23:46] Stop capture requested
+[2015/05/01 11:23:46] Send ca 0
+{2015/05/01 11:23:46} Capturing stopped
+{2015/05/01 11:23:46} Add /var/www/media/vi_0001_20150501_112343.mp4 to Box Queue at pos 1
+{2015/05/01 11:23:46} Start boxing /var/www/media/vi_0001_20150501_112343.mp4 from Box Queue at pos 1
+{2015/05/01 11:23:47} Finished boxing /var/www/media/vi_0001_20150501_112343.mp4 from Box Queue at pos 1
+[2015/05/01 11:25:15] Start capture requested
+[2015/05/01 11:25:15] Send ca 1
+{2015/05/01 11:25:15} Capturing started
+[2015/05/01 11:25:35] Stop capture requested
+[2015/05/01 11:25:35] Send ca 0
+{2015/05/01 11:25:35} Capturing stopped
+{2015/05/01 11:25:35} Add /var/www/media/vi_0002_20150501_112515.mp4 to Box Queue at pos 2
+{2015/05/01 11:25:35} Start boxing /var/www/media/vi_0002_20150501_112515.mp4 from Box Queue at pos 2
+{2015/05/01 11:25:46} Finished boxing /var/www/media/vi_0002_20150501_112515.mp4 from Box Queue at pos 2
+[2015/05/01 11:28:36] Start capture requested
+[2015/05/01 11:28:36] Send ca 1
+{2015/05/01 11:28:36} Capturing started
+[2015/05/01 11:28:39] Stop capture requested
+[2015/05/01 11:28:39] Send ca 0
+{2015/05/01 11:28:39} Capturing stopped
+{2015/05/01 11:28:39} Add /var/www/media/vi_0003_20150501_112836.mp4 to Box Queue at pos 3
+{2015/05/01 11:28:39} Start boxing /var/www/media/vi_0003_20150501_112836.mp4 from Box Queue at pos 3
+{2015/05/01 11:28:41} Finished boxing /var/www/media/vi_0003_20150501_112836.mp4 from Box Queue at pos 3
+[2015/05/01 11:28:41] Start capture requested
+[2015/05/01 11:28:41] Send ca 1
+{2015/05/01 11:28:41} Capturing started
+[2015/05/01 11:28:44] Stop capture requested
+[2015/05/01 11:28:44] Send ca 0
+{2015/05/01 11:28:44} Capturing stopped
+{2015/05/01 11:28:44} Add /var/www/media/vi_0004_20150501_112841.mp4 to Box Queue at pos 4
+{2015/05/01 11:28:45} Start boxing /var/www/media/vi_0004_20150501_112841.mp4 from Box Queue at pos 4
+{2015/05/01 11:28:46} Finished boxing /var/www/media/vi_0004_20150501_112841.mp4 from Box Queue at pos 4
+[2015/05/01 11:28:46] Start capture requested
+[2015/05/01 11:28:46] Send ca 1
+{2015/05/01 11:28:46} Capturing started
+[2015/05/01 11:28:51] Stop capture requested
+[2015/05/01 11:28:51] Send ca 0
+{2015/05/01 11:28:51} Capturing stopped
+{2015/05/01 11:28:51} Add /var/www/media/vi_0005_20150501_112846.mp4 to Box Queue at pos 5
+{2015/05/01 11:28:52} Start boxing /var/www/media/vi_0005_20150501_112846.mp4 from Box Queue at pos 5
+{2015/05/01 11:28:53} Finished boxing /var/www/media/vi_0005_20150501_112846.mp4 from Box Queue at pos 5
+[2015/05/01 11:28:53] Start capture requested
+[2015/05/01 11:28:53] Send ca 1
+{2015/05/01 11:28:53} Capturing started
+[2015/05/01 11:28:56] Stop capture requested
+[2015/05/01 11:28:56] Send ca 0
+{2015/05/01 11:28:56} Capturing stopped
+{2015/05/01 11:28:56} Add /var/www/media/vi_0006_20150501_112853.mp4 to Box Queue at pos 6
+{2015/05/01 11:28:56} Start boxing /var/www/media/vi_0006_20150501_112853.mp4 from Box Queue at pos 6
+{2015/05/01 11:28:57} Finished boxing /var/www/media/vi_0006_20150501_112853.mp4 from Box Queue at pos 6
+[2015/05/01 11:28:58] Start capture requested
+[2015/05/01 11:28:58] Send ca 1
+{2015/05/01 11:28:58} Capturing started
+[2015/05/01 11:29:01] Stop capture requested
+[2015/05/01 11:29:01] Send ca 0
+{2015/05/01 11:29:01} Capturing stopped
+{2015/05/01 11:29:01} Add /var/www/media/vi_0007_20150501_112858.mp4 to Box Queue at pos 7
+{2015/05/01 11:29:02} Start boxing /var/www/media/vi_0007_20150501_112858.mp4 from Box Queue at pos 7
+{2015/05/01 11:29:03} Finished boxing /var/www/media/vi_0007_20150501_112858.mp4 from Box Queue at pos 7
+[2015/05/01 11:29:03] Start capture requested
+[2015/05/01 11:29:03] Send ca 1
+{2015/05/01 11:29:03} Capturing started
+[2015/05/01 11:29:08] Stop capture requested
+[2015/05/01 11:29:08] Send ca 0
+{2015/05/01 11:29:08} Capturing stopped
+{2015/05/01 11:29:08} Add /var/www/media/vi_0008_20150501_112903.mp4 to Box Queue at pos 8
+{2015/05/01 11:29:08} Start boxing /var/www/media/vi_0008_20150501_112903.mp4 from Box Queue at pos 8
+{2015/05/01 11:29:09} Finished boxing /var/www/media/vi_0008_20150501_112903.mp4 from Box Queue at pos 8
+[2015/05/01 11:29:10] Start capture requested
+[2015/05/01 11:29:10] Send ca 1
+{2015/05/01 11:29:10} Capturing started
+[2015/05/01 11:29:14] Stop capture requested
+[2015/05/01 11:29:14] Send ca 0
+{2015/05/01 11:29:14} Capturing stopped
+{2015/05/01 11:29:14} Add /var/www/media/vi_0009_20150501_112910.mp4 to Box Queue at pos 9
+{2015/05/01 11:29:15} Start boxing /var/www/media/vi_0009_20150501_112910.mp4 from Box Queue at pos 9
+[2015/05/01 11:29:16] Start capture requested
+[2015/05/01 11:29:16] Send ca 1
+{2015/05/01 11:29:16} Capturing started
+{2015/05/01 11:29:16} Finished boxing /var/www/media/vi_0009_20150501_112910.mp4 from Box Queue at pos 9
+[2015/05/01 11:29:20] Stop capture requested
+[2015/05/01 11:29:20] Send ca 0
+{2015/05/01 11:29:20} Capturing stopped
+{2015/05/01 11:29:20} Add /var/www/media/vi_0010_20150501_112916.mp4 to Box Queue at pos 10
+{2015/05/01 11:29:21} Start boxing /var/www/media/vi_0010_20150501_112916.mp4 from Box Queue at pos 10
+{2015/05/01 11:29:22} Finished boxing /var/www/media/vi_0010_20150501_112916.mp4 from Box Queue at pos 10
+[2015/05/01 11:29:22] Start capture requested
+[2015/05/01 11:29:22] Send ca 1
+{2015/05/01 11:29:22} Capturing started
+[2015/05/01 11:29:26] Stop capture requested
+[2015/05/01 11:29:26] Send ca 0
+{2015/05/01 11:29:26} Capturing stopped
+{2015/05/01 11:29:26} Add /var/www/media/vi_0011_20150501_112922.mp4 to Box Queue at pos 11
+{2015/05/01 11:29:26} Start boxing /var/www/media/vi_0011_20150501_112922.mp4 from Box Queue at pos 11
+{2015/05/01 11:29:27} Finished boxing /var/www/media/vi_0011_20150501_112922.mp4 from Box Queue at pos 11
+[2015/05/01 11:29:28] Start capture requested
+[2015/05/01 11:29:28] Send ca 1
+{2015/05/01 11:29:28} Capturing started
+[2015/05/01 11:29:32] Stop capture requested
+[2015/05/01 11:29:32] Send ca 0
+{2015/05/01 11:29:32} Capturing stopped
+{2015/05/01 11:29:32} Add /var/www/media/vi_0012_20150501_112928.mp4 to Box Queue at pos 12
+{2015/05/01 11:29:33} Start boxing /var/www/media/vi_0012_20150501_112928.mp4 from Box Queue at pos 12
+{2015/05/01 11:29:34} Finished boxing /var/www/media/vi_0012_20150501_112928.mp4 from Box Queue at pos 12
+[2015/05/01 11:29:34] Start capture requested
+[2015/05/01 11:29:34] Send ca 1
+{2015/05/01 11:29:34} Capturing started
+[2015/05/01 11:29:38] Stop capture requested
+[2015/05/01 11:29:38] Send ca 0
+{2015/05/01 11:29:38} Capturing stopped
+{2015/05/01 11:29:38} Add /var/www/media/vi_0013_20150501_112934.mp4 to Box Queue at pos 13
+{2015/05/01 11:29:38} Start boxing /var/www/media/vi_0013_20150501_112934.mp4 from Box Queue at pos 13
+{2015/05/01 11:29:39} Finished boxing /var/www/media/vi_0013_20150501_112934.mp4 from Box Queue at pos 13
+[2015/05/01 11:29:40] Start capture requested
+[2015/05/01 11:29:40] Send ca 1
+{2015/05/01 11:29:40} Capturing started
+[2015/05/01 11:29:44] Stop capture requested
+[2015/05/01 11:29:44] Send ca 0
+{2015/05/01 11:29:44} Capturing stopped
+{2015/05/01 11:29:44} Add /var/www/media/vi_0014_20150501_112940.mp4 to Box Queue at pos 14
+{2015/05/01 11:29:44} Start boxing /var/www/media/vi_0014_20150501_112940.mp4 from Box Queue at pos 14
+{2015/05/01 11:29:45} Finished boxing /var/www/media/vi_0014_20150501_112940.mp4 from Box Queue at pos 14
+[2015/05/01 11:29:46] Start capture requested
+[2015/05/01 11:29:46] Send ca 1
+{2015/05/01 11:29:46} Capturing started
+[2015/05/01 11:29:50] Stop capture requested
+[2015/05/01 11:29:50] Send ca 0
+{2015/05/01 11:29:50} Capturing stopped
+{2015/05/01 11:29:50} Add /var/www/media/vi_0015_20150501_112946.mp4 to Box Queue at pos 15
+{2015/05/01 11:29:51} Start boxing /var/www/media/vi_0015_20150501_112946.mp4 from Box Queue at pos 15
+{2015/05/01 11:29:52} Finished boxing /var/www/media/vi_0015_20150501_112946.mp4 from Box Queue at pos 15
+[2015/05/01 11:29:52] Start capture requested
+[2015/05/01 11:29:52] Send ca 1
+{2015/05/01 11:29:52} Capturing started
+[2015/05/01 11:29:56] Stop capture requested
+[2015/05/01 11:29:56] Send ca 0
+{2015/05/01 11:29:56} Capturing stopped
+{2015/05/01 11:29:56} Add /var/www/media/vi_0016_20150501_112952.mp4 to Box Queue at pos 16
+{2015/05/01 11:29:56} Start boxing /var/www/media/vi_0016_20150501_112952.mp4 from Box Queue at pos 16
+{2015/05/01 11:29:57} Finished boxing /var/www/media/vi_0016_20150501_112952.mp4 from Box Queue at pos 16
+[2015/05/01 11:29:58] Start capture requested
+[2015/05/01 11:29:58] Send ca 1
+{2015/05/01 11:29:58} Capturing started
+[2015/05/01 11:30:02] Stop capture requested
+[2015/05/01 11:30:02] Send ca 0
+{2015/05/01 11:30:02} Capturing stopped
+{2015/05/01 11:30:02} Add /var/www/media/vi_0017_20150501_112958.mp4 to Box Queue at pos 17
+{2015/05/01 11:30:03} Start boxing /var/www/media/vi_0017_20150501_112958.mp4 from Box Queue at pos 17
+{2015/05/01 11:30:04} Finished boxing /var/www/media/vi_0017_20150501_112958.mp4 from Box Queue at pos 17
+[2015/05/01 11:30:04] Start capture requested
+[2015/05/01 11:30:04] Send ca 1
+{2015/05/01 11:30:04} Capturing started
+[2015/05/01 11:30:08] Stop capture requested
+[2015/05/01 11:30:08] Send ca 0
+{2015/05/01 11:30:08} Capturing stopped
+{2015/05/01 11:30:08} Add /var/www/media/vi_0018_20150501_113004.mp4 to Box Queue at pos 18
+{2015/05/01 11:30:08} Start boxing /var/www/media/vi_0018_20150501_113004.mp4 from Box Queue at pos 18
+{2015/05/01 11:30:10} Finished boxing /var/www/media/vi_0018_20150501_113004.mp4 from Box Queue at pos 18
+[2015/05/01 11:30:10] Start capture requested
+[2015/05/01 11:30:10] Send ca 1
+{2015/05/01 11:30:10} Capturing started
+[2015/05/01 11:30:15] Stop capture requested
+[2015/05/01 11:30:15] Send ca 0
+{2015/05/01 11:30:15} Capturing stopped
+{2015/05/01 11:30:15} Add /var/www/media/vi_0019_20150501_113010.mp4 to Box Queue at pos 19
+{2015/05/01 11:30:15} Start boxing /var/www/media/vi_0019_20150501_113010.mp4 from Box Queue at pos 19
+{2015/05/01 11:30:16} Finished boxing /var/www/media/vi_0019_20150501_113010.mp4 from Box Queue at pos 19
+[2015/05/01 11:30:17] Start capture requested
+[2015/05/01 11:30:17] Send ca 1
+{2015/05/01 11:30:17} Capturing started
+[2015/05/01 11:30:22] Stop capture requested
+[2015/05/01 11:30:22] Send ca 0
+{2015/05/01 11:30:22} Capturing stopped
+{2015/05/01 11:30:22} Add /var/www/media/vi_0020_20150501_113017.mp4 to Box Queue at pos 20
+{2015/05/01 11:30:23} Start boxing /var/www/media/vi_0020_20150501_113017.mp4 from Box Queue at pos 20
+{2015/05/01 11:30:24} Finished boxing /var/www/media/vi_0020_20150501_113017.mp4 from Box Queue at pos 20
+[2015/05/01 11:30:24] Start capture requested
+[2015/05/01 11:30:24] Send ca 1
+{2015/05/01 11:30:24} Capturing started
+[2015/05/01 11:30:28] Stop capture requested
+[2015/05/01 11:30:28] Send ca 0
+{2015/05/01 11:30:28} Capturing stopped
+{2015/05/01 11:30:28} Add /var/www/media/vi_0021_20150501_113024.mp4 to Box Queue at pos 21
+{2015/05/01 11:30:28} Start boxing /var/www/media/vi_0021_20150501_113024.mp4 from Box Queue at pos 21
+{2015/05/01 11:30:30} Finished boxing /var/www/media/vi_0021_20150501_113024.mp4 from Box Queue at pos 21
+[2015/05/01 11:30:30] Start capture requested
+[2015/05/01 11:30:31] Send ca 1
+{2015/05/01 11:30:31} Capturing started
+[2015/05/01 11:30:33] Stop capture requested
+[2015/05/01 11:30:33] Send ca 0
+{2015/05/01 11:30:33} Capturing stopped
+{2015/05/01 11:30:33} Add /var/www/media/vi_0022_20150501_113031.mp4 to Box Queue at pos 22
+{2015/05/01 11:30:33} Start boxing /var/www/media/vi_0022_20150501_113031.mp4 from Box Queue at pos 22
+{2015/05/01 11:30:34} Finished boxing /var/www/media/vi_0022_20150501_113031.mp4 from Box Queue at pos 22
+[2015/05/01 11:30:35] Start capture requested
+[2015/05/01 11:30:35] Send ca 1
+{2015/05/01 11:30:35} Capturing started
+[2015/05/01 11:30:39] Stop capture requested
+[2015/05/01 11:30:39] Send ca 0
+{2015/05/01 11:30:39} Capturing stopped
+{2015/05/01 11:30:39} Add /var/www/media/vi_0023_20150501_113035.mp4 to Box Queue at pos 23
+{2015/05/01 11:30:40} Start boxing /var/www/media/vi_0023_20150501_113035.mp4 from Box Queue at pos 23
+[2015/05/01 11:30:41] Start capture requested
+[2015/05/01 11:30:41] Send ca 1
+{2015/05/01 11:30:41} Capturing started
+{2015/05/01 11:30:41} Finished boxing /var/www/media/vi_0023_20150501_113035.mp4 from Box Queue at pos 23
+[2015/05/01 11:30:45] Stop capture requested
+[2015/05/01 11:30:45] Send ca 0
+{2015/05/01 11:30:45} Capturing stopped
+{2015/05/01 11:30:45} Add /var/www/media/vi_0024_20150501_113041.mp4 to Box Queue at pos 24
+{2015/05/01 11:30:46} Start boxing /var/www/media/vi_0024_20150501_113041.mp4 from Box Queue at pos 24
+{2015/05/01 11:30:47} Finished boxing /var/www/media/vi_0024_20150501_113041.mp4 from Box Queue at pos 24
+[2015/05/01 11:30:47] Start capture requested
+[2015/05/01 11:30:47] Send ca 1
+{2015/05/01 11:30:47} Capturing started
+[2015/05/01 11:30:51] Stop capture requested
+[2015/05/01 11:30:51] Send ca 0
+{2015/05/01 11:30:51} Capturing stopped
+{2015/05/01 11:30:51} Add /var/www/media/vi_0025_20150501_113047.mp4 to Box Queue at pos 25
+{2015/05/01 11:30:51} Start boxing /var/www/media/vi_0025_20150501_113047.mp4 from Box Queue at pos 25
+{2015/05/01 11:30:52} Finished boxing /var/www/media/vi_0025_20150501_113047.mp4 from Box Queue at pos 25
+[2015/05/01 11:30:53] Start capture requested
+[2015/05/01 11:30:53] Send ca 1
+{2015/05/01 11:30:53} Capturing started
+[2015/05/01 11:30:57] Stop capture requested
+[2015/05/01 11:30:57] Send ca 0
+{2015/05/01 11:30:57} Capturing stopped
+{2015/05/01 11:30:57} Add /var/www/media/vi_0026_20150501_113053.mp4 to Box Queue at pos 26
+{2015/05/01 11:30:58} Start boxing /var/www/media/vi_0026_20150501_113053.mp4 from Box Queue at pos 26
+{2015/05/01 11:30:59} Finished boxing /var/www/media/vi_0026_20150501_113053.mp4 from Box Queue at pos 26
+[2015/05/01 11:30:59] Start capture requested
+[2015/05/01 11:30:59] Send ca 1
+{2015/05/01 11:30:59} Capturing started
+[2015/05/01 11:31:04] Stop capture requested
+[2015/05/01 11:31:04] Send ca 0
+{2015/05/01 11:31:04} Capturing stopped
+{2015/05/01 11:31:04} Add /var/www/media/vi_0027_20150501_113059.mp4 to Box Queue at pos 27
+{2015/05/01 11:31:05} Start boxing /var/www/media/vi_0027_20150501_113059.mp4 from Box Queue at pos 27
+{2015/05/01 11:31:06} Finished boxing /var/www/media/vi_0027_20150501_113059.mp4 from Box Queue at pos 27
+[2015/05/01 11:31:06] Start capture requested
+[2015/05/01 11:31:06] Send ca 1
+{2015/05/01 11:31:06} Capturing started
+[2015/05/01 11:31:10] Stop capture requested
+[2015/05/01 11:31:10] Send ca 0
+{2015/05/01 11:31:10} Capturing stopped
+{2015/05/01 11:31:10} Add /var/www/media/vi_0028_20150501_113106.mp4 to Box Queue at pos 28
+{2015/05/01 11:31:10} Start boxing /var/www/media/vi_0028_20150501_113106.mp4 from Box Queue at pos 28
+{2015/05/01 11:31:11} Finished boxing /var/www/media/vi_0028_20150501_113106.mp4 from Box Queue at pos 28
+[2015/05/01 11:31:12] Start capture requested
+[2015/05/01 11:31:12] Send ca 1
+{2015/05/01 11:31:12} Capturing started
+[2015/05/01 11:31:16] Stop capture requested
+[2015/05/01 11:31:16] Send ca 0
+{2015/05/01 11:31:16} Capturing stopped
+{2015/05/01 11:31:16} Add /var/www/media/vi_0029_20150501_113112.mp4 to Box Queue at pos 29
+{2015/05/01 11:31:17} Start boxing /var/www/media/vi_0029_20150501_113112.mp4 from Box Queue at pos 29
+{2015/05/01 11:31:18} Finished boxing /var/www/media/vi_0029_20150501_113112.mp4 from Box Queue at pos 29
+[2015/05/01 11:31:18] Start capture requested
+[2015/05/01 11:31:18] Send ca 1
+{2015/05/01 11:31:18} Capturing started
+[2015/05/01 11:31:22] Stop capture requested
+[2015/05/01 11:31:22] Send ca 0
+{2015/05/01 11:31:22} Capturing stopped
+{2015/05/01 11:31:22} Add /var/www/media/vi_0030_20150501_113118.mp4 to Box Queue at pos 30
+{2015/05/01 11:31:22} Start boxing /var/www/media/vi_0030_20150501_113118.mp4 from Box Queue at pos 30
+{2015/05/01 11:31:23} Finished boxing /var/www/media/vi_0030_20150501_113118.mp4 from Box Queue at pos 30
+[2015/05/01 11:31:24] Start capture requested
+[2015/05/01 11:31:24] Send ca 1
+{2015/05/01 11:31:24} Capturing started
+[2015/05/01 11:31:28] Stop capture requested
+[2015/05/01 11:31:28] Send ca 0
+{2015/05/01 11:31:28} Capturing stopped
+{2015/05/01 11:31:28} Add /var/www/media/vi_0031_20150501_113124.mp4 to Box Queue at pos 31
+{2015/05/01 11:31:29} Start boxing /var/www/media/vi_0031_20150501_113124.mp4 from Box Queue at pos 31
+[2015/05/01 11:31:30] Start capture requested
+[2015/05/01 11:31:30] Send ca 1
+{2015/05/01 11:31:30} Capturing started
+{2015/05/01 11:31:30} Finished boxing /var/www/media/vi_0031_20150501_113124.mp4 from Box Queue at pos 31
+[2015/05/01 11:31:34] Stop capture requested
+[2015/05/01 11:31:34] Send ca 0
+{2015/05/01 11:31:34} Capturing stopped
+{2015/05/01 11:31:34} Add /var/www/media/vi_0032_20150501_113130.mp4 to Box Queue at pos 0
+{2015/05/01 11:31:35} Start boxing /var/www/media/vi_0032_20150501_113130.mp4 from Box Queue at pos 0
+[2015/05/01 11:31:36] Start capture requested
+[2015/05/01 11:31:36] Send ca 1
+{2015/05/01 11:31:36} Capturing started
+{2015/05/01 11:31:36} Finished boxing /var/www/media/vi_0032_20150501_113130.mp4 from Box Queue at pos 0
+[2015/05/01 11:31:40] Stop capture requested
+[2015/05/01 11:31:40] Send ca 0
+{2015/05/01 11:31:40} Capturing stopped
+{2015/05/01 11:31:40} Add /var/www/media/vi_0033_20150501_113136.mp4 to Box Queue at pos 1
+{2015/05/01 11:31:40} Start boxing /var/www/media/vi_0033_20150501_113136.mp4 from Box Queue at pos 1
+{2015/05/01 11:31:41} Finished boxing /var/www/media/vi_0033_20150501_113136.mp4 from Box Queue at pos 1
+[2015/05/01 11:31:42] Start capture requested
+[2015/05/01 11:31:42] Send ca 1
+{2015/05/01 11:31:42} Capturing started
+[2015/05/01 11:31:47] Stop capture requested
+[2015/05/01 11:31:47] Send ca 0
+{2015/05/01 11:31:47} Capturing stopped
+{2015/05/01 11:31:47} Add /var/www/media/vi_0034_20150501_113142.mp4 to Box Queue at pos 2
+{2015/05/01 11:31:48} Start boxing /var/www/media/vi_0034_20150501_113142.mp4 from Box Queue at pos 2
+{2015/05/01 11:31:49} Finished boxing /var/www/media/vi_0034_20150501_113142.mp4 from Box Queue at pos 2
+[2015/05/01 11:31:49] Start capture requested
+[2015/05/01 11:31:49] Send ca 1
+{2015/05/01 11:31:49} Capturing started
+[2015/05/01 11:31:53] Stop capture requested
+[2015/05/01 11:31:53] Send ca 0
+{2015/05/01 11:31:53} Capturing stopped
+{2015/05/01 11:31:53} Add /var/www/media/vi_0035_20150501_113149.mp4 to Box Queue at pos 3
+{2015/05/01 11:31:54} Start boxing /var/www/media/vi_0035_20150501_113149.mp4 from Box Queue at pos 3
+[2015/05/01 11:31:55] Start capture requested
+[2015/05/01 11:31:55] Send ca 1
+{2015/05/01 11:31:55} Capturing started
+{2015/05/01 11:31:55} Finished boxing /var/www/media/vi_0035_20150501_113149.mp4 from Box Queue at pos 3
+[2015/05/01 11:31:59] Stop capture requested
+[2015/05/01 11:31:59] Send ca 0
+{2015/05/01 11:31:59} Capturing stopped
+{2015/05/01 11:31:59} Add /var/www/media/vi_0036_20150501_113155.mp4 to Box Queue at pos 4
+{2015/05/01 11:31:59} Start boxing /var/www/media/vi_0036_20150501_113155.mp4 from Box Queue at pos 4
+{2015/05/01 11:32:00} Finished boxing /var/www/media/vi_0036_20150501_113155.mp4 from Box Queue at pos 4
+[2015/05/01 11:32:01] Start capture requested
+[2015/05/01 11:32:01] Send ca 1
+{2015/05/01 11:32:01} Capturing started
+[2015/05/01 11:32:06] Stop capture requested
+[2015/05/01 11:32:06] Send ca 0
+{2015/05/01 11:32:06} Capturing stopped
+{2015/05/01 11:32:06} Add /var/www/media/vi_0037_20150501_113201.mp4 to Box Queue at pos 5
+{2015/05/01 11:32:07} Start boxing /var/www/media/vi_0037_20150501_113201.mp4 from Box Queue at pos 5
+{2015/05/01 11:32:08} Finished boxing /var/www/media/vi_0037_20150501_113201.mp4 from Box Queue at pos 5
+[2015/05/01 11:32:08] Start capture requested
+[2015/05/01 11:32:08] Send ca 1
+{2015/05/01 11:32:08} Capturing started
+[2015/05/01 11:32:12] Stop capture requested
+[2015/05/01 11:32:12] Send ca 0
+{2015/05/01 11:32:12} Capturing stopped
+{2015/05/01 11:32:12} Add /var/www/media/vi_0038_20150501_113208.mp4 to Box Queue at pos 6
+{2015/05/01 11:32:12} Start boxing /var/www/media/vi_0038_20150501_113208.mp4 from Box Queue at pos 6
+{2015/05/01 11:32:14} Finished boxing /var/www/media/vi_0038_20150501_113208.mp4 from Box Queue at pos 6
+[2015/05/01 11:32:14] Start capture requested
+[2015/05/01 11:32:14] Send ca 1
+{2015/05/01 11:32:14} Capturing started
+[2015/05/01 11:32:18] Stop capture requested
+[2015/05/01 11:32:18] Send ca 0
+{2015/05/01 11:32:18} Capturing stopped
+{2015/05/01 11:32:18} Add /var/www/media/vi_0039_20150501_113214.mp4 to Box Queue at pos 7
+{2015/05/01 11:32:19} Start boxing /var/www/media/vi_0039_20150501_113214.mp4 from Box Queue at pos 7
+[2015/05/01 11:32:20] Start capture requested
+[2015/05/01 11:32:20] Send ca 1
+{2015/05/01 11:32:20} Capturing started
+{2015/05/01 11:32:20} Finished boxing /var/www/media/vi_0039_20150501_113214.mp4 from Box Queue at pos 7
+[2015/05/01 11:32:24] Stop capture requested
+[2015/05/01 11:32:24] Send ca 0
+{2015/05/01 11:32:24} Capturing stopped
+{2015/05/01 11:32:24} Add /var/www/media/vi_0040_20150501_113220.mp4 to Box Queue at pos 8
+{2015/05/01 11:32:24} Start boxing /var/www/media/vi_0040_20150501_113220.mp4 from Box Queue at pos 8
+{2015/05/01 11:32:26} Finished boxing /var/www/media/vi_0040_20150501_113220.mp4 from Box Queue at pos 8
+[2015/05/01 11:32:26] Start capture requested
+[2015/05/01 11:32:26] Send ca 1
+{2015/05/01 11:32:26} Capturing started
+[2015/05/01 11:32:31] Stop capture requested
+[2015/05/01 11:32:31] Send ca 0
+{2015/05/01 11:32:31} Capturing stopped
+{2015/05/01 11:32:31} Add /var/www/media/vi_0041_20150501_113226.mp4 to Box Queue at pos 9
+{2015/05/01 11:32:31} Start boxing /var/www/media/vi_0041_20150501_113226.mp4 from Box Queue at pos 9
+{2015/05/01 11:32:32} Finished boxing /var/www/media/vi_0041_20150501_113226.mp4 from Box Queue at pos 9
+[2015/05/01 11:32:33] Start capture requested
+[2015/05/01 11:32:33] Send ca 1
+{2015/05/01 11:32:33} Capturing started
+[2015/05/01 11:32:37] Stop capture requested
+[2015/05/01 11:32:37] Send ca 0
+{2015/05/01 11:32:37} Capturing stopped
+{2015/05/01 11:32:37} Add /var/www/media/vi_0042_20150501_113233.mp4 to Box Queue at pos 10
+{2015/05/01 11:32:38} Start boxing /var/www/media/vi_0042_20150501_113233.mp4 from Box Queue at pos 10
+{2015/05/01 11:32:39} Finished boxing /var/www/media/vi_0042_20150501_113233.mp4 from Box Queue at pos 10
+[2015/05/01 11:32:39] Start capture requested
+[2015/05/01 11:32:39] Send ca 1
+{2015/05/01 11:32:39} Capturing started
+[2015/05/01 11:32:43] Stop capture requested
+[2015/05/01 11:32:43] Send ca 0
+{2015/05/01 11:32:43} Capturing stopped
+{2015/05/01 11:32:43} Add /var/www/media/vi_0043_20150501_113239.mp4 to Box Queue at pos 11
+{2015/05/01 11:32:43} Start boxing /var/www/media/vi_0043_20150501_113239.mp4 from Box Queue at pos 11
+{2015/05/01 11:32:45} Finished boxing /var/www/media/vi_0043_20150501_113239.mp4 from Box Queue at pos 11
+[2015/05/01 11:32:45] Start capture requested
+[2015/05/01 11:32:45] Send ca 1
+{2015/05/01 11:32:45} Capturing started
+[2015/05/01 11:32:49] Stop capture requested
+[2015/05/01 11:32:49] Send ca 0
+{2015/05/01 11:32:49} Capturing stopped
+{2015/05/01 11:32:49} Add /var/www/media/vi_0044_20150501_113245.mp4 to Box Queue at pos 12
+{2015/05/01 11:32:49} Start boxing /var/www/media/vi_0044_20150501_113245.mp4 from Box Queue at pos 12
+{2015/05/01 11:32:50} Finished boxing /var/www/media/vi_0044_20150501_113245.mp4 from Box Queue at pos 12
+[2015/05/01 11:32:51] Start capture requested
+[2015/05/01 11:32:51] Send ca 1
+{2015/05/01 11:32:51} Capturing started
+[2015/05/01 11:32:55] Stop capture requested
+[2015/05/01 11:32:55] Send ca 0
+{2015/05/01 11:32:55} Capturing stopped
+{2015/05/01 11:32:55} Add /var/www/media/vi_0045_20150501_113251.mp4 to Box Queue at pos 13
+{2015/05/01 11:32:56} Start boxing /var/www/media/vi_0045_20150501_113251.mp4 from Box Queue at pos 13
+{2015/05/01 11:32:57} Finished boxing /var/www/media/vi_0045_20150501_113251.mp4 from Box Queue at pos 13
+[2015/05/01 11:32:57] Start capture requested
+[2015/05/01 11:32:57] Send ca 1
+{2015/05/01 11:32:57} Capturing started
+[2015/05/01 11:33:01] Stop capture requested
+[2015/05/01 11:33:01] Send ca 0
+{2015/05/01 11:33:01} Capturing stopped
+{2015/05/01 11:33:01} Add /var/www/media/vi_0046_20150501_113257.mp4 to Box Queue at pos 14
+{2015/05/01 11:33:01} Start boxing /var/www/media/vi_0046_20150501_113257.mp4 from Box Queue at pos 14
+{2015/05/01 11:33:02} Finished boxing /var/www/media/vi_0046_20150501_113257.mp4 from Box Queue at pos 14
+[2015/05/01 11:33:03] Start capture requested
+[2015/05/01 11:33:03] Send ca 1
+{2015/05/01 11:33:03} Capturing started
+[2015/05/01 11:33:07] Stop capture requested
+[2015/05/01 11:33:07] Send ca 0
+{2015/05/01 11:33:07} Capturing stopped
+{2015/05/01 11:33:07} Add /var/www/media/vi_0047_20150501_113303.mp4 to Box Queue at pos 15
+{2015/05/01 11:33:08} Start boxing /var/www/media/vi_0047_20150501_113303.mp4 from Box Queue at pos 15
+[2015/05/01 11:33:09] Start capture requested
+[2015/05/01 11:33:09] Send ca 1
+{2015/05/01 11:33:09} Capturing started
+{2015/05/01 11:33:09} Finished boxing /var/www/media/vi_0047_20150501_113303.mp4 from Box Queue at pos 15
+[2015/05/01 11:33:13] Stop capture requested
+[2015/05/01 11:33:13] Send ca 0
+{2015/05/01 11:33:13} Capturing stopped
+{2015/05/01 11:33:13} Add /var/www/media/vi_0048_20150501_113309.mp4 to Box Queue at pos 16
+{2015/05/01 11:33:13} Start boxing /var/www/media/vi_0048_20150501_113309.mp4 from Box Queue at pos 16
+{2015/05/01 11:33:15} Finished boxing /var/www/media/vi_0048_20150501_113309.mp4 from Box Queue at pos 16
+[2015/05/01 11:33:15] Start capture requested
+[2015/05/01 11:33:15] Send ca 1
+{2015/05/01 11:33:15} Capturing started
+[2015/05/01 11:33:20] Stop capture requested
+[2015/05/01 11:33:20] Send ca 0
+{2015/05/01 11:33:20} Capturing stopped
+{2015/05/01 11:33:20} Add /var/www/media/vi_0049_20150501_113315.mp4 to Box Queue at pos 17
+{2015/05/01 11:33:20} Start boxing /var/www/media/vi_0049_20150501_113315.mp4 from Box Queue at pos 17
+{2015/05/01 11:33:21} Finished boxing /var/www/media/vi_0049_20150501_113315.mp4 from Box Queue at pos 17
+[2015/05/01 11:33:22] Start capture requested
+[2015/05/01 11:33:22] Send ca 1
+{2015/05/01 11:33:22} Capturing started
+[2015/05/01 11:33:26] Stop capture requested
+[2015/05/01 11:33:26] Send ca 0
+{2015/05/01 11:33:26} Capturing stopped
+{2015/05/01 11:33:26} Add /var/www/media/vi_0050_20150501_113322.mp4 to Box Queue at pos 18
+{2015/05/01 11:33:27} Start boxing /var/www/media/vi_0050_20150501_113322.mp4 from Box Queue at pos 18
+{2015/05/01 11:33:28} Finished boxing /var/www/media/vi_0050_20150501_113322.mp4 from Box Queue at pos 18
+[2015/05/01 11:33:28] Start capture requested
+[2015/05/01 11:33:28] Send ca 1
+{2015/05/01 11:33:28} Capturing started
+[2015/05/01 11:33:32] Stop capture requested
+[2015/05/01 11:33:32] Send ca 0
+{2015/05/01 11:33:32} Capturing stopped
+{2015/05/01 11:33:32} Add /var/www/media/vi_0051_20150501_113328.mp4 to Box Queue at pos 19
+{2015/05/01 11:33:32} Start boxing /var/www/media/vi_0051_20150501_113328.mp4 from Box Queue at pos 19
+{2015/05/01 11:33:33} Finished boxing /var/www/media/vi_0051_20150501_113328.mp4 from Box Queue at pos 19
+[2015/05/01 11:33:34] Start capture requested
+[2015/05/01 11:33:34] Send ca 1
+{2015/05/01 11:33:34} Capturing started
+[2015/05/01 11:33:39] Stop capture requested
+[2015/05/01 11:33:39] Send ca 0
+{2015/05/01 11:33:39} Capturing stopped
+{2015/05/01 11:33:39} Add /var/www/media/vi_0052_20150501_113334.mp4 to Box Queue at pos 20
+{2015/05/01 11:33:39} Start boxing /var/www/media/vi_0052_20150501_113334.mp4 from Box Queue at pos 20
+{2015/05/01 11:33:40} Finished boxing /var/www/media/vi_0052_20150501_113334.mp4 from Box Queue at pos 20
+[2015/05/01 11:33:41] Start capture requested
+[2015/05/01 11:33:41] Send ca 1
+{2015/05/01 11:33:41} Capturing started
+[2015/05/01 11:33:47] Stop capture requested
+[2015/05/01 11:33:47] Send ca 0
+{2015/05/01 11:33:47} Capturing stopped
+{2015/05/01 11:33:47} Add /var/www/media/vi_0053_20150501_113341.mp4 to Box Queue at pos 21
+{2015/05/01 11:33:48} Start boxing /var/www/media/vi_0053_20150501_113341.mp4 from Box Queue at pos 21
+{2015/05/01 11:33:49} Finished boxing /var/www/media/vi_0053_20150501_113341.mp4 from Box Queue at pos 21
+[2015/05/01 11:38:42] Start capture requested
+[2015/05/01 11:38:42] Send ca 1
+{2015/05/01 11:38:42} Capturing started
+[2015/05/01 11:38:56] Stop capture requested
+[2015/05/01 11:38:56] Send ca 0
+{2015/05/01 11:38:56} Capturing stopped
+{2015/05/01 11:38:56} Add /var/www/media/vi_0054_20150501_113842.mp4 to Box Queue at pos 22
+{2015/05/01 11:38:57} Start boxing /var/www/media/vi_0054_20150501_113842.mp4 from Box Queue at pos 22
+[2015/05/01 11:38:58] Start capture requested
+[2015/05/01 11:38:58] Send ca 1
+{2015/05/01 11:38:58} Capturing started
+[2015/05/01 11:39:03] Stop capture requested
+[2015/05/01 11:39:04] Send ca 0
+{2015/05/01 11:39:05} Capturing stopped
+{2015/05/01 11:39:05} Add /var/www/media/vi_0055_20150501_113858.mp4 to Box Queue at pos 23
+{2015/05/01 11:39:06} Finished boxing /var/www/media/vi_0054_20150501_113842.mp4 from Box Queue at pos 22
+{2015/05/01 11:39:06} Start boxing /var/www/media/vi_0055_20150501_113858.mp4 from Box Queue at pos 23
+[2015/05/01 11:39:07] Start capture requested
+[2015/05/01 11:39:07] Send ca 1
+{2015/05/01 11:39:07} Capturing started
+{2015/05/01 11:39:09} Finished boxing /var/www/media/vi_0055_20150501_113858.mp4 from Box Queue at pos 23
+[2015/05/01 11:39:11] Stop capture requested
+[2015/05/01 11:39:11] Send ca 0
+{2015/05/01 11:39:11} Capturing stopped
+{2015/05/01 11:39:11} Add /var/www/media/vi_0056_20150501_113907.mp4 to Box Queue at pos 24
+{2015/05/01 11:39:11} Start boxing /var/www/media/vi_0056_20150501_113907.mp4 from Box Queue at pos 24
+{2015/05/01 11:39:12} Finished boxing /var/www/media/vi_0056_20150501_113907.mp4 from Box Queue at pos 24
+[2015/05/01 11:39:13] Start capture requested
+[2015/05/01 11:39:13] Send ca 1
+{2015/05/01 11:39:13} Capturing started
+[2015/05/01 11:39:18] Stop capture requested
+[2015/05/01 11:39:18] Send ca 0
+{2015/05/01 11:39:18} Capturing stopped
+{2015/05/01 11:39:18} Add /var/www/media/vi_0057_20150501_113913.mp4 to Box Queue at pos 25
+{2015/05/01 11:39:18} Start boxing /var/www/media/vi_0057_20150501_113913.mp4 from Box Queue at pos 25
+{2015/05/01 11:39:19} Finished boxing /var/www/media/vi_0057_20150501_113913.mp4 from Box Queue at pos 25
+[2015/05/01 11:39:20] Start capture requested
+[2015/05/01 11:39:20] Send ca 1
+{2015/05/01 11:39:20} Capturing started
+[2015/05/01 11:39:24] Stop capture requested
+[2015/05/01 11:39:24] Send ca 0
+{2015/05/01 11:39:24} Capturing stopped
+{2015/05/01 11:39:24} Add /var/www/media/vi_0058_20150501_113920.mp4 to Box Queue at pos 26
+{2015/05/01 11:39:25} Start boxing /var/www/media/vi_0058_20150501_113920.mp4 from Box Queue at pos 26
+{2015/05/01 11:39:26} Finished boxing /var/www/media/vi_0058_20150501_113920.mp4 from Box Queue at pos 26
+[2015/05/01 11:39:26] Start capture requested
+[2015/05/01 11:39:26] Send ca 1
+{2015/05/01 11:39:26} Capturing started
+[2015/05/01 11:39:30] Stop capture requested
+[2015/05/01 11:39:30] Send ca 0
+{2015/05/01 11:39:30} Capturing stopped
+{2015/05/01 11:39:30} Add /var/www/media/vi_0059_20150501_113926.mp4 to Box Queue at pos 27
+{2015/05/01 11:39:30} Start boxing /var/www/media/vi_0059_20150501_113926.mp4 from Box Queue at pos 27
+{2015/05/01 11:39:31} Finished boxing /var/www/media/vi_0059_20150501_113926.mp4 from Box Queue at pos 27
+[2015/05/01 11:39:32] Start capture requested
+[2015/05/01 11:39:32] Send ca 1
+{2015/05/01 11:39:32} Capturing started
+[2015/05/01 11:39:36] Stop capture requested
+[2015/05/01 11:39:36] Send ca 0
+{2015/05/01 11:39:36} Capturing stopped
+{2015/05/01 11:39:36} Add /var/www/media/vi_0060_20150501_113932.mp4 to Box Queue at pos 28
+{2015/05/01 11:39:40} Start boxing /var/www/media/vi_0060_20150501_113932.mp4 from Box Queue at pos 28
+[2015/05/01 11:39:41] Start capture requested
+[2015/05/01 11:39:41] Send ca 1
+{2015/05/01 11:39:41} Capturing started
+{2015/05/01 11:39:42} Finished boxing /var/www/media/vi_0060_20150501_113932.mp4 from Box Queue at pos 28
+[2015/05/01 11:39:43] Stop capture requested
+[2015/05/01 11:39:43] Send ca 0
+{2015/05/01 11:39:44} Capturing stopped
+{2015/05/01 11:39:44} Add /var/www/media/vi_0061_20150501_113941.mp4 to Box Queue at pos 29
+{2015/05/01 11:39:44} Start boxing /var/www/media/vi_0061_20150501_113941.mp4 from Box Queue at pos 29
+{2015/05/01 11:39:45} Finished boxing /var/www/media/vi_0061_20150501_113941.mp4 from Box Queue at pos 29
+[2015/05/01 11:39:46] Start capture requested
+[2015/05/01 11:39:46] Send ca 1
+{2015/05/01 11:39:46} Capturing started
+[2015/05/01 11:39:49] Stop capture requested
+[2015/05/01 11:39:49] Send ca 0
+{2015/05/01 11:39:49} Capturing stopped
+{2015/05/01 11:39:49} Add /var/www/media/vi_0062_20150501_113946.mp4 to Box Queue at pos 30
+{2015/05/01 11:39:49} Start boxing /var/www/media/vi_0062_20150501_113946.mp4 from Box Queue at pos 30
+{2015/05/01 11:39:50} Finished boxing /var/www/media/vi_0062_20150501_113946.mp4 from Box Queue at pos 30
+[2015/05/01 11:39:51] Start capture requested
+[2015/05/01 11:39:51] Send ca 1
+{2015/05/01 11:39:51} Capturing started
+[2015/05/01 11:39:55] Stop capture requested
+[2015/05/01 11:39:55] Send ca 0
+{2015/05/01 11:39:55} Capturing stopped
+{2015/05/01 11:39:55} Add /var/www/media/vi_0063_20150501_113951.mp4 to Box Queue at pos 31
+{2015/05/01 11:39:55} Start boxing /var/www/media/vi_0063_20150501_113951.mp4 from Box Queue at pos 31
+{2015/05/01 11:39:56} Finished boxing /var/www/media/vi_0063_20150501_113951.mp4 from Box Queue at pos 31
+[2015/05/01 11:39:57] Start capture requested
+[2015/05/01 11:39:57] Send ca 1
+{2015/05/01 11:39:57} Capturing started
+[2015/05/01 11:40:01] Stop capture requested
+[2015/05/01 11:40:01] Send ca 0
+{2015/05/01 11:40:01} Capturing stopped
+{2015/05/01 11:40:01} Add /var/www/media/vi_0064_20150501_113957.mp4 to Box Queue at pos 0
+{2015/05/01 11:40:02} Start boxing /var/www/media/vi_0064_20150501_113957.mp4 from Box Queue at pos 0
+{2015/05/01 11:40:03} Finished boxing /var/www/media/vi_0064_20150501_113957.mp4 from Box Queue at pos 0
+[2015/05/01 11:40:03] Start capture requested
+[2015/05/01 11:40:03] Send ca 1
+{2015/05/01 11:40:03} Capturing started
+[2015/05/01 11:40:07] Stop capture requested
+[2015/05/01 11:40:07] Send ca 0
+{2015/05/01 11:40:07} Capturing stopped
+{2015/05/01 11:40:07} Add /var/www/media/vi_0065_20150501_114003.mp4 to Box Queue at pos 1
+{2015/05/01 11:40:07} Start boxing /var/www/media/vi_0065_20150501_114003.mp4 from Box Queue at pos 1
+{2015/05/01 11:40:08} Finished boxing /var/www/media/vi_0065_20150501_114003.mp4 from Box Queue at pos 1
+[2015/05/01 11:40:09] Start capture requested
+[2015/05/01 11:40:09] Send ca 1
+{2015/05/01 11:40:09} Capturing started
+[2015/05/01 11:40:13] Stop capture requested
+[2015/05/01 11:40:13] Send ca 0
+{2015/05/01 11:40:13} Capturing stopped
+{2015/05/01 11:40:13} Add /var/www/media/vi_0066_20150501_114009.mp4 to Box Queue at pos 2
+{2015/05/01 11:40:13} Start boxing /var/www/media/vi_0066_20150501_114009.mp4 from Box Queue at pos 2
+{2015/05/01 11:40:14} Finished boxing /var/www/media/vi_0066_20150501_114009.mp4 from Box Queue at pos 2
+[2015/05/01 11:40:15] Start capture requested
+[2015/05/01 11:40:15] Send ca 1
+{2015/05/01 11:40:15} Capturing started
+[2015/05/01 11:40:19] Stop capture requested
+[2015/05/01 11:40:19] Send ca 0
+{2015/05/01 11:40:19} Capturing stopped
+{2015/05/01 11:40:19} Add /var/www/media/vi_0067_20150501_114015.mp4 to Box Queue at pos 3
+{2015/05/01 11:40:20} Start boxing /var/www/media/vi_0067_20150501_114015.mp4 from Box Queue at pos 3
+{2015/05/01 11:40:21} Finished boxing /var/www/media/vi_0067_20150501_114015.mp4 from Box Queue at pos 3
+[2015/05/01 11:40:21] Start capture requested
+[2015/05/01 11:40:21] Send ca 1
+{2015/05/01 11:40:21} Capturing started
+[2015/05/01 11:40:26] Stop capture requested
+[2015/05/01 11:40:26] Send ca 0
+{2015/05/01 11:40:26} Capturing stopped
+{2015/05/01 11:40:26} Add /var/www/media/vi_0068_20150501_114021.mp4 to Box Queue at pos 4
+{2015/05/01 11:40:26} Start boxing /var/www/media/vi_0068_20150501_114021.mp4 from Box Queue at pos 4
+{2015/05/01 11:40:27} Finished boxing /var/www/media/vi_0068_20150501_114021.mp4 from Box Queue at pos 4
+[2015/05/01 11:40:28] Start capture requested
+[2015/05/01 11:40:28] Send ca 1
+{2015/05/01 11:40:28} Capturing started
+[2015/05/01 11:40:33] Stop capture requested
+[2015/05/01 11:40:33] Send ca 0
+{2015/05/01 11:40:33} Capturing stopped
+{2015/05/01 11:40:33} Add /var/www/media/vi_0069_20150501_114028.mp4 to Box Queue at pos 5
+{2015/05/01 11:40:34} Start boxing /var/www/media/vi_0069_20150501_114028.mp4 from Box Queue at pos 5
+[2015/05/01 11:40:35] Start capture requested
+[2015/05/01 11:40:35] Send ca 1
+{2015/05/01 11:40:35} Capturing started
+{2015/05/01 11:40:35} Finished boxing /var/www/media/vi_0069_20150501_114028.mp4 from Box Queue at pos 5
+[2015/05/01 11:40:50] Stop capture requested
+[2015/05/01 11:40:50] Send ca 0
+{2015/05/01 11:40:50} Capturing stopped
+{2015/05/01 11:40:50} Add /var/www/media/vi_0070_20150501_114035.mp4 to Box Queue at pos 6
+{2015/05/01 11:40:51} Start boxing /var/www/media/vi_0070_20150501_114035.mp4 from Box Queue at pos 6
+[2015/05/01 11:40:52] Start capture requested
+[2015/05/01 11:40:57] Send ca 1
+{2015/05/01 11:40:57} Capturing started
+{2015/05/01 11:40:58} Finished boxing /var/www/media/vi_0070_20150501_114035.mp4 from Box Queue at pos 6
+[2015/05/01 11:41:00] Stop capture requested
+[2015/05/01 11:41:00] Send ca 0
+{2015/05/01 11:41:00} Capturing stopped
+{2015/05/01 11:41:00} Add /var/www/media/vi_0071_20150501_114057.mp4 to Box Queue at pos 7
+{2015/05/01 11:41:01} Start boxing /var/www/media/vi_0071_20150501_114057.mp4 from Box Queue at pos 7
+[2015/05/01 11:41:02] Start capture requested
+[2015/05/01 11:41:02] Send ca 1
+{2015/05/01 11:41:02} Capturing started
+{2015/05/01 11:41:02} Finished boxing /var/www/media/vi_0071_20150501_114057.mp4 from Box Queue at pos 7
+[2015/05/01 11:41:06] Stop capture requested
+[2015/05/01 11:41:06] Send ca 0
+{2015/05/01 11:41:06} Capturing stopped
+{2015/05/01 11:41:06} Add /var/www/media/vi_0072_20150501_114102.mp4 to Box Queue at pos 8
+{2015/05/01 11:41:06} Start boxing /var/www/media/vi_0072_20150501_114102.mp4 from Box Queue at pos 8
+{2015/05/01 11:41:07} Finished boxing /var/www/media/vi_0072_20150501_114102.mp4 from Box Queue at pos 8
+[2015/05/01 11:41:08] Start capture requested
+[2015/05/01 11:41:08] Send ca 1
+{2015/05/01 11:41:08} Capturing started
+[2015/05/01 11:41:12] Stop capture requested
+[2015/05/01 11:41:12] Send ca 0
+{2015/05/01 11:41:12} Capturing stopped
+{2015/05/01 11:41:12} Add /var/www/media/vi_0073_20150501_114108.mp4 to Box Queue at pos 9
+{2015/05/01 11:41:12} Start boxing /var/www/media/vi_0073_20150501_114108.mp4 from Box Queue at pos 9
+{2015/05/01 11:41:13} Finished boxing /var/www/media/vi_0073_20150501_114108.mp4 from Box Queue at pos 9
+[2015/05/01 11:41:14] Start capture requested
+[2015/05/01 11:41:14] Send ca 1
+{2015/05/01 11:41:14} Capturing started
+[2015/05/01 11:41:18] Stop capture requested
+[2015/05/01 11:41:18] Send ca 0
+{2015/05/01 11:41:18} Capturing stopped
+{2015/05/01 11:41:18} Add /var/www/media/vi_0074_20150501_114114.mp4 to Box Queue at pos 10
+{2015/05/01 11:41:19} Start boxing /var/www/media/vi_0074_20150501_114114.mp4 from Box Queue at pos 10
+{2015/05/01 11:41:20} Finished boxing /var/www/media/vi_0074_20150501_114114.mp4 from Box Queue at pos 10
+[2015/05/01 11:41:20] Start capture requested
+[2015/05/01 11:41:20] Send ca 1
+{2015/05/01 11:41:20} Capturing started
+[2015/05/01 11:41:24] Stop capture requested
+[2015/05/01 11:41:25] Send ca 0
+{2015/05/01 11:41:25} Capturing stopped
+{2015/05/01 11:41:25} Add /var/www/media/vi_0075_20150501_114120.mp4 to Box Queue at pos 11
+{2015/05/01 11:41:25} Start boxing /var/www/media/vi_0075_20150501_114120.mp4 from Box Queue at pos 11
+{2015/05/01 11:41:26} Finished boxing /var/www/media/vi_0075_20150501_114120.mp4 from Box Queue at pos 11
+[2015/05/01 11:41:27] Start capture requested
+[2015/05/01 11:41:27] Send ca 1
+{2015/05/01 11:41:27} Capturing started
+[2015/05/01 11:41:31] Stop capture requested
+[2015/05/01 11:41:31] Send ca 0
+{2015/05/01 11:41:31} Capturing stopped
+{2015/05/01 11:41:31} Add /var/www/media/vi_0076_20150501_114127.mp4 to Box Queue at pos 12
+{2015/05/01 11:41:31} Start boxing /var/www/media/vi_0076_20150501_114127.mp4 from Box Queue at pos 12
+{2015/05/01 11:41:32} Finished boxing /var/www/media/vi_0076_20150501_114127.mp4 from Box Queue at pos 12
+[2015/05/01 11:41:33] Start capture requested
+[2015/05/01 11:41:33] Send ca 1
+{2015/05/01 11:41:33} Capturing started
+[2015/05/01 11:41:37] Stop capture requested
+[2015/05/01 11:41:37] Send ca 0
+{2015/05/01 11:41:37} Capturing stopped
+{2015/05/01 11:41:37} Add /var/www/media/vi_0077_20150501_114133.mp4 to Box Queue at pos 13
+{2015/05/01 11:41:37} Start boxing /var/www/media/vi_0077_20150501_114133.mp4 from Box Queue at pos 13
+{2015/05/01 11:41:39} Finished boxing /var/www/media/vi_0077_20150501_114133.mp4 from Box Queue at pos 13
+[2015/05/01 11:41:39] Start capture requested
+[2015/05/01 11:41:39] Send ca 1
+{2015/05/01 11:41:39} Capturing started
+[2015/05/01 11:41:43] Stop capture requested
+[2015/05/01 11:41:43] Send ca 0
+{2015/05/01 11:41:43} Capturing stopped
+{2015/05/01 11:41:43} Add /var/www/media/vi_0078_20150501_114139.mp4 to Box Queue at pos 14
+{2015/05/01 11:41:44} Start boxing /var/www/media/vi_0078_20150501_114139.mp4 from Box Queue at pos 14
+[2015/05/01 11:41:45] Start capture requested
+[2015/05/01 11:41:45] Send ca 1
+{2015/05/01 11:41:45} Capturing started
+{2015/05/01 11:41:45} Finished boxing /var/www/media/vi_0078_20150501_114139.mp4 from Box Queue at pos 14
+[2015/05/01 11:41:50] Stop capture requested
+[2015/05/01 11:41:50] Send ca 0
+{2015/05/01 11:41:50} Capturing stopped
+{2015/05/01 11:41:50} Add /var/www/media/vi_0079_20150501_114145.mp4 to Box Queue at pos 15
+{2015/05/01 11:41:50} Start boxing /var/www/media/vi_0079_20150501_114145.mp4 from Box Queue at pos 15
+{2015/05/01 11:41:51} Finished boxing /var/www/media/vi_0079_20150501_114145.mp4 from Box Queue at pos 15
+[2015/05/01 11:41:52] Start capture requested
+[2015/05/01 11:41:52] Send ca 1
+{2015/05/01 11:41:52} Capturing started
+[2015/05/01 11:42:06] Stop capture requested
+[2015/05/01 11:42:06] Send ca 0
+{2015/05/01 11:42:06} Capturing stopped
+{2015/05/01 11:42:06} Add /var/www/media/vi_0080_20150501_114152.mp4 to Box Queue at pos 16
+{2015/05/01 11:42:06} Start boxing /var/www/media/vi_0080_20150501_114152.mp4 from Box Queue at pos 16
+[2015/05/01 11:42:08] Start capture requested
+[2015/05/01 11:42:08] Send ca 1
+{2015/05/01 11:42:08} Capturing started
+[2015/05/01 11:42:12] Stop capture requested
+[2015/05/01 11:42:14] Send ca 0
+{2015/05/01 11:42:14} Capturing stopped
+{2015/05/01 11:42:14} Add /var/www/media/vi_0081_20150501_114208.mp4 to Box Queue at pos 17
+[2015/05/01 11:42:16] Start capture requested
+[2015/05/01 11:42:18] Send ca 1
+{2015/05/01 11:42:18} Capturing started
+{2015/05/01 11:42:18} Finished boxing /var/www/media/vi_0080_20150501_114152.mp4 from Box Queue at pos 16
+{2015/05/01 11:42:18} Start boxing /var/www/media/vi_0081_20150501_114208.mp4 from Box Queue at pos 17
+{2015/05/01 11:42:19} Finished boxing /var/www/media/vi_0081_20150501_114208.mp4 from Box Queue at pos 17
+[2015/05/01 11:42:20] Stop capture requested
+[2015/05/01 11:42:20] Send ca 0
+{2015/05/01 11:42:20} Capturing stopped
+{2015/05/01 11:42:20} Add /var/www/media/vi_0082_20150501_114218.mp4 to Box Queue at pos 18
+{2015/05/01 11:42:20} Start boxing /var/www/media/vi_0082_20150501_114218.mp4 from Box Queue at pos 18
+{2015/05/01 11:42:22} Finished boxing /var/www/media/vi_0082_20150501_114218.mp4 from Box Queue at pos 18
+[2015/05/01 11:42:22] Start capture requested
+[2015/05/01 11:42:22] Send ca 1
+{2015/05/01 11:42:22} Capturing started
+[2015/05/01 11:42:26] Stop capture requested
+[2015/05/01 11:42:26] Send ca 0
+{2015/05/01 11:42:26} Capturing stopped
+{2015/05/01 11:42:26} Add /var/www/media/vi_0083_20150501_114222.mp4 to Box Queue at pos 19
+{2015/05/01 11:42:26} Start boxing /var/www/media/vi_0083_20150501_114222.mp4 from Box Queue at pos 19
+{2015/05/01 11:42:27} Finished boxing /var/www/media/vi_0083_20150501_114222.mp4 from Box Queue at pos 19
+[2015/05/01 11:42:28] Start capture requested
+[2015/05/01 11:42:28] Send ca 1
+{2015/05/01 11:42:28} Capturing started
+[2015/05/01 11:42:32] Stop capture requested
+[2015/05/01 11:42:32] Send ca 0
+{2015/05/01 11:42:32} Capturing stopped
+{2015/05/01 11:42:32} Add /var/www/media/vi_0084_20150501_114228.mp4 to Box Queue at pos 20
+{2015/05/01 11:42:33} Start boxing /var/www/media/vi_0084_20150501_114228.mp4 from Box Queue at pos 20
+{2015/05/01 11:42:34} Finished boxing /var/www/media/vi_0084_20150501_114228.mp4 from Box Queue at pos 20
+[2015/05/01 11:42:34] Start capture requested
+[2015/05/01 11:42:34] Send ca 1
+{2015/05/01 11:42:34} Capturing started
+[2015/05/01 11:42:39] Stop capture requested
+[2015/05/01 11:42:39] Send ca 0
+{2015/05/01 11:42:39} Capturing stopped
+{2015/05/01 11:42:39} Add /var/www/media/vi_0085_20150501_114234.mp4 to Box Queue at pos 21
+{2015/05/01 11:42:39} Start boxing /var/www/media/vi_0085_20150501_114234.mp4 from Box Queue at pos 21
+{2015/05/01 11:42:40} Finished boxing /var/www/media/vi_0085_20150501_114234.mp4 from Box Queue at pos 21
+[2015/05/01 11:42:41] Start capture requested
+[2015/05/01 11:42:42] Send ca 1
+{2015/05/01 11:42:42} Capturing started
+[2015/05/01 11:42:44] Stop capture requested
+[2015/05/01 11:42:44] Send ca 0
+{2015/05/01 11:42:44} Capturing stopped
+{2015/05/01 11:42:44} Add /var/www/media/vi_0086_20150501_114242.mp4 to Box Queue at pos 22
+{2015/05/01 11:42:45} Start boxing /var/www/media/vi_0086_20150501_114242.mp4 from Box Queue at pos 22
+{2015/05/01 11:42:46} Finished boxing /var/www/media/vi_0086_20150501_114242.mp4 from Box Queue at pos 22
+[2015/05/01 11:42:46] Start capture requested
+[2015/05/01 11:42:46] Send ca 1
+{2015/05/01 11:42:46} Capturing started
+[2015/05/01 11:42:50] Stop capture requested
+[2015/05/01 11:42:50] Send ca 0
+{2015/05/01 11:42:50} Capturing stopped
+{2015/05/01 11:42:50} Add /var/www/media/vi_0087_20150501_114246.mp4 to Box Queue at pos 23
+{2015/05/01 11:42:50} Start boxing /var/www/media/vi_0087_20150501_114246.mp4 from Box Queue at pos 23
+{2015/05/01 11:42:52} Finished boxing /var/www/media/vi_0087_20150501_114246.mp4 from Box Queue at pos 23
+[2015/05/01 11:42:52] Start capture requested
+[2015/05/01 11:42:52] Send ca 1
+{2015/05/01 11:42:52} Capturing started
+[2015/05/01 11:42:56] Stop capture requested
+[2015/05/01 11:42:56] Send ca 0
+{2015/05/01 11:42:56} Capturing stopped
+{2015/05/01 11:42:56} Add /var/www/media/vi_0088_20150501_114252.mp4 to Box Queue at pos 24
+{2015/05/01 11:42:56} Start boxing /var/www/media/vi_0088_20150501_114252.mp4 from Box Queue at pos 24
+{2015/05/01 11:42:57} Finished boxing /var/www/media/vi_0088_20150501_114252.mp4 from Box Queue at pos 24
+[2015/05/01 11:42:58] Start capture requested
+[2015/05/01 11:42:58] Send ca 1
+{2015/05/01 11:42:58} Capturing started
+[2015/05/01 11:43:02] Stop capture requested
+[2015/05/01 11:43:02] Send ca 0
+{2015/05/01 11:43:02} Capturing stopped
+{2015/05/01 11:43:02} Add /var/www/media/vi_0089_20150501_114258.mp4 to Box Queue at pos 25
+{2015/05/01 11:43:03} Start boxing /var/www/media/vi_0089_20150501_114258.mp4 from Box Queue at pos 25
+{2015/05/01 11:43:04} Finished boxing /var/www/media/vi_0089_20150501_114258.mp4 from Box Queue at pos 25
+[2015/05/01 11:43:04] Start capture requested
+[2015/05/01 11:43:04] Send ca 1
+{2015/05/01 11:43:04} Capturing started
+[2015/05/01 11:43:08] Stop capture requested
+[2015/05/01 11:43:08] Send ca 0
+{2015/05/01 11:43:08} Capturing stopped
+{2015/05/01 11:43:08} Add /var/www/media/vi_0090_20150501_114304.mp4 to Box Queue at pos 26
+{2015/05/01 11:43:08} Start boxing /var/www/media/vi_0090_20150501_114304.mp4 from Box Queue at pos 26
+{2015/05/01 11:43:09} Finished boxing /var/www/media/vi_0090_20150501_114304.mp4 from Box Queue at pos 26
+[2015/05/01 11:43:10] Start capture requested
+[2015/05/01 11:43:10] Send ca 1
+{2015/05/01 11:43:10} Capturing started
+[2015/05/01 11:43:15] Stop capture requested
+[2015/05/01 11:43:15] Send ca 0
+{2015/05/01 11:43:15} Capturing stopped
+{2015/05/01 11:43:15} Add /var/www/media/vi_0091_20150501_114310.mp4 to Box Queue at pos 27
+{2015/05/01 11:43:15} Start boxing /var/www/media/vi_0091_20150501_114310.mp4 from Box Queue at pos 27
+{2015/05/01 11:43:16} Finished boxing /var/www/media/vi_0091_20150501_114310.mp4 from Box Queue at pos 27
+[2015/05/01 11:43:17] Start capture requested
+[2015/05/01 11:43:17] Send ca 1
+{2015/05/01 11:43:17} Capturing started
+[2015/05/01 11:43:21] Stop capture requested
+[2015/05/01 11:43:21] Send ca 0
+{2015/05/01 11:43:21} Capturing stopped
+{2015/05/01 11:43:21} Add /var/www/media/vi_0092_20150501_114317.mp4 to Box Queue at pos 28
+{2015/05/01 11:43:22} Start boxing /var/www/media/vi_0092_20150501_114317.mp4 from Box Queue at pos 28
+{2015/05/01 11:43:23} Finished boxing /var/www/media/vi_0092_20150501_114317.mp4 from Box Queue at pos 28
+[2015/05/01 11:43:23] Start capture requested
+[2015/05/01 11:43:23] Send ca 1
+{2015/05/01 11:43:23} Capturing started
+[2015/05/01 11:43:27] Stop capture requested
+[2015/05/01 11:43:27] Send ca 0
+{2015/05/01 11:43:27} Capturing stopped
+{2015/05/01 11:43:27} Add /var/www/media/vi_0093_20150501_114323.mp4 to Box Queue at pos 29
+{2015/05/01 11:43:27} Start boxing /var/www/media/vi_0093_20150501_114323.mp4 from Box Queue at pos 29
+{2015/05/01 11:43:28} Finished boxing /var/www/media/vi_0093_20150501_114323.mp4 from Box Queue at pos 29
+[2015/05/01 11:43:29] Start capture requested
+[2015/05/01 11:43:29] Send ca 1
+{2015/05/01 11:43:29} Capturing started
+[2015/05/01 11:43:33] Stop capture requested
+[2015/05/01 11:43:33] Send ca 0
+{2015/05/01 11:43:33} Capturing stopped
+{2015/05/01 11:43:33} Add /var/www/media/vi_0094_20150501_114329.mp4 to Box Queue at pos 30
+{2015/05/01 11:43:34} Start boxing /var/www/media/vi_0094_20150501_114329.mp4 from Box Queue at pos 30
+[2015/05/01 11:43:35] Start capture requested
+[2015/05/01 11:43:35] Send ca 1
+{2015/05/01 11:43:35} Capturing started
+{2015/05/01 11:43:35} Finished boxing /var/www/media/vi_0094_20150501_114329.mp4 from Box Queue at pos 30
+[2015/05/01 11:43:39] Stop capture requested
+[2015/05/01 11:43:39] Send ca 0
+{2015/05/01 11:43:39} Capturing stopped
+{2015/05/01 11:43:39} Add /var/www/media/vi_0095_20150501_114335.mp4 to Box Queue at pos 31
+{2015/05/01 11:43:39} Start boxing /var/www/media/vi_0095_20150501_114335.mp4 from Box Queue at pos 31
+{2015/05/01 11:43:40} Finished boxing /var/www/media/vi_0095_20150501_114335.mp4 from Box Queue at pos 31
+[2015/05/01 11:43:41] Start capture requested
+[2015/05/01 11:43:41] Send ca 1
+{2015/05/01 11:43:41} Capturing started
+[2015/05/01 11:43:45] Stop capture requested
+[2015/05/01 11:43:45] Send ca 0
+{2015/05/01 11:43:45} Capturing stopped
+{2015/05/01 11:43:45} Add /var/www/media/vi_0096_20150501_114341.mp4 to Box Queue at pos 0
+{2015/05/01 11:43:45} Start boxing /var/www/media/vi_0096_20150501_114341.mp4 from Box Queue at pos 0
+{2015/05/01 11:43:46} Finished boxing /var/www/media/vi_0096_20150501_114341.mp4 from Box Queue at pos 0
+[2015/05/01 11:43:47] Start capture requested
+[2015/05/01 11:43:47] Send ca 1
+{2015/05/01 11:43:47} Capturing started
+[2015/05/01 11:44:01] Stop capture requested
+[2015/05/01 11:44:01] Send ca 0
+{2015/05/01 11:44:01} Capturing stopped
+{2015/05/01 11:44:01} Add /var/www/media/vi_0097_20150501_114347.mp4 to Box Queue at pos 1
+{2015/05/01 11:44:02} Start boxing /var/www/media/vi_0097_20150501_114347.mp4 from Box Queue at pos 1
+[2015/05/01 11:44:03] Start capture requested
+[2015/05/01 11:44:03] Send ca 1
+{2015/05/01 11:44:03} Capturing started
+[2015/05/01 11:44:07] Stop capture requested
+[2015/05/01 11:44:07] Send ca 0
+{2015/05/01 11:44:07} Capturing stopped
+{2015/05/01 11:44:07} Add /var/www/media/vi_0098_20150501_114403.mp4 to Box Queue at pos 2
+{2015/05/01 11:44:09} Finished boxing /var/www/media/vi_0097_20150501_114347.mp4 from Box Queue at pos 1
+{2015/05/01 11:44:09} Start boxing /var/www/media/vi_0098_20150501_114403.mp4 from Box Queue at pos 2
+[2015/05/01 11:44:09] Start capture requested
+[2015/05/01 11:44:09] Send ca 1
+{2015/05/01 11:44:09} Capturing started
+[2015/05/01 11:44:13] Stop capture requested
+[2015/05/01 11:44:13] Send ca 0
+{2015/05/01 11:44:16} Capturing stopped
+{2015/05/01 11:44:16} Add /var/www/media/vi_0099_20150501_114409.mp4 to Box Queue at pos 3
+{2015/05/01 11:44:16} Finished boxing /var/www/media/vi_0098_20150501_114403.mp4 from Box Queue at pos 2
+{2015/05/01 11:44:16} Start boxing /var/www/media/vi_0099_20150501_114409.mp4 from Box Queue at pos 3
+{2015/05/01 11:44:18} Finished boxing /var/www/media/vi_0099_20150501_114409.mp4 from Box Queue at pos 3
+[2015/05/01 11:44:18] Start capture requested
+[2015/05/01 11:44:18] Send ca 1
+{2015/05/01 11:44:18} Capturing started
+[2015/05/01 11:44:22] Stop capture requested
+[2015/05/01 11:44:22] Send ca 0
+{2015/05/01 11:44:22} Capturing stopped
+{2015/05/01 11:44:22} Add /var/www/media/vi_0100_20150501_114418.mp4 to Box Queue at pos 4
+{2015/05/01 11:44:22} Start boxing /var/www/media/vi_0100_20150501_114418.mp4 from Box Queue at pos 4
+{2015/05/01 11:44:23} Finished boxing /var/www/media/vi_0100_20150501_114418.mp4 from Box Queue at pos 4
+[2015/05/01 11:44:24] Start capture requested
+[2015/05/01 11:44:24] Send ca 1
+{2015/05/01 11:44:24} Capturing started
+[2015/05/01 11:44:28] Stop capture requested
+[2015/05/01 11:44:28] Send ca 0
+{2015/05/01 11:44:28} Capturing stopped
+{2015/05/01 11:44:28} Add /var/www/media/vi_0101_20150501_114424.mp4 to Box Queue at pos 5
+{2015/05/01 11:44:29} Start boxing /var/www/media/vi_0101_20150501_114424.mp4 from Box Queue at pos 5
+{2015/05/01 11:44:30} Finished boxing /var/www/media/vi_0101_20150501_114424.mp4 from Box Queue at pos 5
+[2015/05/01 11:44:30] Start capture requested
+[2015/05/01 11:44:30] Send ca 1
+{2015/05/01 11:44:30} Capturing started
+[2015/05/01 11:44:34] Stop capture requested
+[2015/05/01 11:44:34] Send ca 0
+{2015/05/01 11:44:34} Capturing stopped
+{2015/05/01 11:44:34} Add /var/www/media/vi_0102_20150501_114430.mp4 to Box Queue at pos 6
+{2015/05/01 11:44:34} Start boxing /var/www/media/vi_0102_20150501_114430.mp4 from Box Queue at pos 6
+{2015/05/01 11:44:35} Finished boxing /var/www/media/vi_0102_20150501_114430.mp4 from Box Queue at pos 6
+[2015/05/01 11:44:36] Start capture requested
+[2015/05/01 11:44:36] Send ca 1
+{2015/05/01 11:44:36} Capturing started
+[2015/05/01 11:44:51] Stop capture requested
+[2015/05/01 11:44:51] Send ca 0
+{2015/05/01 11:44:51} Capturing stopped
+{2015/05/01 11:44:51} Add /var/www/media/vi_0103_20150501_114436.mp4 to Box Queue at pos 7
+{2015/05/01 11:44:51} Start boxing /var/www/media/vi_0103_20150501_114436.mp4 from Box Queue at pos 7
+[2015/05/01 11:44:53] Start capture requested
+[2015/05/01 11:44:53] Send ca 1
+{2015/05/01 11:44:53} Capturing started
+[2015/05/01 11:44:57] Stop capture requested
+[2015/05/01 11:44:57] Send ca 0
+{2015/05/01 11:44:59} Capturing stopped
+{2015/05/01 11:44:59} Add /var/www/media/vi_0104_20150501_114453.mp4 to Box Queue at pos 8
+[2015/05/01 11:45:01] Start capture requested
+[2015/05/01 11:45:03] Send ca 1
+{2015/05/01 11:45:03} Capturing started
+{2015/05/01 11:45:03} Finished boxing /var/www/media/vi_0103_20150501_114436.mp4 from Box Queue at pos 7
+{2015/05/01 11:45:03} Start boxing /var/www/media/vi_0104_20150501_114453.mp4 from Box Queue at pos 8
+{2015/05/01 11:45:04} Finished boxing /var/www/media/vi_0104_20150501_114453.mp4 from Box Queue at pos 8
+[2015/05/01 11:45:05] Stop capture requested
+[2015/05/01 11:45:05] Send ca 0
+{2015/05/01 11:45:05} Capturing stopped
+{2015/05/01 11:45:05} Add /var/www/media/vi_0105_20150501_114503.mp4 to Box Queue at pos 9
+{2015/05/01 11:45:05} Start boxing /var/www/media/vi_0105_20150501_114503.mp4 from Box Queue at pos 9
+{2015/05/01 11:45:06} Finished boxing /var/www/media/vi_0105_20150501_114503.mp4 from Box Queue at pos 9
+[2015/05/01 11:45:07] Start capture requested
+[2015/05/01 11:45:07] Send ca 1
+{2015/05/01 11:45:07} Capturing started
+[2015/05/01 11:45:11] Stop capture requested
+[2015/05/01 11:45:11] Send ca 0
+{2015/05/01 11:45:11} Capturing stopped
+{2015/05/01 11:45:11} Add /var/www/media/vi_0106_20150501_114507.mp4 to Box Queue at pos 10
+{2015/05/01 11:45:11} Start boxing /var/www/media/vi_0106_20150501_114507.mp4 from Box Queue at pos 10
+{2015/05/01 11:45:12} Finished boxing /var/www/media/vi_0106_20150501_114507.mp4 from Box Queue at pos 10
+[2015/05/01 11:45:13] Start capture requested
+[2015/05/01 11:45:13] Send ca 1
+{2015/05/01 11:45:13} Capturing started
+[2015/05/01 11:45:18] Stop capture requested
+[2015/05/01 11:45:18] Send ca 0
+{2015/05/01 11:45:18} Capturing stopped
+{2015/05/01 11:45:18} Add /var/www/media/vi_0107_20150501_114513.mp4 to Box Queue at pos 11
+{2015/05/01 11:45:19} Start boxing /var/www/media/vi_0107_20150501_114513.mp4 from Box Queue at pos 11
+[2015/05/01 11:45:20] Start capture requested
+[2015/05/01 11:45:20] Send ca 1
+[2015/05/01 11:45:22] Stop capture requested
+[2015/05/01 11:45:23] Send ca 0
+{2015/05/01 11:45:23} Capturing started
+{2015/05/01 11:45:23} Finished boxing /var/www/media/vi_0107_20150501_114513.mp4 from Box Queue at pos 11
+{2015/05/01 11:45:24} Capturing stopped
+{2015/05/01 11:45:24} Add /var/www/media/vi_0108_20150501_114520.mp4 to Box Queue at pos 12
+{2015/05/01 11:45:25} Start boxing /var/www/media/vi_0108_20150501_114520.mp4 from Box Queue at pos 12
+{2015/05/01 11:45:26} Finished boxing /var/www/media/vi_0108_20150501_114520.mp4 from Box Queue at pos 12
+[2015/05/01 11:45:33] Start capture requested
+[2015/05/01 11:45:33] Send ca 1
+{2015/05/01 11:45:33} Capturing started
+[2015/05/01 11:45:38] Stop capture requested
+[2015/05/01 11:45:38] Send ca 0
+{2015/05/01 11:45:38} Capturing stopped
+{2015/05/01 11:45:38} Add /var/www/media/vi_0109_20150501_114533.mp4 to Box Queue at pos 13
+{2015/05/01 11:45:38} Start boxing /var/www/media/vi_0109_20150501_114533.mp4 from Box Queue at pos 13
+{2015/05/01 11:45:39} Finished boxing /var/www/media/vi_0109_20150501_114533.mp4 from Box Queue at pos 13
+[2015/05/01 11:45:40] Start capture requested
+[2015/05/01 11:45:40] Send ca 1
+{2015/05/01 11:45:40} Capturing started
+[2015/05/01 11:45:44] Stop capture requested
+[2015/05/01 11:45:44] Send ca 0
+{2015/05/01 11:45:44} Capturing stopped
+{2015/05/01 11:45:44} Add /var/www/media/vi_0110_20150501_114540.mp4 to Box Queue at pos 14
+{2015/05/01 11:45:45} Start boxing /var/www/media/vi_0110_20150501_114540.mp4 from Box Queue at pos 14
+{2015/05/01 11:45:46} Finished boxing /var/www/media/vi_0110_20150501_114540.mp4 from Box Queue at pos 14
+[2015/05/01 11:45:46] Start capture requested
+[2015/05/01 11:45:46] Send ca 1
+{2015/05/01 11:45:46} Capturing started
+[2015/05/01 11:45:49] Stop capture requested
+[2015/05/01 11:45:49] Send ca 0
+{2015/05/01 11:45:49} Capturing stopped
+{2015/05/01 11:45:49} Add /var/www/media/vi_0111_20150501_114546.mp4 to Box Queue at pos 15
+{2015/05/01 11:45:49} Start boxing /var/www/media/vi_0111_20150501_114546.mp4 from Box Queue at pos 15
+{2015/05/01 11:45:50} Finished boxing /var/www/media/vi_0111_20150501_114546.mp4 from Box Queue at pos 15
+[2015/05/01 11:45:51] Start capture requested
+[2015/05/01 11:45:51] Send ca 1
+{2015/05/01 11:45:51} Capturing started
+[2015/05/01 11:45:55] Stop capture requested
+[2015/05/01 11:45:55] Send ca 0
+{2015/05/01 11:45:55} Capturing stopped
+{2015/05/01 11:45:55} Add /var/www/media/vi_0112_20150501_114551.mp4 to Box Queue at pos 16
+{2015/05/01 11:45:55} Start boxing /var/www/media/vi_0112_20150501_114551.mp4 from Box Queue at pos 16
+{2015/05/01 11:45:56} Finished boxing /var/www/media/vi_0112_20150501_114551.mp4 from Box Queue at pos 16
+[2015/05/01 11:45:57] Start capture requested
+[2015/05/01 11:45:57] Send ca 1
+{2015/05/01 11:45:57} Capturing started
+[2015/05/01 11:46:02] Stop capture requested
+[2015/05/01 11:46:02] Send ca 0
+{2015/05/01 11:46:02} Capturing stopped
+{2015/05/01 11:46:02} Add /var/www/media/vi_0113_20150501_114557.mp4 to Box Queue at pos 17
+{2015/05/01 11:46:03} Start boxing /var/www/media/vi_0113_20150501_114557.mp4 from Box Queue at pos 17
+{2015/05/01 11:46:04} Finished boxing /var/www/media/vi_0113_20150501_114557.mp4 from Box Queue at pos 17
+[2015/05/01 11:46:04] Start capture requested
+[2015/05/01 11:46:04] Send ca 1
+{2015/05/01 11:46:04} Capturing started
+[2015/05/01 11:46:23] Stop capture requested
+[2015/05/01 11:46:23] Send ca 0
+{2015/05/01 11:46:23} Capturing stopped
+{2015/05/01 11:46:23} Add /var/www/media/vi_0114_20150501_114604.mp4 to Box Queue at pos 18
+{2015/05/01 11:46:23} Start boxing /var/www/media/vi_0114_20150501_114604.mp4 from Box Queue at pos 18
+[2015/05/01 11:46:25] Start capture requested
+[2015/05/01 11:46:25] Send ca 1
+{2015/05/01 11:46:26} Capturing started
+[2015/05/01 11:46:30] Stop capture requested
+[2015/05/01 11:46:35] Send ca 0
+{2015/05/01 11:46:37} Capturing stopped
+{2015/05/01 11:46:37} Add /var/www/media/vi_0115_20150501_114625.mp4 to Box Queue at pos 19
+{2015/05/01 11:46:38} Finished boxing /var/www/media/vi_0114_20150501_114604.mp4 from Box Queue at pos 18
+{2015/05/01 11:46:38} Start boxing /var/www/media/vi_0115_20150501_114625.mp4 from Box Queue at pos 19
+{2015/05/01 11:46:39} Finished boxing /var/www/media/vi_0115_20150501_114625.mp4 from Box Queue at pos 19
+[2015/05/01 11:46:39] Start capture requested
+[2015/05/01 11:46:39] Send ca 1
+{2015/05/01 11:46:39} Capturing started
+[2015/05/01 11:46:42] Stop capture requested
+[2015/05/01 11:46:42] Send ca 0
+{2015/05/01 11:46:42} Capturing stopped
+{2015/05/01 11:46:42} Add /var/www/media/vi_0116_20150501_114639.mp4 to Box Queue at pos 20
+{2015/05/01 11:46:42} Start boxing /var/www/media/vi_0116_20150501_114639.mp4 from Box Queue at pos 20
+{2015/05/01 11:46:43} Finished boxing /var/www/media/vi_0116_20150501_114639.mp4 from Box Queue at pos 20
+[2015/05/01 11:46:44] Start capture requested
+[2015/05/01 11:46:44] Send ca 1
+{2015/05/01 11:46:44} Capturing started
+[2015/05/01 11:46:58] Stop capture requested
+[2015/05/01 11:46:58] Send ca 0
+{2015/05/01 11:46:58} Capturing stopped
+{2015/05/01 11:46:58} Add /var/www/media/vi_0117_20150501_114644.mp4 to Box Queue at pos 21
+{2015/05/01 11:46:59} Start boxing /var/www/media/vi_0117_20150501_114644.mp4 from Box Queue at pos 21
+[2015/05/01 11:47:00] Start capture requested
+[2015/05/01 11:47:03] Send ca 1
+{2015/05/01 11:47:03} Capturing started
+{2015/05/01 11:47:03} Finished boxing /var/www/media/vi_0117_20150501_114644.mp4 from Box Queue at pos 21
+[2015/05/01 11:47:06] Stop capture requested
+[2015/05/01 11:47:06] Send ca 0
+{2015/05/01 11:47:06} Capturing stopped
+{2015/05/01 11:47:06} Add /var/www/media/vi_0118_20150501_114703.mp4 to Box Queue at pos 22
+{2015/05/01 11:47:07} Start boxing /var/www/media/vi_0118_20150501_114703.mp4 from Box Queue at pos 22
+{2015/05/01 11:47:08} Finished boxing /var/www/media/vi_0118_20150501_114703.mp4 from Box Queue at pos 22
+[2015/05/01 11:47:08] Start capture requested
+[2015/05/01 11:47:08] Send ca 1
+{2015/05/01 11:47:08} Capturing started
+[2015/05/01 11:47:13] Stop capture requested
+[2015/05/01 11:47:13] Send ca 0
+{2015/05/01 11:47:13} Capturing stopped
+{2015/05/01 11:47:13} Add /var/www/media/vi_0119_20150501_114708.mp4 to Box Queue at pos 23
+{2015/05/01 11:47:13} Start boxing /var/www/media/vi_0119_20150501_114708.mp4 from Box Queue at pos 23
+{2015/05/01 11:47:14} Finished boxing /var/www/media/vi_0119_20150501_114708.mp4 from Box Queue at pos 23
+[2015/05/01 11:47:15] Start capture requested
+[2015/05/01 11:47:15] Send ca 1
+{2015/05/01 11:47:15} Capturing started
+[2015/05/01 11:47:19] Stop capture requested
+[2015/05/01 11:47:19] Send ca 0
+{2015/05/01 11:47:19} Capturing stopped
+{2015/05/01 11:47:19} Add /var/www/media/vi_0120_20150501_114715.mp4 to Box Queue at pos 24
+{2015/05/01 11:47:19} Start boxing /var/www/media/vi_0120_20150501_114715.mp4 from Box Queue at pos 24
+{2015/05/01 11:47:20} Finished boxing /var/www/media/vi_0120_20150501_114715.mp4 from Box Queue at pos 24
+[2015/05/01 11:47:21] Start capture requested
+[2015/05/01 11:47:21] Send ca 1
+{2015/05/01 11:47:21} Capturing started
+[2015/05/01 11:47:23] Stop capture requested
+[2015/05/01 11:47:23] Send ca 0
+{2015/05/01 11:47:23} Capturing stopped
+{2015/05/01 11:47:23} Add /var/www/media/vi_0121_20150501_114721.mp4 to Box Queue at pos 25
+{2015/05/01 11:47:23} Start boxing /var/www/media/vi_0121_20150501_114721.mp4 from Box Queue at pos 25
+{2015/05/01 11:47:25} Finished boxing /var/www/media/vi_0121_20150501_114721.mp4 from Box Queue at pos 25
+[2015/05/01 11:48:24] Start capture requested
+[2015/05/01 11:48:24] Send ca 1
+{2015/05/01 11:48:24} Capturing started
+[2015/05/01 11:48:52] Stop capture requested
+[2015/05/01 11:48:52] Send ca 0
+{2015/05/01 11:48:52} Capturing stopped
+{2015/05/01 11:48:52} Add /var/www/media/vi_0122_20150501_114824.mp4 to Box Queue at pos 26
+{2015/05/01 11:48:52} Start boxing /var/www/media/vi_0122_20150501_114824.mp4 from Box Queue at pos 26
+[2015/05/01 11:48:57] Start capture requested
+[2015/05/01 11:48:58] Send ca 1
+{2015/05/01 11:48:58} Capturing started
+[2015/05/01 11:49:02] Stop capture requested
+[2015/05/01 11:49:05] Send ca 0
+{2015/05/01 11:49:05} Capturing stopped
+{2015/05/01 11:49:05} Add /var/www/media/vi_0123_20150501_114858.mp4 to Box Queue at pos 27
+{2015/05/01 11:49:06} Finished boxing /var/www/media/vi_0122_20150501_114824.mp4 from Box Queue at pos 26
+{2015/05/01 11:49:06} Start boxing /var/www/media/vi_0123_20150501_114858.mp4 from Box Queue at pos 27
+[2015/05/01 11:49:07] Start capture requested
+[2015/05/01 11:49:07] Send ca 1
+{2015/05/01 11:49:07} Capturing started
+{2015/05/01 11:49:07} Finished boxing /var/www/media/vi_0123_20150501_114858.mp4 from Box Queue at pos 27
+[2015/05/01 11:49:16] Stop capture requested
+[2015/05/01 11:49:16] Send ca 0
+{2015/05/01 11:49:16} Capturing stopped
+{2015/05/01 11:49:16} Add /var/www/media/vi_0124_20150501_114907.mp4 to Box Queue at pos 28
+{2015/05/01 11:49:16} Start boxing /var/www/media/vi_0124_20150501_114907.mp4 from Box Queue at pos 28
+[2015/05/01 11:49:18] Start capture requested
+[2015/05/01 11:49:18] Send ca 1
+{2015/05/01 11:49:22} Capturing started
+{2015/05/01 11:49:23} Finished boxing /var/www/media/vi_0124_20150501_114907.mp4 from Box Queue at pos 28
+[2015/05/01 11:49:28] Stop capture requested
+[2015/05/01 11:49:28] Send ca 0
+{2015/05/01 11:49:28} Capturing stopped
+{2015/05/01 11:49:28} Add /var/www/media/vi_0125_20150501_114918.mp4 to Box Queue at pos 29
+{2015/05/01 11:49:29} Start boxing /var/www/media/vi_0125_20150501_114918.mp4 from Box Queue at pos 29
+[2015/05/01 11:49:30] Start capture requested
+[2015/05/01 11:49:30] Send ca 1
+{2015/05/01 11:49:30} Capturing started
+{2015/05/01 11:49:30} Finished boxing /var/www/media/vi_0125_20150501_114918.mp4 from Box Queue at pos 29
+[2015/05/01 11:49:45] Stop capture requested
+[2015/05/01 11:49:45] Send ca 0
+{2015/05/01 11:49:45} Capturing stopped
+{2015/05/01 11:49:45} Add /var/www/media/vi_0126_20150501_114930.mp4 to Box Queue at pos 30
+{2015/05/01 11:49:46} Start boxing /var/www/media/vi_0126_20150501_114930.mp4 from Box Queue at pos 30
+[2015/05/01 11:49:47] Start capture requested
+[2015/05/01 11:49:55] Send ca 1
+{2015/05/01 11:49:55} Capturing started
+{2015/05/01 11:49:57} Finished boxing /var/www/media/vi_0126_20150501_114930.mp4 from Box Queue at pos 30
+[2015/05/01 11:50:09] Stop capture requested
+[2015/05/01 11:50:09] Send ca 0
+{2015/05/01 11:50:09} Capturing stopped
+{2015/05/01 11:50:09} Add /var/www/media/vi_0127_20150501_114955.mp4 to Box Queue at pos 31
+{2015/05/01 11:50:09} Start boxing /var/www/media/vi_0127_20150501_114955.mp4 from Box Queue at pos 31
+[2015/05/01 11:50:11] Start capture requested
+[2015/05/01 11:50:11] Send ca 1
+{2015/05/01 11:50:12} Capturing started
+[2015/05/01 11:50:15] Stop capture requested
+[2015/05/01 11:50:17] Send ca 0
+{2015/05/01 11:50:17} Capturing stopped
+{2015/05/01 11:50:17} Add /var/www/media/vi_0128_20150501_115011.mp4 to Box Queue at pos 0
+{2015/05/01 11:50:17} Finished boxing /var/www/media/vi_0127_20150501_114955.mp4 from Box Queue at pos 31
+{2015/05/01 11:50:17} Start boxing /var/www/media/vi_0128_20150501_115011.mp4 from Box Queue at pos 0
+{2015/05/01 11:50:18} Finished boxing /var/www/media/vi_0128_20150501_115011.mp4 from Box Queue at pos 0
+[2015/05/01 11:50:19] Start capture requested
+[2015/05/01 11:50:21] Send ca 1
+{2015/05/01 11:50:21} Capturing started
+[2015/05/01 11:50:24] Stop capture requested
+[2015/05/01 11:50:24] Send ca 0
+{2015/05/01 11:50:24} Capturing stopped
+{2015/05/01 11:50:24} Add /var/www/media/vi_0129_20150501_115021.mp4 to Box Queue at pos 1
+{2015/05/01 11:50:25} Start boxing /var/www/media/vi_0129_20150501_115021.mp4 from Box Queue at pos 1
+[2015/05/01 11:50:26] Start capture requested
+[2015/05/01 11:50:26] Send ca 1
+{2015/05/01 11:50:26} Capturing started
+{2015/05/01 11:50:26} Finished boxing /var/www/media/vi_0129_20150501_115021.mp4 from Box Queue at pos 1
+[2015/05/01 11:50:41] Stop capture requested
+[2015/05/01 11:50:41] Send ca 0
+{2015/05/01 11:50:41} Capturing stopped
+{2015/05/01 11:50:41} Add /var/www/media/vi_0130_20150501_115026.mp4 to Box Queue at pos 2
+{2015/05/01 11:50:42} Start boxing /var/www/media/vi_0130_20150501_115026.mp4 from Box Queue at pos 2
+[2015/05/01 11:50:43] Start capture requested
+[2015/05/01 11:50:43] Send ca 1
+{2015/05/01 11:50:47} Capturing started
+{2015/05/01 11:50:48} Finished boxing /var/www/media/vi_0130_20150501_115026.mp4 from Box Queue at pos 2
+[2015/05/01 11:51:01] Stop capture requested
+[2015/05/01 11:51:01] Send ca 0
+{2015/05/01 11:51:01} Capturing stopped
+{2015/05/01 11:51:01} Add /var/www/media/vi_0131_20150501_115043.mp4 to Box Queue at pos 3
+{2015/05/01 11:51:01} Start boxing /var/www/media/vi_0131_20150501_115043.mp4 from Box Queue at pos 3
+[2015/05/01 11:51:03] Start capture requested
+[2015/05/01 11:51:07] Send ca 1
+{2015/05/01 11:51:07} Capturing started
+{2015/05/01 11:51:09} Finished boxing /var/www/media/vi_0131_20150501_115043.mp4 from Box Queue at pos 3
+[2015/05/01 11:51:09] Stop capture requested
+[2015/05/01 11:51:09] Send ca 0
+{2015/05/01 11:51:09} Capturing stopped
+{2015/05/01 11:51:09} Add /var/www/media/vi_0132_20150501_115107.mp4 to Box Queue at pos 4
+{2015/05/01 11:51:10} Start boxing /var/www/media/vi_0132_20150501_115107.mp4 from Box Queue at pos 4
+{2015/05/01 11:51:11} Finished boxing /var/www/media/vi_0132_20150501_115107.mp4 from Box Queue at pos 4
+[2015/05/01 11:51:11] Start capture requested
+[2015/05/01 11:51:11] Send ca 1
+{2015/05/01 11:51:11} Capturing started
+[2015/05/01 11:51:15] Stop capture requested
+[2015/05/01 11:51:15] Send ca 0
+{2015/05/01 11:51:15} Capturing stopped
+{2015/05/01 11:51:15} Add /var/www/media/vi_0133_20150501_115111.mp4 to Box Queue at pos 5
+{2015/05/01 11:51:15} Start boxing /var/www/media/vi_0133_20150501_115111.mp4 from Box Queue at pos 5
+{2015/05/01 11:51:16} Finished boxing /var/www/media/vi_0133_20150501_115111.mp4 from Box Queue at pos 5
+[2015/05/01 11:51:17] Start capture requested
+[2015/05/01 11:51:17] Send ca 1
+{2015/05/01 11:51:17} Capturing started
+[2015/05/01 11:51:21] Stop capture requested
+[2015/05/01 11:51:21] Send ca 0
+{2015/05/01 11:51:21} Capturing stopped
+{2015/05/01 11:51:21} Add /var/www/media/vi_0134_20150501_115117.mp4 to Box Queue at pos 6
+{2015/05/01 11:51:21} Start boxing /var/www/media/vi_0134_20150501_115117.mp4 from Box Queue at pos 6
+{2015/05/01 11:51:22} Finished boxing /var/www/media/vi_0134_20150501_115117.mp4 from Box Queue at pos 6
+[2015/05/01 11:51:23] Start capture requested
+[2015/05/01 11:51:23] Send ca 1
+{2015/05/01 11:51:23} Capturing started
+[2015/05/01 11:51:28] Stop capture requested
+[2015/05/01 11:51:28] Send ca 0
+{2015/05/01 11:51:28} Capturing stopped
+{2015/05/01 11:51:28} Add /var/www/media/vi_0135_20150501_115123.mp4 to Box Queue at pos 7
+{2015/05/01 11:51:29} Start boxing /var/www/media/vi_0135_20150501_115123.mp4 from Box Queue at pos 7
+{2015/05/01 11:51:30} Finished boxing /var/www/media/vi_0135_20150501_115123.mp4 from Box Queue at pos 7
+[2015/05/01 11:51:30] Start capture requested
+[2015/05/01 11:51:30] Send ca 1
+{2015/05/01 11:51:30} Capturing started
+[2015/05/01 11:51:33] Stop capture requested
+[2015/05/01 11:51:33] Send ca 0
+{2015/05/01 11:51:33} Capturing stopped
+{2015/05/01 11:51:33} Add /var/www/media/vi_0136_20150501_115130.mp4 to Box Queue at pos 8
+{2015/05/01 11:51:34} Start boxing /var/www/media/vi_0136_20150501_115130.mp4 from Box Queue at pos 8
+[2015/05/01 11:51:35] Start capture requested
+[2015/05/01 11:51:35] Send ca 1
+{2015/05/01 11:51:35} Capturing started
+{2015/05/01 11:51:35} Finished boxing /var/www/media/vi_0136_20150501_115130.mp4 from Box Queue at pos 8
+[2015/05/01 11:51:50] Stop capture requested
+[2015/05/01 11:51:50] Send ca 0
+{2015/05/01 11:51:50} Capturing stopped
+{2015/05/01 11:51:50} Add /var/www/media/vi_0137_20150501_115135.mp4 to Box Queue at pos 9
+{2015/05/01 11:51:51} Start boxing /var/www/media/vi_0137_20150501_115135.mp4 from Box Queue at pos 9
+[2015/05/01 11:51:52] Start capture requested
+[2015/05/01 11:51:52] Send ca 1
+{2015/05/01 11:51:52} Capturing started
+[2015/05/01 11:51:55] Stop capture requested
+[2015/05/01 11:51:57] Send ca 0
+{2015/05/01 11:51:57} Capturing stopped
+{2015/05/01 11:51:57} Add /var/www/media/vi_0138_20150501_115152.mp4 to Box Queue at pos 10
+[2015/05/01 11:51:59] Start capture requested
+[2015/05/01 11:51:59] Send ca 1
+{2015/05/01 11:52:01} Capturing started
+{2015/05/01 11:52:01} Finished boxing /var/www/media/vi_0137_20150501_115135.mp4 from Box Queue at pos 9
+{2015/05/01 11:52:01} Start boxing /var/www/media/vi_0138_20150501_115152.mp4 from Box Queue at pos 10
+{2015/05/01 11:52:02} Finished boxing /var/www/media/vi_0138_20150501_115152.mp4 from Box Queue at pos 10
+[2015/05/01 11:52:03] Stop capture requested
+[2015/05/01 11:52:03] Send ca 0
+{2015/05/01 11:52:03} Capturing stopped
+{2015/05/01 11:52:03} Add /var/www/media/vi_0139_20150501_115159.mp4 to Box Queue at pos 11
+{2015/05/01 11:52:04} Start boxing /var/www/media/vi_0139_20150501_115159.mp4 from Box Queue at pos 11
+{2015/05/01 11:52:05} Finished boxing /var/www/media/vi_0139_20150501_115159.mp4 from Box Queue at pos 11
+[2015/05/01 11:52:05] Start capture requested
+[2015/05/01 11:52:05] Send ca 1
+{2015/05/01 11:52:05} Capturing started
+[2015/05/01 11:52:09] Stop capture requested
+[2015/05/01 11:52:09] Send ca 0
+{2015/05/01 11:52:09} Capturing stopped
+{2015/05/01 11:52:09} Add /var/www/media/vi_0140_20150501_115205.mp4 to Box Queue at pos 12
+{2015/05/01 11:52:09} Start boxing /var/www/media/vi_0140_20150501_115205.mp4 from Box Queue at pos 12
+{2015/05/01 11:52:10} Finished boxing /var/www/media/vi_0140_20150501_115205.mp4 from Box Queue at pos 12
+[2015/05/01 11:52:11] Start capture requested
+[2015/05/01 11:52:11] Send ca 1
+{2015/05/01 11:52:11} Capturing started
+[2015/05/01 11:52:14] Stop capture requested
+[2015/05/01 11:52:14] Send ca 0
+{2015/05/01 11:52:14} Capturing stopped
+{2015/05/01 11:52:14} Add /var/www/media/vi_0141_20150501_115211.mp4 to Box Queue at pos 13
+{2015/05/01 11:52:15} Start boxing /var/www/media/vi_0141_20150501_115211.mp4 from Box Queue at pos 13
+{2015/05/01 11:52:16} Finished boxing /var/www/media/vi_0141_20150501_115211.mp4 from Box Queue at pos 13
+[2015/05/01 11:52:16] Start capture requested
+[2015/05/01 11:52:16] Send ca 1
+{2015/05/01 11:52:16} Capturing started
+[2015/05/01 11:52:20] Stop capture requested
+[2015/05/01 11:52:20] Send ca 0
+{2015/05/01 11:52:20} Capturing stopped
+{2015/05/01 11:52:20} Add /var/www/media/vi_0142_20150501_115216.mp4 to Box Queue at pos 14
+{2015/05/01 11:52:20} Start boxing /var/www/media/vi_0142_20150501_115216.mp4 from Box Queue at pos 14
+{2015/05/01 11:52:21} Finished boxing /var/www/media/vi_0142_20150501_115216.mp4 from Box Queue at pos 14
+[2015/05/01 11:52:22] Start capture requested
+[2015/05/01 11:52:22] Send ca 1
+{2015/05/01 11:52:22} Capturing started
+[2015/05/01 11:52:25] Stop capture requested
+[2015/05/01 11:52:25] Send ca 0
+{2015/05/01 11:52:25} Capturing stopped
+{2015/05/01 11:52:25} Add /var/www/media/vi_0143_20150501_115222.mp4 to Box Queue at pos 15
+{2015/05/01 11:52:25} Start boxing /var/www/media/vi_0143_20150501_115222.mp4 from Box Queue at pos 15
+{2015/05/01 11:52:26} Finished boxing /var/www/media/vi_0143_20150501_115222.mp4 from Box Queue at pos 15
+[2015/05/01 11:52:27] Start capture requested
+[2015/05/01 11:52:27] Send ca 1
+{2015/05/01 11:52:27} Capturing started
+[2015/05/01 11:52:41] Stop capture requested
+[2015/05/01 11:52:41] Send ca 0
+{2015/05/01 11:52:41} Capturing stopped
+{2015/05/01 11:52:41} Add /var/www/media/vi_0144_20150501_115227.mp4 to Box Queue at pos 16
+{2015/05/01 11:52:41} Start boxing /var/www/media/vi_0144_20150501_115227.mp4 from Box Queue at pos 16
+[2015/05/01 11:52:43] Start capture requested
+[2015/05/01 11:52:48] Send ca 1
+{2015/05/01 11:52:48} Capturing started
+{2015/05/01 11:52:48} Finished boxing /var/www/media/vi_0144_20150501_115227.mp4 from Box Queue at pos 16
+[2015/05/01 11:52:52] Stop capture requested
+[2015/05/01 11:52:52] Send ca 0
+{2015/05/01 11:52:52} Capturing stopped
+{2015/05/01 11:52:52} Add /var/www/media/vi_0145_20150501_115248.mp4 to Box Queue at pos 17
+{2015/05/01 11:52:52} Start boxing /var/www/media/vi_0145_20150501_115248.mp4 from Box Queue at pos 17
+{2015/05/01 11:52:53} Finished boxing /var/www/media/vi_0145_20150501_115248.mp4 from Box Queue at pos 17
+[2015/05/01 11:52:54] Start capture requested
+[2015/05/01 11:52:54] Send ca 1
+{2015/05/01 11:52:54} Capturing started
+[2015/05/01 11:52:59] Stop capture requested
+[2015/05/01 11:52:59] Send ca 0
+{2015/05/01 11:52:59} Capturing stopped
+{2015/05/01 11:52:59} Add /var/www/media/vi_0146_20150501_115254.mp4 to Box Queue at pos 18
+{2015/05/01 11:52:59} Start boxing /var/www/media/vi_0146_20150501_115254.mp4 from Box Queue at pos 18
+{2015/05/01 11:53:00} Finished boxing /var/www/media/vi_0146_20150501_115254.mp4 from Box Queue at pos 18
+[2015/05/01 11:53:01] Start capture requested
+[2015/05/01 11:53:01] Send ca 1
+{2015/05/01 11:53:01} Capturing started
+[2015/05/01 11:53:06] Stop capture requested
+[2015/05/01 11:53:06] Send ca 0
+{2015/05/01 11:53:06} Capturing stopped
+{2015/05/01 11:53:06} Add /var/www/media/vi_0147_20150501_115301.mp4 to Box Queue at pos 19
+{2015/05/01 11:53:07} Start boxing /var/www/media/vi_0147_20150501_115301.mp4 from Box Queue at pos 19
+[2015/05/01 11:53:08] Start capture requested
+[2015/05/01 11:53:08] Send ca 1
+{2015/05/01 11:53:08} Capturing started
+{2015/05/01 11:53:08} Finished boxing /var/www/media/vi_0147_20150501_115301.mp4 from Box Queue at pos 19
+[2015/05/01 11:53:11] Stop capture requested
+[2015/05/01 11:53:11] Send ca 0
+{2015/05/01 11:53:11} Capturing stopped
+{2015/05/01 11:53:11} Add /var/www/media/vi_0148_20150501_115308.mp4 to Box Queue at pos 20
+{2015/05/01 11:53:11} Start boxing /var/www/media/vi_0148_20150501_115308.mp4 from Box Queue at pos 20
+{2015/05/01 11:53:12} Finished boxing /var/www/media/vi_0148_20150501_115308.mp4 from Box Queue at pos 20
+[2015/05/01 11:53:13] Start capture requested
+[2015/05/01 11:53:13] Send ca 1
+{2015/05/01 11:53:13} Capturing started
+[2015/05/01 11:53:17] Stop capture requested
+[2015/05/01 11:53:17] Send ca 0
+{2015/05/01 11:53:17} Capturing stopped
+{2015/05/01 11:53:17} Add /var/www/media/vi_0149_20150501_115313.mp4 to Box Queue at pos 21
+{2015/05/01 11:53:17} Start boxing /var/www/media/vi_0149_20150501_115313.mp4 from Box Queue at pos 21
+{2015/05/01 11:53:18} Finished boxing /var/www/media/vi_0149_20150501_115313.mp4 from Box Queue at pos 21
+[2015/05/01 11:53:19] Start capture requested
+[2015/05/01 11:53:19] Send ca 1
+{2015/05/01 11:53:19} Capturing started
+[2015/05/01 11:53:22] Stop capture requested
+[2015/05/01 11:53:22] Send ca 0
+{2015/05/01 11:53:22} Capturing stopped
+{2015/05/01 11:53:22} Add /var/www/media/vi_0150_20150501_115319.mp4 to Box Queue at pos 22
+[2015/05/01 11:53:24] Start capture requested
+[2015/05/01 11:53:27] Send ca 1
+{2015/05/01 11:53:27} Capturing started
+{2015/05/01 11:53:27} Start boxing /var/www/media/vi_0150_20150501_115319.mp4 from Box Queue at pos 22
+{2015/05/01 11:53:28} Finished boxing /var/www/media/vi_0150_20150501_115319.mp4 from Box Queue at pos 22
+[2015/05/01 11:53:29] Stop capture requested
+[2015/05/01 11:53:29] Send ca 0
+{2015/05/01 11:53:29} Capturing stopped
+{2015/05/01 11:53:29} Add /var/www/media/vi_0151_20150501_115327.mp4 to Box Queue at pos 23
+{2015/05/01 11:53:29} Start boxing /var/www/media/vi_0151_20150501_115327.mp4 from Box Queue at pos 23
+{2015/05/01 11:53:31} Finished boxing /var/www/media/vi_0151_20150501_115327.mp4 from Box Queue at pos 23
+[2015/05/01 11:53:31] Start capture requested
+[2015/05/01 11:53:31] Send ca 1
+{2015/05/01 11:53:31} Capturing started
+[2015/05/01 11:53:46] Stop capture requested
+[2015/05/01 11:53:46] Send ca 0
+{2015/05/01 11:53:46} Capturing stopped
+{2015/05/01 11:53:46} Add /var/www/media/vi_0152_20150501_115331.mp4 to Box Queue at pos 24
+{2015/05/01 11:53:46} Start boxing /var/www/media/vi_0152_20150501_115331.mp4 from Box Queue at pos 24
+[2015/05/01 11:53:48] Start capture requested
+[2015/05/01 11:53:48] Send ca 1
+{2015/05/01 11:53:48} Capturing started
+[2015/05/01 11:53:51] Stop capture requested
+[2015/05/01 11:53:53] Send ca 0
+{2015/05/01 11:53:54} Capturing stopped
+{2015/05/01 11:53:54} Add /var/www/media/vi_0153_20150501_115348.mp4 to Box Queue at pos 25
+[2015/05/01 11:53:56] Start capture requested
+[2015/05/01 11:53:58] Send ca 1
+{2015/05/01 11:53:58} Capturing started
+{2015/05/01 11:53:58} Finished boxing /var/www/media/vi_0152_20150501_115331.mp4 from Box Queue at pos 24
+{2015/05/01 11:53:58} Start boxing /var/www/media/vi_0153_20150501_115348.mp4 from Box Queue at pos 25
+{2015/05/01 11:53:59} Finished boxing /var/www/media/vi_0153_20150501_115348.mp4 from Box Queue at pos 25
+[2015/05/01 11:54:00] Stop capture requested
+[2015/05/01 11:54:00] Send ca 0
+{2015/05/01 11:54:01} Capturing stopped
+{2015/05/01 11:54:01} Add /var/www/media/vi_0154_20150501_115358.mp4 to Box Queue at pos 26
+{2015/05/01 11:54:01} Start boxing /var/www/media/vi_0154_20150501_115358.mp4 from Box Queue at pos 26
+{2015/05/01 11:54:02} Finished boxing /var/www/media/vi_0154_20150501_115358.mp4 from Box Queue at pos 26
+[2015/05/01 11:54:03] Start capture requested
+[2015/05/01 11:54:03] Send ca 1
+{2015/05/01 11:54:03} Capturing started
+[2015/05/01 11:54:06] Stop capture requested
+[2015/05/01 11:54:06] Send ca 0
+{2015/05/01 11:54:06} Capturing stopped
+{2015/05/01 11:54:06} Add /var/www/media/vi_0155_20150501_115403.mp4 to Box Queue at pos 27
+{2015/05/01 11:54:06} Start boxing /var/www/media/vi_0155_20150501_115403.mp4 from Box Queue at pos 27
+{2015/05/01 11:54:07} Finished boxing /var/www/media/vi_0155_20150501_115403.mp4 from Box Queue at pos 27
+[2015/05/01 11:54:08] Start capture requested
+[2015/05/01 11:54:08] Send ca 1
+{2015/05/01 11:54:08} Capturing started
+[2015/05/01 11:54:11] Stop capture requested
+[2015/05/01 11:54:11] Send ca 0
+{2015/05/01 11:54:11} Capturing stopped
+{2015/05/01 11:54:11} Add /var/www/media/vi_0156_20150501_115408.mp4 to Box Queue at pos 28
+{2015/05/01 11:54:12} Start boxing /var/www/media/vi_0156_20150501_115408.mp4 from Box Queue at pos 28
+[2015/05/01 11:54:13] Start capture requested
+[2015/05/01 11:54:13] Send ca 1
+{2015/05/01 11:54:13} Capturing started
+{2015/05/01 11:54:13} Finished boxing /var/www/media/vi_0156_20150501_115408.mp4 from Box Queue at pos 28
+[2015/05/01 11:54:26] Stop capture requested
+[2015/05/01 11:54:26] Send ca 0
+{2015/05/01 11:54:26} Capturing stopped
+{2015/05/01 11:54:26} Add /var/www/media/vi_0157_20150501_115413.mp4 to Box Queue at pos 29
+{2015/05/01 11:54:26} Start boxing /var/www/media/vi_0157_20150501_115413.mp4 from Box Queue at pos 29
+[2015/05/01 11:54:28] Start capture requested
+[2015/05/01 11:54:28] Send ca 1
+{2015/05/01 11:54:28} Capturing started
+{2015/05/01 11:54:28} Finished boxing /var/www/media/vi_0157_20150501_115413.mp4 from Box Queue at pos 29
+[2015/05/01 11:54:43] Stop capture requested
+[2015/05/01 11:54:43] Send ca 0
+{2015/05/01 11:54:43} Capturing stopped
+{2015/05/01 11:54:43} Add /var/www/media/vi_0158_20150501_115428.mp4 to Box Queue at pos 30
+{2015/05/01 11:54:43} Start boxing /var/www/media/vi_0158_20150501_115428.mp4 from Box Queue at pos 30
+[2015/05/01 11:54:45] Start capture requested
+[2015/05/01 11:54:45] Send ca 1
+{2015/05/01 11:54:54} Capturing started
+{2015/05/01 11:54:55} Finished boxing /var/www/media/vi_0158_20150501_115428.mp4 from Box Queue at pos 30
+[2015/05/01 11:55:09] Stop capture requested
+[2015/05/01 11:55:09] Send ca 0
+{2015/05/01 11:55:09} Capturing stopped
+{2015/05/01 11:55:09} Add /var/www/media/vi_0159_20150501_115445.mp4 to Box Queue at pos 31
+{2015/05/01 11:55:09} Start boxing /var/www/media/vi_0159_20150501_115445.mp4 from Box Queue at pos 31
+[2015/05/01 11:55:11] Start capture requested
+[2015/05/01 11:55:11] Send ca 1
+{2015/05/01 11:55:11} Capturing started
+[2015/05/01 11:55:14] Stop capture requested
+[2015/05/01 11:55:18] Send ca 0
+{2015/05/01 11:55:18} Capturing stopped
+{2015/05/01 11:55:18} Add /var/www/media/vi_0160_20150501_115511.mp4 to Box Queue at pos 0
+{2015/05/01 11:55:19} Finished boxing /var/www/media/vi_0159_20150501_115445.mp4 from Box Queue at pos 31
+{2015/05/01 11:55:19} Start boxing /var/www/media/vi_0160_20150501_115511.mp4 from Box Queue at pos 0
+[2015/05/01 11:55:20] Start capture requested
+[2015/05/01 11:55:20] Send ca 1
+{2015/05/01 11:55:20} Capturing started
+{2015/05/01 11:55:24} Finished boxing /var/www/media/vi_0160_20150501_115511.mp4 from Box Queue at pos 0
+[2015/05/01 11:55:35] Stop capture requested
+[2015/05/01 11:55:35] Send ca 0
+{2015/05/01 11:55:35} Error: Could not send buffers to port
+{2015/05/01 11:55:36} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:36} Error: Could not enable camera
+{2015/05/01 11:55:37} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:37} Error: Could not enable camera
+{2015/05/01 11:55:38} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:38} Error: Could not enable camera
+{2015/05/01 11:55:39} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:39} Error: Could not enable camera
+{2015/05/01 11:55:40} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:40} Error: Could not enable camera
+{2015/05/01 11:55:41} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:41} Error: Could not enable camera
+{2015/05/01 11:55:42} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:55:42} Error: Could not enable camera
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {2015/05/01 11:17:16} RaspiMJPEG Version 5.1.3
+{2015/05/01 11:17:17} MJPEG streaming, ready to receive commands
+[2015/05/01 11:56:18] RaspiCam support started
+[2015/05/01 11:56:18] Capture Pipe already exists /var/www/FIFO1
+[2015/05/01 11:56:18] Scheduler loop is started
+[2015/05/01 11:56:19] New period detected 0
+[2015/05/01 11:56:19] Scheduled management tasks. Next at 1430484979
+[2015/05/01 12:56:20] Scheduled management tasks. Next at 1430488580

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-file="/home/pi/vars/x" #the file where you keep your string name
+file="/var/www/vars/x" #the file where you keep your string name
 
 r=$(cat "$file")        #the output of 'cat $file' is assigned to the $name variable
-r2=$(($r-10))
+r2=$(($r-7))
 
-if [ "$r" -le 110 ]; then
-           r2=110
+if [ "$r" -le 95 ]; then
+           r2=95
 fi
 
 echo "1="$r2 > /dev/servoblaster

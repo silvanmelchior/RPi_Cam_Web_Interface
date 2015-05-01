@@ -384,5 +384,13 @@
          </div>
       </div>
       <?php if ($debugString != "") echo "$debugString<br>"; ?>
-   </body>
+
+
+<object data=control-child.php width="600" height="400"> <embed src=control-child.php width="600" height="400"> </embed> Error: Embedded data could not be displayed. </object>
+
+<a href="javascript:void(0);"
+NAME="controls" title="controls"
+onClick=window.open("control-child.php","Ratting","width=200,height=200,0,status=0,");><center><img src="control.jpg" alt="Control" style="width:100px;height:100px"></center></a>
+
+  </body>
 </html>
