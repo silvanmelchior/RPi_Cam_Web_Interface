@@ -7,7 +7,7 @@ Depends on ServoBlaster to move the servos, so you should install it first https
 
 For Raspberry Pi 2 this is the only working version of ServoBlaster I found; https://www.raspberrypi.org/forums/viewtopic.php?p=699651&sid=c399f7fc62b79016f7678a4f73e6c1f4#p699651
 
-Once ServoBlaster is installed and working, just follow the instructions;
+Once ServoBlaster is installed and working, just follow the instructions like in the original RPi-Cam-Web-Interface but using this git repository.
 
 sudo apt-get update
 
