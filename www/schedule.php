@@ -401,6 +401,7 @@ function cmdHelp() {
              echo "<tr><td>rs</td><td>1</td><td>Reset user config to default</td></tr>";
              echo "<tr><td>ru</td><td>0/1</td><td>0/1 halt/restart RaspiMJPEG and release camera</td></tr>";
              echo "<tr><td>sc</td><td>1</td><td>Rescan for video and image indexes</td></tr>";
+             echo "<tr><td>sy</td><td>macro</td><td>Execute macro</td></tr>";
            echo "</table>";
          echo "</div>";
        echo "</div>";
@@ -555,11 +556,11 @@ function cmdHelp() {
       $lapseHours = $schedulePars[SCHEDULE_PURGELAPSEHOURS];
       $purgeCount = 0;
       if ($videoHours > 0 || $imageHours > 0 || $lapseHours > 0) {
-         $files = scandir(MEDIA_PATH);
+         $files = scandir(BASE_DIR . '/' . MEDIA_PATH);
          $currentHours = time() / 3600;
          foreach($files as $file) {
-            if(($file != '.') && ($file != '..') && (substr($file, -7) == '.th.jpg')) {
-               $fType = substr($file,-12, 1);
+            if(($file != '.') && ($file != '..') && isThumbnail($file)) {
+               $fType = getFileType($file);
                $purgeHours = 0;
                switch ($fType) {
                   case 'i': $purgeHours = $imageHours;
@@ -570,7 +571,7 @@ function cmdHelp() {
                      break;
                }
                if ($purgeHours > 0) {
-                  $fModHours = filemtime(MEDIA_PATH . "/$file") / 3600;
+                  $fModHours = filemtime(BASE_DIR . '/' . MEDIA_PATH . "/$file") / 3600;
                   if ($fModHours > 0 && ($currentHours - $fModHours) > $purgeHours) {
                      deleteFile($file);
                      $purgeCount++;
@@ -715,8 +716,8 @@ function cmdHelp() {
                   purgeFiles();
                   $cmd = $schedulePars[SCHEDULE_MANAGEMENTCOMMAND];
                   if ($cmd != '') {
-                     writeLog("exec: $cmd");
-                     exec($cmd);
+                     writeLog("exec_macro: $cmd");
+                     sendCmds("sy $cmd");
                   }
                }
             }
