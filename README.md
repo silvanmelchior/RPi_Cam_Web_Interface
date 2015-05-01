@@ -15,7 +15,7 @@ sudo apt-get dist-upgrade
 
 sudo rpi-update
 
-git clone https://github.com/skalad/RPi_Cam_Web_Interface.git
+git clone https://github.com/skalad/RPi_Cam_Web_Interface_ServoBlaster_pan_tilt
 
 cd RPi_Cam_Web_Interface
 
