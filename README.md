@@ -1,6 +1,6 @@
 Added a pan-tilt control (moving the sevos by software with ServoBlaster) in the web-interface from https://github.com/silvanmelchior/RPi_Cam_Web_Interface
 
-![Alt text](/pic.jpg?raw=true "web_if")
+![Alt text](/pic.jpg?raw=true "web_if" =250x)
 
 Depends on ServoBlaster to move the servos, so you should install it first https://github.com/richardghirst/PiBits/tree/master/ServoBlaster
 
