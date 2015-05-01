@@ -1,3 +1,4 @@
+![Alt text](/pic2.jpg?raw=true)
 Added a pan-tilt control (moving the sevos by software with ServoBlaster) in the web-interface from https://github.com/silvanmelchior/RPi_Cam_Web_Interface
 
 By default is configured for using GPIO4 and GPIO17. It can be modified if needed by modifiying the up.sh down.sh right.sh left.sh scripts from directory /var/www/
