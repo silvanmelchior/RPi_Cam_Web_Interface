@@ -556,7 +556,7 @@ function cmdHelp() {
       $lapseHours = $schedulePars[SCHEDULE_PURGELAPSEHOURS];
       $purgeCount = 0;
       if ($videoHours > 0 || $imageHours > 0 || $lapseHours > 0) {
-         $files = scandir(MEDIA_PATH);
+         $files = scandir(BASE_DIR . '/' . MEDIA_PATH);
          $currentHours = time() / 3600;
          foreach($files as $file) {
             if(($file != '.') && ($file != '..') && isThumbnail($file)) {
@@ -571,7 +571,7 @@ function cmdHelp() {
                      break;
                }
                if ($purgeHours > 0) {
-                  $fModHours = filemtime(MEDIA_PATH . "/$file") / 3600;
+                  $fModHours = filemtime(BASE_DIR . '/' . MEDIA_PATH . "/$file") / 3600;
                   if ($fModHours > 0 && ($currentHours - $fModHours) > $purgeHours) {
                      deleteFile($file);
                      $purgeCount++;
