@@ -5,11 +5,15 @@ Depends on ServoBlaster to move the servos, so you should install it first https
 Once ServoBlaster is installed and working, just follow the instructions;
 
 sudo apt-get update
+
 sudo apt-get dist-upgrade
+
 sudo rpi-update
 
 git clone https://github.com/skalad/RPi_Cam_Web_Interface.git
+
 cd RPi_Cam_Web_Interface
+
 chmod u+x RPi_Cam_Web_Interface_Installer.sh
 
 ./RPi_Cam_Web_Interface_Installer.sh install
