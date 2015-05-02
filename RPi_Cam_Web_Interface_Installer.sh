@@ -37,7 +37,6 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 rpicamdir=""
 
-
 case "$1" in
 
   remove)
@@ -142,6 +141,8 @@ case "$1" in
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
+        
+        sudo usermod -a -G video www-data
 
         echo "Installer finished"
         ;;
@@ -166,7 +167,9 @@ case "$1" in
   start)
         ./$0 stop
         sudo mkdir -p /dev/shm/mjpeg
-        sleep 1;sudo raspimjpeg > /dev/null &
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo -u www-data raspimjpeg > /dev/null &
         sleep 1;sudo -u www-data php /var/www/schedule.php > /dev/null &
         echo "Started"
         ;;
@@ -174,7 +177,9 @@ case "$1" in
   debug)
         ./$0 stop
         sudo mkdir -p /dev/shm/mjpeg
-        sleep 1;sudo raspimjpeg &
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo -u www-data raspimjpeg &
         sleep 1;sudo -u www-data php /var/www/schedule.php &
         echo "Started with debug"
         ;;
