@@ -14,7 +14,7 @@ fi
 #START RASPIMJPEG SECTION
 mkdir -p /dev/shm/mjpeg
 sleep 4;raspimjpeg > /dev/null &
-sleep 4;su www-data -c 'php /var/www/schedule.php > /dev/null &'
+sleep 4;su -s '/bin/bash' -c 'php /var/www/html/schedule.php > /dev/null &' www-data
 #END RASPIMJPEG SECTION
 
 exit 0
