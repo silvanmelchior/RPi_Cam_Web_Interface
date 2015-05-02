@@ -143,6 +143,9 @@ case "$1" in
         sudo chmod 640 /etc/motion/motion.conf
         
         sudo usermod -a -G video www-data
+        if [ -e /var/www/$rpicamdir/uconfig ]; then
+          sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
+        fi
 
         echo "Installer finished"
         ;;
