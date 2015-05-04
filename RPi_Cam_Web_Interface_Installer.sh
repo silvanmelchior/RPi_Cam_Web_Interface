@@ -37,12 +37,11 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 rpicamdir=""
 
-
 case "$1" in
 
   remove)
         sudo killall raspimjpeg
-        sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion
+        sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion zip
         sudo apt-get autoremove -y
 
         sudo rm -r /var/www/$rpicamdir/*
@@ -70,7 +69,7 @@ case "$1" in
   install)
         sudo killall raspimjpeg
         git pull origin master
-        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion
+        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
@@ -78,10 +77,17 @@ case "$1" in
           sudo rm /var/www/$rpicamdir/index.html
         fi
         sudo chown -R www-data:www-data /var/www/$rpicamdir
+        
         if [ ! -e /var/www/$rpicamdir/FIFO ]; then
           sudo mknod /var/www/$rpicamdir/FIFO p
         fi
         sudo chmod 666 /var/www/$rpicamdir/FIFO
+        
+        if [ ! -e /var/www/$rpicamdir/FIFO1 ]; then
+          sudo mknod /var/www/$rpicamdir/FIFO1 p
+        fi
+        sudo chmod 666 /var/www/$rpicamdir/FIFO1
+        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
 
         if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
           sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
@@ -114,11 +120,15 @@ case "$1" in
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
+        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
+        fi
+
 
         if [ "$rpicamdir" == "" ]; then
           cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
         else
-          sed -e "s/www/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+          sed -e "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
         fi
         sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
@@ -131,42 +141,61 @@ case "$1" in
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
+        
+        sudo usermod -a -G video www-data
+        if [ -e /var/www/$rpicamdir/uconfig ]; then
+          sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
+        fi
 
         echo "Installer finished"
         ;;
 
+  update)
+        sudo killall raspimjpeg
+        git pull origin master
+        sudo apt-get install -y zip
+
+        sudo cp -r bin/raspimjpeg /opt/vc/bin/
+        sudo chmod 755 /opt/vc/bin/raspimjpeg
+        sudo cp -r www/* /var/www/$rpicamdir/
+
+        if [ ! -e /var/www/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg /var/www/raspimjpeg
+        fi
+        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
+
+        echo "Update finished"
+        ;;
+
   start)
-        shopt -s nullglob
-
-        video=-1
-        for f in /var/www/$rpicamdir/media/video_*.mp4; do
-          video=`echo $f | cut -d '_' -f2 | cut -d '.' -f1`
-        done
-        video=`echo $video | sed 's/^0*//'`
-        video=`expr $video + 1`
-
-        image=-1
-        for f in /var/www/$rpicamdir/media/image_*.jpg; do
-          image=`echo $f | cut -d '_' -f2 | cut -d '.' -f1`
-        done
-        image=`echo $image | sed 's/^0*//'`
-        image=`expr $image + 1`
-
-        shopt -u nullglob
-
+        ./$0 stop
         sudo mkdir -p /dev/shm/mjpeg
-        sudo raspimjpeg -ic $image -vc $video > /dev/null &
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
+        sleep 1;sudo su -c 'php /var/www/schedule.php > /dev/null &' www-data
         echo "Started"
+        ;;
+
+  debug)
+        ./$0 stop
+        sudo mkdir -p /dev/shm/mjpeg
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo su -c 'raspimjpeg &' www-data
+        sleep 1;sudo sudo su -c 'php /var/www/schedule.php &' www-data
+        echo "Started with debug"
         ;;
 
   stop)
         sudo killall raspimjpeg
-	sudo killall motion
+        sudo killall php
+        sudo killall motion
         echo "Stopped"
         ;;
 
   *)
-        echo "No option selected"
+        echo "No or invalid option selected"
         ;;
 
 esac

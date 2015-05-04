@@ -7,8 +7,18 @@
 # Camera Options
 #
 # annotation max length: 31 characters
-annotation RPi Cam %04d.%02d.%02d_%02d:%02d:%02d
+annotation RPi Cam %Y.%M.%D_%h:%m:%s
 anno_background false
+anno3_custom_background_colour 0
+anno3_custom_background_Y 0
+anno3_custom_background_U 128
+anno3_custom_background_V 128
+anno3_custom_text_colour 0
+anno3_custom_text_Y 255
+anno3_custom_text_U 128
+anno3_custom_text_V 128
+anno_text_size 50
+
 sharpness 0
 contrast 0
 brightness 50
@@ -49,7 +59,10 @@ video_width 1920
 video_height 1080
 video_fps 25
 video_bitrate 17000000
-MP4Box true
+video_buffer 0
+
+#MP4Box false=leave as raw h264, background=box in background
+MP4Box background
 MP4Box_fps 25
 
 #
@@ -59,6 +72,9 @@ image_width 2592
 image_height 1944
 image_quality 85
 
+#time lapse interval 0.1 sec units
+tl_interval 30
+
 #
 # File Locations
 #
@@ -66,10 +82,18 @@ image_quality 85
 # image+video path: add %d for number, year, month, day, hour, minute, second
 #
 preview_path /dev/shm/mjpeg/cam.jpg
-image_path /var/www/media/image_%04d_%04d%02d%02d_%02d%02d%02d.jpg
-video_path /var/www/media/video_%04d_%04d%02d%02d_%02d%02d%02d.mp4
+image_path /var/www/media/im_%i_%Y%M%D_%h%m%s.jpg
+lapse_path /var/www/media/tl_%i_%t_%Y%M%D_%h%m%s.jpg
+video_path /var/www/media/vi_%v_%Y%M%D_%h%m%s.mp4
 status_file /var/www/status_mjpeg.txt
 control_file /var/www/FIFO
+media_path /var/www/media
+macros_path /var/www/macros
+subdir_char @
+
+# thumb generator control
+# Set v, i, or t in string to enable thumbs for images, videos, or lapse
+thumb_gen vit
 
 #
 # Autostart
@@ -79,3 +103,15 @@ control_file /var/www/FIFO
 #
 autostart standard
 motion_detection false
+
+# Watchdog
+# Interval in 0.1 secs
+# Errors is Number of times cam.jpg doesn't change before exit
+watchdog_interval 30
+watchdog_errors 3
+
+#optional user_config file to overwrite (persist) changes
+user_config /var/www/uconfig
+
+#logfile for raspimjpeg, default to merge with scheduler log
+log_file /var/www/scheduleLog.txt

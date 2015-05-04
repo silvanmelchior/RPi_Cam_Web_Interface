@@ -1,0 +1,28 @@
+/*! preview.css classes for elements on preview form */
+
+fieldset.fileicon {
+   display:inline;
+   margin:5px;
+   border:2px solid LightGray;
+}
+
+legend.fileicon {
+   float:left;
+   margin-top:5px;
+   margin-bottom:0;
+   padding-top:0;
+   padding-bottom:0;
+}
+
+button.fileicondelete {
+border:none;
+width:24px;
+height:24px;
+background-color: Transparent;
+background-repeat:no-repeat;
+background-size:24px 24px;
+}
+
+checkbox.fileicon {
+float:right;
+}

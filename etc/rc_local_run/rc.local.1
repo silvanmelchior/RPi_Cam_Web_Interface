@@ -1,41 +1,27 @@
 #!/bin/bash -e
 #
-# rc.local
+# rc.local for raspimjpeg
 #
 # This script is executed at the end of each multiuser runlevel.
 # Make sure that the script will "exit 0" on success or any other
 # value on error.
 #
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
-
-# Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-shopt -s nullglob
-
-video=-1
-for f in /var/www/media/video_*.mp4; do
-  video=`echo $f | cut -d '_' -f2 | cut -d '.' -f1`
-done
-video=`echo $video | sed 's/^0*//'`
-video=$((video+1))
-
-image=-1
-for f in /var/www/media/image_*.jpg; do
-  image=`echo $f | cut -d '_' -f2 | cut -d '.' -f1`
-done
-image=`echo $image | sed 's/^0*//'`
-image=$((image+1))
-
-shopt -u nullglob
-
-mkdir /dev/shm/mjpeg
-raspimjpeg -ic $image -vc $video > /dev/null &
+#START RASPIMJPEG SECTION
+mkdir -p /dev/shm/mjpeg
+chown www-data:www-data /dev/shm/mjpeg
+chmod 777 /dev/shm/mjpeg
+if [ -e /etc/debian_version ]; then
+  sleep 4;su -c 'raspimjpeg > /dev/null &' www-data
+  sleep 4;su -c 'php /var/www/schedule.php > /dev/null &' www-data
+else
+  sleep 4;su -c 'raspimjpeg > /dev/null &' www-data
+  sleep 4;su -s '/bin/bash' -c 'php /var/www/schedule.php > /dev/null &' www-data
+fi
+#END RASPIMJPEG SECTION
 
 exit 0
