@@ -141,7 +141,8 @@ case "$1" in
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo chmod 640 /etc/motion/motion.conf
-        
+        sudo chgrp www-data /etc/motion/motion.conf
+        sudo chmod +rrr /etc/motion/motion.conf        
         sudo usermod -a -G video www-data
         if [ -e /var/www/$rpicamdir/uconfig ]; then
           sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
