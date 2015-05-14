@@ -16,11 +16,11 @@ mkdir -p /dev/shm/mjpeg
 chown www-data:www-data /dev/shm/mjpeg
 chmod 777 /dev/shm/mjpeg
 if [ -e /etc/debian_version ]; then
-  sleep 4;su -c 'raspimjpeg > /dev/null &' www-data
-  sleep 4;su -c 'php /var/www/schedule.php > /dev/null &' www-data
+  sleep 4;su -c 'raspimjpeg > /dev/null 2>&1 &' www-data
+  sleep 4;su -c 'php /var/www/schedule.php > /dev/null  2>&1 &' www-data
 else
-  sleep 4;su -c 'raspimjpeg > /dev/null &' www-data
-  sleep 4;su -s '/bin/bash' -c 'php /var/www/schedule.php > /dev/null &' www-data
+  sleep 4;su -c 'raspimjpeg > /dev/null  2>&1 &' www-data
+  sleep 4;su -s '/bin/bash' -c 'php /var/www/schedule.php > /dev/null  2>&1 &' www-data
 fi
 #END RASPIMJPEG SECTION
 
