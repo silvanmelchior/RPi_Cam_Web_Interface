@@ -211,9 +211,13 @@
          case 'i': $fIcon = 'image.png'; break;
          default : $fIcon = 'image.png'; break;
       }
+      $duration ='';
       if (file_exists(MEDIA_PATH . "/$rFile")) {
          $fsz = round ((filesize(MEDIA_PATH . "/$rFile")) / 1024);
          $fModTime = filemtime(MEDIA_PATH . "/$rFile");
+         if ($fType == 'v') {
+            $duration = ($fModTime - filemtime(MEDIA_PATH . "/$f")) . 's';
+         }
       } else {
          $fsz = 0;
          $fModTime = filemtime(MEDIA_PATH . "/$f");
@@ -229,12 +233,23 @@
       echo "<img src='$fIcon' style='width:24px'/>";
       echo "<input type='checkbox' name='check_list[]' $sel value='$f' style='float:right;'/>";
       echo "</legend>";
-      if ($fsz > 0) echo "$fsz Kb $lapseCount"; else echo 'Busy';
+      if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
       echo "<br>$fDate<br>$fTime<br>";
       if ($fsz > 0) echo "<a title='$rFile' href='preview.php?preview=$f'>";
       echo "<img src='" . MEDIA_PATH . "/$f' style='width:" . $ts . "px'/>";
       if ($fsz > 0) echo "</a>";
       echo "</fieldset> ";
+   }
+   
+   function getThumbnails() {
+      $files = scandir(MEDIA_PATH);
+      $thumbnails = array();
+      foreach($files as $file) {
+         if($file != '.' && $file != '..' && isThumbnail($file)) {
+            $thumbnails[] = $file;
+         } 
+      }
+      return $thumbnails;   
    }
    
    function diskUsage() {
@@ -280,8 +295,20 @@
       <div class="container-fluid">
       <form action="preview.php" method="POST">
       <?php
+         $thumbnails = getThumbnails();
          if ($pFile != "") {
+            $pIndex = array_search($tFile, $thumbnails);
             echo "<h1>" . TXT_PREVIEW . ":  " . getFileType($tFile) . getFileIndex($tFile);
+            if ($pIndex > 0)
+               $attr = 'onclick="location.href=\'preview.php?preview=' . $thumbnails[$pIndex-1] . '\'"';
+            else
+               $attr = 'disabled';
+            echo "&nbsp;&nbsp;<input type='button' value='&larr;' class='btn btn-primary' name='prev' $attr >";
+            if (($pIndex+1) < count($thumbnails))
+               $attr = 'onclick="location.href=\'preview.php?preview=' . $thumbnails[$pIndex+1] . '\'"';
+            else
+               $attr = 'disabled';
+            echo "&nbsp;&nbsp;<input type='button' value='&rarr;' class='btn btn-primary' name='next' $attr>";
             echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='download1' value='$tFile'>" . BTN_DOWNLOAD . "</button>";
             echo "&nbsp;<button class='btn btn-danger' type='submit' name='delete1' value='$tFile'>" . BTN_DELETE . "</button>";
             if(getFileType($tFile) == "t") {
@@ -306,13 +333,10 @@
          echo "</h1>";
          diskUsage();
          if ($debugString !="") echo "$debugString<br>";
-         $files = scandir(MEDIA_PATH);
-         if(count($files) == 2) echo "<p>No videos/images saved</p>";
+         if(count($thumbnails) == 0) echo "<p>No videos/images saved</p>";
          else {
-            foreach($files as $file) {
-               if(($file != '.') && ($file != '..') && isThumbnail($file, -7)) {
-                  drawFile($file, $thumbSize, $dSelect);
-               } 
+            foreach($thumbnails as $file) {
+              drawFile($file, $thumbSize, $dSelect);
             }
          }
          echo "<p><p>" . TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
