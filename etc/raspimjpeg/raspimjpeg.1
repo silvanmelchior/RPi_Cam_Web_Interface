@@ -76,6 +76,20 @@ image_quality 85
 tl_interval 30
 
 #
+# Motion Detection
+#
+motion_external true
+vector_preview false
+vector_mode ?
+motion_noise 20
+motion_threshold 100
+motion_image
+motion_startframes 5
+motion_stopframes 50
+motion_pipe /var/www/FIFO1
+motion_file
+
+#
 # File Locations
 #
 # preview path: add %d for number
@@ -93,7 +107,6 @@ subdir_char @
 
 # thumb generator control
 # Set v, i, or t in string to enable thumbs for images, videos, or lapse
-# Only turn off for types you don't want visible in web interface and will manage yourself.
 thumb_gen vit
 
 #
@@ -110,7 +123,6 @@ motion_detection false
 # Errors is Number of times cam.jpg doesn't change before exit
 watchdog_interval 30
 watchdog_errors 3
-
 #optional user_config file to overwrite (persist) changes
 user_config /var/www/uconfig
 
