@@ -37,6 +37,8 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 rpicamdir=""
 
+cd $(dirname $(readlink -f $0))
+
 case "$1" in
 
   remove)
