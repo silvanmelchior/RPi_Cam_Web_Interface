@@ -207,10 +207,11 @@
                            <td>Resolutions:</td>
                            <td>Load Preset: <select onchange="set_preset(this.value)">
                                  <option value="1920 1080 25 25 2592 1944">Select option...</option>
-                                 <option value="1920 1080 25 25 2592 1944">Std FOV</option>
-                                 <option value="1296 730 25 25 2592 1944">16:9 wide FOV</option>
-                                 <option value="1296 976 25 25 2592 1944">4:3 full FOV</option>
-                                 <option value="1920 1080 01 30 2592 1944">Std FOV, x30 Timelapse</option>
+                                 <option value="1920 1080 25 25 2592 1944">Full HD 1080p 16:9</option>
+                                 <option value="1280 0720 25 25 2592 1944">HD-ready 720p 16:9</option>
+                                 <option value="1296 972 25 25 2592 1944">Max View 972p 4:3</option>
+                                 <option value="768 576 25 25 2592 1944">SD TV 576p 4:3</option>
+                                 <option value="1920 1080 01 30 2592 1944">Full HD Timelapse (x30) 1080p 16:9</option>
                               </select><br>
                               Custom Values:<br>
                               Video res: <?php makeInput('video_width', 4); ?>x<?php makeInput('video_height', 4); ?>px<br>
