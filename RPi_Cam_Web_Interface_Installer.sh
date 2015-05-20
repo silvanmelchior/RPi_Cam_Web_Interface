@@ -140,9 +140,8 @@ case "$1" in
           sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
-        sudo chmod 640 /etc/motion/motion.conf
         sudo chgrp www-data /etc/motion/motion.conf
-        sudo chmod +rrr /etc/motion/motion.conf        
+        sudo chmod 664 /etc/motion/motion.conf
         sudo usermod -a -G video www-data
         if [ -e /var/www/$rpicamdir/uconfig ]; then
           sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
