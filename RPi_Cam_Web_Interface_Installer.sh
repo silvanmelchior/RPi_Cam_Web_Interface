@@ -161,8 +161,8 @@ case "$1" in
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
 
-        if [ ! -e /var/www/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/raspimjpeg
+        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
 
