@@ -175,7 +175,7 @@ case "$1" in
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
-        sleep 1;sudo su -c 'php /var/www/schedule.php > /dev/null &' www-data
+        sleep 1;sudo su -c 'php /var/www/$rpicamdir/schedule.php > /dev/null &' www-data
         echo "Started"
         ;;
 
@@ -185,7 +185,7 @@ case "$1" in
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg &' www-data
-        sleep 1;sudo sudo su -c 'php /var/www/schedule.php &' www-data
+        sleep 1;sudo sudo su -c 'php /var/www/$rpicamdir/schedule.php &' www-data
         echo "Started with debug"
         ;;
 
