@@ -204,6 +204,7 @@ case "$1" in
 
   *)
         echo "No or invalid option selected"
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|update|remove|start|stop|autostart_yes|autostart_no|debug}"
         ;;
 
 esac
