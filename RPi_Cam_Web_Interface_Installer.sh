@@ -37,6 +37,14 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 rpicamdir=""
 
+cd $(dirname $(readlink -f $0))
+
+	if [ "$rpicamdir" == "" ]; then
+		echo "Please input directory name where you want to install RPi_Cam_Web_Interface."
+		echo "Leave it empty for using www root."
+		read rpicamdir
+	fi
+
 case "$1" in
 
   remove)
@@ -159,8 +167,8 @@ case "$1" in
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
 
-        if [ ! -e /var/www/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/raspimjpeg
+        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
 
@@ -173,7 +181,7 @@ case "$1" in
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
-        sleep 1;sudo su -c 'php /var/www/schedule.php > /dev/null &' www-data
+        sleep 1;sudo su -c 'php /var/www/$rpicamdir/schedule.php > /dev/null &' www-data
         echo "Started"
         ;;
 
@@ -183,7 +191,7 @@ case "$1" in
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg &' www-data
-        sleep 1;sudo sudo su -c 'php /var/www/schedule.php &' www-data
+        sleep 1;sudo sudo su -c 'php /var/www/$rpicamdir/schedule.php &' www-data
         echo "Started with debug"
         ;;
 

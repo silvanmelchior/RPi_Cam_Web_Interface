@@ -100,13 +100,14 @@
    //restart and fetch updated config list
    function restartMotion() {
       $t = file_get_contents(MOTION_URL . "action/restart");
-      $retry = 5;
+      $retry = 20;
       do {
          sleep(1);
          $t = file_get_contents(MOTION_URL . "config/list");
          if ($t) {
             return $t;
          }
+         $retry--;
       } while ($retry > 0);
    }
 
