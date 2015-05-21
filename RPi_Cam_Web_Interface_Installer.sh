@@ -39,6 +39,12 @@ rpicamdir=""
 
 cd $(dirname $(readlink -f $0))
 
+	if [ "$rpicamdir" == "" ]; then
+		echo "Please input directory name where you want to install RPi_Cam_Web_Interface."
+		echo "Leave it empty for using www root."
+		read rpicamdir
+	fi
+
 case "$1" in
 
   remove)
