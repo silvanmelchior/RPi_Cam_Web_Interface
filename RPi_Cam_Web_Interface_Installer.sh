@@ -35,14 +35,22 @@
 # The folder name must be a subfolder of /var/www/ which will be created
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
-rpicamdir=""
+# Config options is in ./config.txt. Put or change your options there. First run skript makes it for you.
 
 cd $(dirname $(readlink -f $0))
 
-	if [ "$rpicamdir" == "" ]; then
-		echo "Please input directory name where you want to install RPi_Cam_Web_Interface."
-		echo "Leave it empty for using www root."
-		read rpicamdir
+source ./config.txt
+
+if [ "$rpicamdir" == "" ]; then
+	echo "Please input directory name where you want to install or installed RPi_Cam_Web_Interface."
+	echo "Leave it empty for using www root."
+	read rpicamdir
+	if ! grep -Fq "rpicamdir" ./config.txt; then
+		echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
+	elif 
+		grep -Fxq "rpicamdir=\"\"" ./config.txt; then
+		sed -i "s/rpicamdir=\"\"/rpicamdir=\"$rpicamdir\"/g" *.txt
+		fi
 	fi
 
 case "$1" in
