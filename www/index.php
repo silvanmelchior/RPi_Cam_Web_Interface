@@ -21,6 +21,7 @@
    $options_rl = array('Off' => '0', 'On' => '1');
    $options_vp = array('Off' => '0', 'On' => '1');
    $options_mx = array('Internal' => '0', 'External' => '1');
+   $options_mf = array('Off' => '0', 'On' => '1');
 
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
@@ -413,6 +414,10 @@
                            <td>
                               <?php makeInput('motion_stopframes', 5); ?><input type="button" value="OK" onclick="send_cmd('me ' + document.getElementById('motion_stopframes').value)">
                            </td>
+                        </tr>
+                        <tr>
+                           <td>Save vectors to .dat :<br>Uses more space</td>
+                           <td><select onchange="send_cmd('mf ' + this.value);"><?php makeOptions($options_mf, 'motion_file'); ?></select></td>
                         </tr>
                      </table>
                   </div>
