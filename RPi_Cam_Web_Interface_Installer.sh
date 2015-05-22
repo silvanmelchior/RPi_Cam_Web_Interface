@@ -44,6 +44,14 @@ cd $(dirname $(readlink -f $0))
 		echo "Leave it empty for using www root."
 		read rpicamdir
 	fi
+	
+fn_stop ()
+{ # This is function stop
+        sudo killall raspimjpeg
+        sudo killall php
+        sudo killall motion
+        echo "Stopped"
+}
 
 case "$1" in
 
@@ -176,7 +184,7 @@ case "$1" in
         ;;
 
   start)
-        $0 stop
+        fn_stop
         sudo mkdir -p /dev/shm/mjpeg
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
@@ -186,7 +194,7 @@ case "$1" in
         ;;
 
   debug)
-        $0 stop
+        fn_stop
         sudo mkdir -p /dev/shm/mjpeg
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
@@ -196,10 +204,7 @@ case "$1" in
         ;;
 
   stop)
-        sudo killall raspimjpeg
-        sudo killall php
-        sudo killall motion
-        echo "Stopped"
+        fn_stop
         ;;
 
   *)
