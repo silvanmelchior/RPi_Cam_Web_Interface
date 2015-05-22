@@ -130,7 +130,8 @@
       writeLog("Making zip $zipname");
       $zipfiles = fopen($zipname.".files", "w");
       foreach ($files as $file) {
-         if (getFileType($file) == 't') {
+         $t = getFileType($file);
+         if ($t == 't') {
             $lapses = findLapseFiles($file);
             if (!empty($lapses)) {
                foreach($lapses as $lapse) {
@@ -141,6 +142,9 @@
             $base = dataFilename($file);
             if (file_exists(MEDIA_PATH . "/$base")) {
                fprintf($zipfiles, MEDIA_PATH . "/$base\n");
+            }
+            if ($t == 'v' && file_exists(MEDIA_PATH . "/$base.dat")) {
+               fprintf($zipfiles, MEDIA_PATH . "/$base.dat\n");
             }
          }
       }

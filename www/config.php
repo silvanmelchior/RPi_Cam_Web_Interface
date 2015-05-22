@@ -160,6 +160,10 @@
             $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
             if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
          }
+         if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
+            $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+            if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+         }
       }
       $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
       if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
