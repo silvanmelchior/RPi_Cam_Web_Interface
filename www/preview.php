@@ -22,7 +22,7 @@
    //Set size defaults and try to get from cookies
    $previewSize = 640;
    $thumbSize = 96;
-   $sortOrder = 0;
+   $sortOrder = 1;
    if(isset($_COOKIE["previewSize"])) {
       $previewSize = $_COOKIE["previewSize"];
    }
