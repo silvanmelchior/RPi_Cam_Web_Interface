@@ -11,7 +11,7 @@
    define('BTN_SELECTALL', 'Select All');
    define('BTN_SELECTNONE', 'Select None');
    define('BTN_GETZIP', 'Get Zip');
-   define('BTN_UPDATESIZES', 'Update Sizes');
+   define('BTN_UPDATESIZEORDER', 'Update Sizes / Order');
    define('TXT_PREVIEW', 'Preview');
    define('TXT_THUMB', 'Thumb');
    define('TXT_FILES', 'Files');
@@ -22,11 +22,15 @@
    //Set size defaults and try to get from cookies
    $previewSize = 640;
    $thumbSize = 96;
+   $sortOrder = 1;
    if(isset($_COOKIE["previewSize"])) {
       $previewSize = $_COOKIE["previewSize"];
    }
    if(isset($_COOKIE["thumbSize"])) {
       $thumbSize = $_COOKIE["thumbSize"];
+   }
+   if(isset($_COOKIE["sortOrder"])) {
+      $sortOrder = $_COOKIE["sortOrder"];
    }
    $dSelect = "";
    $pFile = "";
@@ -105,7 +109,7 @@
             }        
             maintainFolders(MEDIA_PATH, false, false);
             break;
-         case 'updateSizes':
+         case 'updateSizeOrder':
             if(!empty($_POST['previewSize'])) {
                $previewSize = $_POST['previewSize'];
                if ($previewSize < 100 || $previewSize > 1920) $previewSize = 640;
@@ -115,6 +119,10 @@
                $thumbSize = $_POST['thumbSize'];
                if ($thumbSize < 32 || $thumbSize > 320) $thumbSize = 96;
                setcookie("thumbSize", $thumbSize, time() + (86400 * 365), "/");
+            }        
+            if(!empty($_POST['sortOrder'])) {
+               $sortOrder = $_POST['sortOrder'];
+               setcookie("sortOrder", $sortOrder, time() + (86400 * 365), "/");
             }        
             break;
          case 'zipSel':
@@ -246,7 +254,8 @@
    }
    
    function getThumbnails() {
-      $files = scandir(MEDIA_PATH);
+      global $sortOrder;
+      $files = scandir(MEDIA_PATH, $sortOrder - 1);
       $thumbnails = array();
       foreach($files as $file) {
          if($file != '.' && $file != '..' && isThumbnail($file)) {
@@ -345,7 +354,13 @@
          }
          echo "<p><p>" . TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
          echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='text' size='3' name='thumbSize' value='$thumbSize'>";
-         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizes'>" . BTN_UPDATESIZES . "</button>";
+         echo "&nbsp;Sort Order&nbsp;<select id='sortOrder' name='sortOrder'>";
+         if ($sortOrder == 1) $selected = "selected"; else $selected = "";
+         echo "<option value='1' $selected>Ascending</option>";
+         if ($sortOrder == 2) $selected = "selected"; else $selected = "";
+         echo "<option value='2'  $selected>Descending</option>";
+         echo '</select>';
+         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button>";
       ?>
       </form>
       

@@ -133,6 +133,10 @@ case "$1" in
         else
           sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         fi
+        if [ -e /etc/raspimjpeg ]; then
+          echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"
+          sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
+        fi
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
