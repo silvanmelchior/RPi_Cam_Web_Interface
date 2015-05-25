@@ -35,22 +35,38 @@
 # The folder name must be a subfolder of /var/www/ which will be created
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
-rpicamdir=""
 
 cd $(dirname $(readlink -f $0))
 
-	if [ "$rpicamdir" == "" ]; then
-		echo "Please input directory name where you want to install RPi_Cam_Web_Interface."
-		echo "Leave it empty for using www root."
-		read rpicamdir
-	fi
+# Config options located in ./config.txt. In first run script makes that file for you.
+if [ ! -e ./config.txt ]; then
+      sudo echo "#This is config file for main installer. But your options here." > ./config.txt
+      sudo echo "" >> ./config.txt
+fi
+
+source ./config.txt
+
+# Use following code when needed add more options.
+if [ "$rpicamdir" == "" ]; then
+	echo "Please input directory name where you want to install or already installed RPi_Cam_Web_Interface."
+	echo "Leave it empty for using www root."
+	read rpicamdir
+		if ! grep -Fq "rpicamdir" ./config.txt; then
+			sudo echo "# Rpicam install directory" >> ./config.txt
+			sudo echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
+				sudo echo "" >> ./config.txt
+		elif 
+			grep -Fxq "rpicamdir=\"\"" ./config.txt; then
+			sudo sed -i "s/rpicamdir=\"\"/rpicamdir=\"$rpicamdir\"/g" ./config.txt
+		fi
+fi
 	
 fn_stop ()
 { # This is function stop
-        sudo killall raspimjpeg
-        sudo killall php
-        sudo killall motion
-        echo "Stopped"
+      sudo killall raspimjpeg
+      sudo killall php
+      sudo killall motion
+      echo "Stopped"
 }
 
 case "$1" in
