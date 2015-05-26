@@ -37,6 +37,11 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 rpicamdir=""
 
+# Terminal colors
+color_red="tput setaf 1"
+color_green="tput setaf 2"
+color_reset="tput sgr0"
+
 cd $(dirname $(readlink -f $0))
 
 	if [ "$rpicamdir" == "" ]; then
@@ -134,7 +139,7 @@ case "$1" in
           sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         fi
         if [ -e /etc/raspimjpeg ]; then
-          echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"
+          $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         fi
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
@@ -212,8 +217,8 @@ case "$1" in
         ;;
 
   *)
-        echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|update|remove|start|stop|autostart_yes|autostart_no|debug}"
+        $color_red; echo "No or invalid option selected"
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|update|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
         ;;
 
 esac
