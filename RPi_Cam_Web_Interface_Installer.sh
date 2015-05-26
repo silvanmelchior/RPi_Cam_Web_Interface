@@ -58,6 +58,26 @@ fn_stop ()
         echo "Stopped"
 }
 
+fn_git_pull ()
+{ # This is function "git pull" if needed
+remote=$(
+    git ls-remote -h origin master |
+    awk '{print $1}'
+)
+local=$(git rev-parse HEAD)
+
+printf "Local : %s\nRemote: %s\n" $local $remote
+
+if [[ $local == $remote ]]; then
+    $color_green; echo "Commits match."; $color_reset
+else
+    $color_red; echo "Commits don't match. We update."; $color_reset
+    git pull origin master
+    $color_red; echo "Update finished. Please run script again!"; $color_reset
+    exit 0
+fi
+}
+
 case "$1" in
 
   remove)
@@ -89,7 +109,7 @@ case "$1" in
 
   install)
         sudo killall raspimjpeg
-        git pull origin master
+        fn_git_pull
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
         sudo mkdir -p /var/www/$rpicamdir/media
@@ -177,7 +197,7 @@ case "$1" in
 
   update)
         sudo killall raspimjpeg
-        git pull origin master
+        fn_git_pull
         sudo apt-get install -y zip
 
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
