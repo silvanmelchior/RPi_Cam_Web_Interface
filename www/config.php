@@ -99,7 +99,7 @@
       $files = array();
       foreach($scanfiles as $file) {
          if(($file != '.') && ($file != '..') && isThumbnail($file)) {
-            $fDate = filemtime(MEDIA_PATH . "/$file");
+            $fDate = filemtime(LBASE_DIR . '/' . MEDIA_PATH . "/$file");
             $files[$file] = $fDate;
          } 
       }
