@@ -97,15 +97,15 @@
             $showLog = true;
             break;
          case 'downloadlog':
-            if (file_exists(BASE_DIR . '/' . LOGFILE_SCHEDULE)) {
+            if (file_exists(getLogFile())) {
                header("Content-Type: text/plain");
                header("Content-Disposition: attachment; filename=\"" . date('Ymd-His-') . LOGFILE_SCHEDULE . "\"");
-               readfile(BASE_DIR . '/' . LOGFILE_SCHEDULE);
+               readfile(getLogFile());
                return;
             }
          case 'clearlog':
-            if (file_exists(BASE_DIR . '/' . LOGFILE_SCHEDULE)) {
-               unlink(BASE_DIR . '/' . LOGFILE_SCHEDULE);
+            if (file_exists(getLogFile())) {
+               unlink(getLogFile());
             }
             break;
       }
@@ -291,8 +291,8 @@
    }
 
    function displayLog() {
-      if (file_exists(BASE_DIR . '/' . LOGFILE_SCHEDULE)) {
-         $logData = file_get_contents(BASE_DIR . '/' . LOGFILE_SCHEDULE);
+      if (file_exists(getLogFile())) {
+         $logData = file_get_contents(getLogFile());
          echo str_replace(PHP_EOL, '<BR>', $logData);
       } else {
          echo "No log data found";

@@ -51,7 +51,7 @@
 
    // schedule log function
    function writeLog($msg) {
-      $log = fopen(LBASE_DIR . '/' . LOGFILE_SCHEDULE, 'a');
+      $log = fopen(getLogFile(), 'a');
       $time = date('[Y/m/d H:i:s]');
       fwrite($log, "$time $msg" . PHP_EOL);
       fclose($log);
@@ -210,5 +210,17 @@
       else
          return ""; 
    }
+
+   function getLogFile() {
+      global $logFile;
+      if ($logFile != "")
+         return $logFile;
+      else
+         return LBASE_DIR . '/' . LOGFILE_SCHEDULE;
+   }
+   $config = array();
+   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE1);
+   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE2);
+   $logFile = $config['log_file'];
 
 ?>
