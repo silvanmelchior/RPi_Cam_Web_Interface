@@ -55,7 +55,18 @@ fn_stop ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
-        echo "Stopped"
+        $color_green; echo "Stopped"; $color_reset
+}
+
+fn_abort()
+{
+    $color_red; echo >&2 '
+***************
+*** ABORTED ***
+***************
+'
+    echo "An error occurred. Exiting..." >&2; $color_reset
+    exit 1
 }
 
 case "$1" in
@@ -72,24 +83,23 @@ case "$1" in
         sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
 
-        echo "Removed everything"
+        $color_green; echo "Removed everything"; $color_reset
         ;;
 
   autostart_yes)
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
-        echo "Changed autostart"
+        $color_green; echo "Changed autostart"; $color_reset
         ;;
 
   autostart_no)
         sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
-        echo "Changed autostart"
+        $color_green; echo "Changed autostart"; $color_reset
         ;;
 
   install)
         sudo killall raspimjpeg
-        git pull origin master
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
         sudo mkdir -p /var/www/$rpicamdir/media
@@ -172,12 +182,33 @@ case "$1" in
           sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
         fi
 
-        echo "Installer finished"
+        $color_green; echo "Installer finished"; $color_reset
+        ;;
+        
+  update)
+  	trap 'fn_abort' 0
+	set -e
+        remote=$(
+            git ls-remote -h origin master |
+            awk '{print $1}'
+        )
+        local=$(git rev-parse HEAD)
+
+        printf "Local : %s\nRemote: %s\n" $local $remote
+
+        if [[ $local == $remote ]]; then
+            $color_green; echo "Commits match."; $color_reset
+        else
+            $color_red; echo "Commits don't match. We update."; $color_reset
+            git pull origin master
+        fi
+        trap : 0
+
+        $color_green; echo "Update finished"; $color_reset
         ;;
 
-  update)
+  upgrade)
         sudo killall raspimjpeg
-        git pull origin master
         sudo apt-get install -y zip
 
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
@@ -189,7 +220,7 @@ case "$1" in
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
 
-        echo "Update finished"
+        $color_green; echo "Upgrade finished"; $color_reset
         ;;
 
   start)
@@ -199,7 +230,7 @@ case "$1" in
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
         sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
-        echo "Started"
+        $color_green; echo "Started"; $color_reset
         ;;
 
   debug)
@@ -209,7 +240,7 @@ case "$1" in
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg &' www-data
         sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        echo "Started with debug"
+        $color_green; echo "Started with debug"; $color_reset
         ;;
 
   stop)
@@ -218,7 +249,7 @@ case "$1" in
 
   *)
         $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|update|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|update|upgrade|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
         ;;
 
 esac
