@@ -95,7 +95,9 @@ motion_file 0
 #
 # preview path: add %d for number
 # image+video path: add %d for number, year, month, day, hour, minute, second
-#
+# macros_path can be used to store macros executed by sy command
+# boxing_path if set is where h264 files will be temporarily stored when boxing used
+# image, video and lapse may be configured relative to media_path if first / left out
 base_path /var/www
 preview_path /dev/shm/mjpeg/cam.jpg
 image_path /var/www/media/im_%i_%Y%M%D_%h%m%s.jpg
@@ -105,6 +107,7 @@ status_file /var/www/status_mjpeg.txt
 control_file /var/www/FIFO
 media_path /var/www/media
 macros_path /var/www/macros
+boxing_path
 subdir_char @
 
 # thumb generator control
