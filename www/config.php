@@ -72,6 +72,8 @@
                   if ($value == 'true') $value = 1;
                   if ($value == 'false') $value = 0;
                   $config[$key] = $value;
+               } else {
+                  $config[$line] = "";
                }
             }
          }
