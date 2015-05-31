@@ -35,7 +35,6 @@
 # The folder name must be a subfolder of /var/www/ which will be created
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
-rpicamdir=""
 
 # Terminal colors
 color_red="tput setaf 1"
@@ -44,11 +43,33 @@ color_reset="tput sgr0"
 
 cd $(dirname $(readlink -f $0))
 
-	if [ "$rpicamdir" == "" ]; then
-		echo "Please input directory name where you want to install RPi_Cam_Web_Interface."
-		echo "Leave it empty for using www root."
-		read rpicamdir
-	fi
+fn_yesno ()
+{ # This is function yes or no
+        $color_green; read -p "$tmp_message <y/n> " prompt; $color_reset
+		
+		if [[ $prompt =~ [yY](es)* ]]; then
+#			$color_green; echo "You answer was YES"; $color_reset
+			fn_tmp_yes
+		elif [[ $prompt =~ [nN](o)* ]]; then
+#			$color_green; echo "You answer was NO"; $color_reset
+			fn_tmp_no
+		else
+			$color_red; echo "Please type Y or N!"; $color_reset
+			fn_yesno
+		fi
+}
+: '
+tmp_message="Are you sure you want to continue?"
+fn_tmp_yes ()
+{
+	echo "YES script"
+}
+fn_tmp_no ()
+{
+	echo "NO script"
+}
+fn_yesno
+'
 	
 fn_stop ()
 { # This is function stop
@@ -68,6 +89,39 @@ fn_abort()
     echo "An error occurred. Exiting..." >&2; $color_reset
     exit 1
 }
+
+# Config options located in ./config.txt. In first run script makes that file for you.
+if [ ! -e ./config.txt ]; then
+      sudo echo "#This is config file for main installer. But your options here." > ./config.txt
+      sudo echo "" >> ./config.txt
+fi
+
+source ./config.txt
+
+if ! grep -Fq "rpicamdir=" ./config.txt; then
+		$color_green; echo "Where you want to install? Please insert subfolder name or press enter for www-root."; $color_reset
+		read rpicamdir
+		sudo echo "# Rpicam install directory" >> ./config.txt
+		sudo echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
+		sudo echo "" >> ./config.txt
+		$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
+else
+		$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
+		tmp_message="Is that right?"
+		fn_tmp_yes ()
+		{
+			echo ""
+		}
+		fn_tmp_no ()
+		{
+			$color_green; echo "Please insert subfolder name or press enter for www-root."; $color_reset
+			read rpicamdir
+			sudo sed -i "s/^rpicamdir=.*/rpicamdir=\"$rpicamdir\"/g" ./config.txt
+			$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
+		}
+		fn_yesno
+		fi
+
 
 case "$1" in
 
