@@ -48,10 +48,10 @@ fn_yesno ()
         $color_green; read -p "$tmp_message <y/n> " prompt; $color_reset
 		
 		if [[ $prompt =~ [yY](es)* ]]; then
-#			$color_green; echo "You answer was YES"; $color_reset
+#			$color_green; echo "Your answer was YES"; $color_reset
 			fn_tmp_yes
 		elif [[ $prompt =~ [nN](o)* ]]; then
-#			$color_green; echo "You answer was NO"; $color_reset
+#			$color_green; echo "Your answer was NO"; $color_reset
 			fn_tmp_no
 		else
 			$color_red; echo "Please type Y or N!"; $color_reset
@@ -92,14 +92,14 @@ fn_abort()
 
 # Config options located in ./config.txt. In first run script makes that file for you.
 if [ ! -e ./config.txt ]; then
-      sudo echo "#This is config file for main installer. But your options here." > ./config.txt
+      sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
       sudo echo "" >> ./config.txt
 fi
 
 source ./config.txt
 
 if ! grep -Fq "rpicamdir=" ./config.txt; then
-		$color_green; echo "Where you want to install? Please insert subfolder name or press enter for www-root."; $color_reset
+		$color_green; echo "Where do you want to install? Please enter subfolder name or press enter for www-root."; $color_reset
 		read rpicamdir
 		sudo echo "# Rpicam install directory" >> ./config.txt
 		sudo echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
@@ -114,7 +114,7 @@ else
 		}
 		fn_tmp_no ()
 		{
-			$color_green; echo "Please insert subfolder name or press enter for www-root."; $color_reset
+			$color_green; echo "Please enter subfolder name or press enter for www-root."; $color_reset
 			read rpicamdir
 			sudo sed -i "s/^rpicamdir=.*/rpicamdir=\"$rpicamdir\"/g" ./config.txt
 			$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
