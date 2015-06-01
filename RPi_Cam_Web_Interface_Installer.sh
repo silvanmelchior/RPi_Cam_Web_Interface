@@ -140,6 +140,21 @@ case "$1" in
         $color_green; echo "Removed everything"; $color_reset
         ;;
 
+  remove_nginx)
+        sudo killall raspimjpeg
+        sudo apt-get remove -y nginx php5 php5-fpm php5-common php-apc gpac motion
+        sudo apt-get autoremove -y
+
+        sudo rm -r /var/www/$rpicamdir/*
+        sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
+        sudo rm /usr/bin/raspimjpeg
+        sudo rm /etc/raspimjpeg
+        sudo cp -r /etc/rc.local.bak /etc/rc.local
+        sudo chmod 755 /etc/rc.local
+
+        echo "Removed everything"
+        ;;
+
   autostart_yes)
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
@@ -242,6 +257,120 @@ case "$1" in
         if [ ! "$rpicamdir" == "" ]; then
           sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
+
+        $color_green; echo "Installer finished"; $color_reset
+        ;;
+
+  install_nginx)
+        sudo killall raspimjpeg
+        sudo apt-get install -y nginx php5-fpm php5-common php-apc
+
+        sudo mkdir -p /var/www/$rpicamdir/media
+        sudo cp -r www/* /var/www/$rpicamdir/
+        if [ -e /var/www/$rpicamdir/index.html ]; then
+          sudo rm /var/www/$rpicamdir/index.html
+        fi
+        sudo chown -R www-data:www-data /var/www/$rpicamdir
+
+        if [ ! -e /var/www/$rpicamdir/FIFO ]; then
+          sudo mknod /var/www/$rpicamdir/FIFO p
+        fi
+        sudo chmod 666 /var/www/$rpicamdir/FIFO
+
+        if [ ! -e /var/www/$rpicamdir/FIFO1 ]; then
+          sudo mknod /var/www/$rpicamdir/FIFO1 p
+        fi
+        sudo chmod 666 /var/www/$rpicamdir/FIFO1
+        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
+
+        if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
+          sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
+        fi
+
+        if [ "$rpicamdir" == "" ]; then
+          cat etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
+        else
+          sed -e "s:root /var/www;:root /var/www/$rpicamdir;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
+        fi
+        sudo cp -r etc/nginx/sites-available/rpicam /etc/nginx/sites-available/rpicam
+        sudo chmod 644 /etc/nginx/sites-available/rpicam
+
+
+        if [ ! -e /etc/nginx/sites-enabled/rpicam ]; then
+          sudo ln -s /etc/nginx/sites-available/rpicam /etc/nginx/sites-enabled/rpicam
+        fi
+
+        # Update nginx main config file
+        sudo sed -i "s/worker_processes 4;/worker_processes 2;/g" /etc/nginx/nginx.conf
+        sudo sed -i "s/worker_connections 768;/worker_connections 128;/g" /etc/nginx/nginx.conf
+        sudo sed -i "s/gzip on;/gzip off;/g" /etc/nginx/nginx.conf
+        if ["$NGINX_DISABLE_LOGGING"]; then
+            sudo sed -i "s:access_log /var/log/nginx/nginx/access.log;:access_log /dev/null;:g" /etc/nginx/nginx.conf
+        fi
+
+        # Configure php-apc
+        sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> /etc/php5/fpm/php.ini"
+        sudo cp etc/php5/apc.ini /etc/php5/conf.d/20-apc.ini
+        sudo chmod 644 /etc/php5/conf.d/20-apc.ini
+
+        sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
+        sudo chmod 440 /etc/sudoers.d/RPI_Cam_Web_Interface
+
+        sudo cp -r bin/raspimjpeg /opt/vc/bin/
+        sudo chmod 755 /opt/vc/bin/raspimjpeg
+        if [ ! -e /usr/bin/raspimjpeg ]; then
+          sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+        fi
+
+        if [ "$rpicamdir" == "" ]; then
+          cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+        else
+          sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+        fi
+        if [ -e /etc/raspimjpeg ]; then
+          $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
+          sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
+        fi
+        sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
+        sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
+        sudo chmod 644 /etc/raspimjpeg
+        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
+        fi
+
+
+        if [ "$rpicamdir" == "" ]; then
+          cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+        else
+          sed -e "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+        fi
+        sudo cp -r /etc/rc.local /etc/rc.local.bak
+        sudo cp -r etc/rc_local_run/rc.local /etc/
+        sudo chmod 755 /etc/rc.local
+
+        if [ "$rpicamdir" == "" ]; then
+          cat etc/motion/motion.conf.1 > etc/motion/motion.conf
+        else
+          sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+        fi
+        sudo cp -r etc/motion/motion.conf /etc/motion/
+        if [ ! "$rpicamdir" == "" ]; then
+  	  sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+        fi
+        sudo chgrp www-data /etc/motion/motion.conf
+        sudo chmod 664 /etc/motion/motion.conf
+        sudo usermod -a -G video www-data
+        if [ -e /var/www/$rpicamdir/uconfig ]; then
+          sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
+        fi
+        
+        if [ ! "$rpicamdir" == "" ]; then
+          sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
+        fi
+
+        # Restart nginx and php5-fpm to apply changes
+        service nginx restart
+        service php5-fpm restart
 
         $color_green; echo "Installer finished"; $color_reset
         ;;
