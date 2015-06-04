@@ -125,6 +125,30 @@ else
 fi
 }
 
+fn_webport ()
+{ # This is function webport in config.txt file. Currently running only with Apache.
+webport=$(cat ./default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+$color_green; echo "Currently webserver running in port \"$webport\""; $color_reset
+tmp_message="Do you want to change it?"
+fn_tmp_yes ()
+{
+	$color_green; echo "Please enter what port do you want webserver is running."; $color_reset
+	read webport
+	tmpfile=$(mktemp)
+	awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && mv "$tmpfile" /etc/apache2/ports.conf
+	awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && mv "$tmpfile" /etc/apache2/ports.conf
+	awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && mv "$tmpfile" /etc/apache2/sites-available/default
+	sudo service apache2 restart
+	webport=$(cat ./default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+	$color_green; echo "Now webserver running in port \"$webport\""; $color_reset
+}
+fn_tmp_no ()
+{
+	echo ""
+}
+fn_yesno
+}
+
 case "$1" in
 
   remove)
@@ -176,6 +200,7 @@ case "$1" in
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
 	fn_rpicamdir
+	fn_webport
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -408,6 +433,7 @@ case "$1" in
         sudo apt-get install -y zip
 
 	fn_rpicamdir
+	fn_webport
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
@@ -448,7 +474,7 @@ case "$1" in
 
   *)
         $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|update|upgrade|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|remove_nginx|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
         ;;
 
 esac
