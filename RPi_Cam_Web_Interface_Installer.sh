@@ -465,7 +465,7 @@ case "$1" in
 
   *)
         $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|remove_nginx|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
         ;;
 
 esac
