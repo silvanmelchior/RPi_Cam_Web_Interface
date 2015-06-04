@@ -129,23 +129,14 @@ case "$1" in
 
   remove)
         sudo killall raspimjpeg
-        sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion zip
-        sudo apt-get autoremove -y
-
-	fn_rpicamdir
-        sudo rm -r /var/www/$rpicamdir/*
-        sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
-        sudo rm /usr/bin/raspimjpeg
-        sudo rm /etc/raspimjpeg
-        sudo cp -r /etc/rc.local.bak /etc/rc.local
-        sudo chmod 755 /etc/rc.local
-
-        $color_green; echo "Removed everything"; $color_reset
-        ;;
-
-  remove_nginx)
-        sudo killall raspimjpeg
-        sudo apt-get remove -y nginx php5 php5-fpm php5-common php-apc gpac motion
+        package=('apache2' 'php5' 'libapache2-mod-php5' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+	for i in "${package[@]}"
+	do
+		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
+		then
+		sudo apt-get remove -y "$i"
+		fi
+	done
         sudo apt-get autoremove -y
 
 	fn_rpicamdir
