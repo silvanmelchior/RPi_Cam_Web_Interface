@@ -98,6 +98,8 @@ fi
 
 source ./config.txt
 
+fn_rpicamdir ()
+{ # This is function rpicamdir in config.txt file
 if ! grep -Fq "rpicamdir=" ./config.txt; then
 		$color_green; echo "Where do you want to install? Please enter subfolder name or press enter for www-root."; $color_reset
 		read rpicamdir
@@ -120,8 +122,8 @@ else
 			$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
 		}
 		fn_yesno
-		fi
-
+fi
+}
 
 case "$1" in
 
@@ -130,6 +132,7 @@ case "$1" in
         sudo apt-get remove -y apache2 php5 libapache2-mod-php5 gpac motion zip
         sudo apt-get autoremove -y
 
+	fn_rpicamdir
         sudo rm -r /var/www/$rpicamdir/*
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
@@ -145,6 +148,7 @@ case "$1" in
         sudo apt-get remove -y nginx php5 php5-fpm php5-common php-apc gpac motion
         sudo apt-get autoremove -y
 
+	fn_rpicamdir
         sudo rm -r /var/www/$rpicamdir/*
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
@@ -152,7 +156,7 @@ case "$1" in
         sudo cp -r /etc/rc.local.bak /etc/rc.local
         sudo chmod 755 /etc/rc.local
 
-        echo "Removed everything"
+        $color_green; echo "Removed everything"; $color_reset
         ;;
 
   autostart_yes)
@@ -171,6 +175,7 @@ case "$1" in
         sudo killall raspimjpeg
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
+	fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -265,6 +270,7 @@ case "$1" in
         sudo killall raspimjpeg
         sudo apt-get install -y nginx php5-fpm php5-common php-apc
 
+	fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -401,6 +407,7 @@ case "$1" in
         sudo killall raspimjpeg
         sudo apt-get install -y zip
 
+	fn_rpicamdir
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
@@ -415,6 +422,7 @@ case "$1" in
 
   start)
         fn_stop
+        fn_rpicamdir
         sudo mkdir -p /dev/shm/mjpeg
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
@@ -425,6 +433,7 @@ case "$1" in
 
   debug)
         fn_stop
+        fn_rpicamdir
         sudo mkdir -p /dev/shm/mjpeg
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
