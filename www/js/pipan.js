@@ -1,5 +1,9 @@
+// mode=1 pipan, 2=servoblaster
+var mode = 0;
+
 var pan = 100;
 var tilt = 100;
+var cmd = "";
 var pan_bak = 100;
 var tilt_bak = 100;
 var pan_start;
@@ -34,29 +38,39 @@ function ajax_pipan_done() {
 }
  
 function ajax_pipan_start () {
-  ajax_pipan.open("GET","pipan.php?pan=" + pan + "&tilt=" + tilt, true);
-  ajax_pipan.send();
+  if (mode == 1)
+     ajax_pipan.open("GET","pipan.php?pan=" + pan + "&tilt=" + tilt, true);
+  else if (mode == 2)
+     ajax_pipan.open("GET","pipan.php?action=" + cmd, true);
+     
+  if (mode != 0)
+     ajax_pipan.send();
+  
   pan_bak = pan;
   tilt_bak = tilt;
 }
  
 function servo_left () {
   if(pan <= 190) pan += 10;
+  cmd = "left";
   ajax_pipan_start();
 }
  
 function servo_right () {
   if(pan >= 10) pan -= 10;
+  cmd = "right";
   ajax_pipan_start();
 }
  
 function servo_up () {
   if(tilt >= 10) tilt -= 10;
+  cmd = "up";
   ajax_pipan_start();
 }
  
 function servo_down () {
   if(tilt <= 190) tilt += 10;
+  cmd = "down";
   ajax_pipan_start();
 }
  
@@ -135,3 +149,8 @@ function init_pt(p,t) {
   pan = p;
   tilt = t;
 }
+
+function set_panmode(m) {
+  mode = m;
+}
+

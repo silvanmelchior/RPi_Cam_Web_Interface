@@ -34,14 +34,23 @@
       }
    }
 
-   function pipan_controls() {
-      initCamPos();
-      echo "<div class='container-fluid text-center liveimage'>";
-      echo "<input type='button' class='btn btn-primary' value='up' onclick='servo_up();'><br>";
-      echo "&nbsp<input type='button' class='btn btn-primary' value='left' onclick='servo_left();'>";
-      echo "&nbsp<input type='button' class='btn btn-primary' value='down' onclick='servo_down();'>";
-      echo "&nbsp<input type='button' class='btn btn-primary' value='right' onclick='servo_right();'>";
-      echo "</div>";   
+   function pan_controls() {
+      $mode = 0;
+      if (file_exists("pipan_on")){
+         initCamPos();
+         $mode = 1;
+      } else if (file_exists("servo_on")){
+         $mode = 2;
+      }
+      if ($mode <> 0) {
+         echo '<script type="text/javascript">set_panmode(',$mode,');</script>';
+         echo "<div class='container-fluid text-center liveimage'>";
+         echo "<img src='up.jpg' alt='Up' style='width:50px;height:50px' onclick='servo_up();'><br>";
+         echo "<img src='left.jpg' alt='Left' style='width:50px;height:50px' onclick='servo_left();'>&nbsp&nbsp";
+         echo "<img src='right.jpg' alt='Right' style='width:50px;height:50px' onclick='servo_right();'><br>";
+         echo "<img src='down.jpg' alt='Left' style='width:50px;height:50px' onclick='servo_down();'>&nbsp&nbsp";
+         echo "</div>";
+      }
    }
   
    function pilight_controls() {
@@ -186,7 +195,7 @@
          </div>
       </div>
       <div id="secondary-buttons" class="container-fluid text-center" <?php echo $displayStyle; ?> >
-         <?php  if (file_exists("pipan_on")) pipan_controls(); ?>
+         <?php pan_controls(); ?>
          <a href="preview.php" class="btn btn-default">Download Videos and Images</a>
          &nbsp;&nbsp;
          <?php  if($config['motion_external']): ?><a href="motion.php" class="btn btn-default">Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
