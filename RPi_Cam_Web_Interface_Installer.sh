@@ -126,13 +126,13 @@ fi
 }
 
 fn_webport ()
-{ # This is function to shange webserver port. Currently running only with Apache.
+{ # This is function to change webserver port. Currently running only with Apache.
 webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-$color_green; echo "Currently webserver running in port \"$webport\""; $color_reset
+$color_green; echo "Currently webserver is using port \"$webport\""; $color_reset
 tmp_message="Do you want to change it?"
 fn_tmp_yes ()
 {
-	$color_green; echo "Please enter what port do you want webserver is running."; $color_reset
+	$color_green; echo "Please enter new port for webserver."; $color_reset
 	read webport
 	tmpfile=$(mktemp)
 	awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && mv "$tmpfile" /etc/apache2/ports.conf
@@ -140,7 +140,7 @@ fn_tmp_yes ()
 	awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && mv "$tmpfile" /etc/apache2/sites-available/default
 	sudo service apache2 restart
 	webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-	$color_green; echo "Now webserver running in port \"$webport\""; $color_reset
+	$color_green; echo "Now webserver using port \"$webport\""; $color_reset
 }
 fn_tmp_no ()
 {
