@@ -45,10 +45,12 @@
       if ($mode <> 0) {
          echo '<script type="text/javascript">set_panmode(',$mode,');</script>';
          echo "<div class='container-fluid text-center liveimage'>";
-         echo "<img src='up.jpg' alt='Up' style='width:50px;height:50px' onclick='servo_up();'><br>";
-         echo "<img src='left.jpg' alt='Left' style='width:50px;height:50px' onclick='servo_left();'>&nbsp&nbsp";
-         echo "<img src='right.jpg' alt='Right' style='width:50px;height:50px' onclick='servo_right();'><br>";
-         echo "<img src='down.jpg' alt='Left' style='width:50px;height:50px' onclick='servo_down();'>&nbsp&nbsp";
+         echo "<div alt='Up' id='arrowUp' style='margin-bottom: 2px;width: 0;height: 0;border-left: 20px solid transparent;border-right: 20px solid transparent;border-bottom: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;margin-left: auto; margin-right: auto;' onclick='servo_up();'></div>";
+         echo "<div>";
+         echo "<div alt='Left' id='arrowLeft' style='margin-right: 22px;display: inline-block;height: 0;border-top: 20px solid transparent;border-bottom: 20px solid transparent;border-right: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;' onclick='servo_left();'></div>";
+         echo "<div alt='Right' id='arrowRight' style='margin-left: 22px;display: inline-block;height: 0;border-top: 20px solid transparent;border-bottom: 20px solid transparent;border-left: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;' onclick='servo_right();'></div>";
+         echo "</div>";
+         echo "<div alt='Down' id='arrowDown' style='margin-top: 2px;width: 0;height: 0;border-left: 20px solid transparent;border-right: 20px solid transparent;border-top: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;margin-left: auto; margin-right: auto;' onclick='servo_down();'></div>";
          echo "</div>";
       }
    }
