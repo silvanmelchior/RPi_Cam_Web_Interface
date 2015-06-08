@@ -218,6 +218,7 @@ case "$1" in
           cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         else
           sed -e "s/Directory \/var\/www/Directory \/var\/www\/$rpicamdir/" etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
+          sed -e "s/DocumentRoot \/var\/www/DocumentRoot \/var\/www\/$rpicamdir/" etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
         fi
         sudo cp -r etc/apache2/sites-available/default /etc/apache2/sites-available/
         sudo chmod 644 /etc/apache2/sites-available/default
@@ -266,7 +267,7 @@ case "$1" in
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         if [ ! "$rpicamdir" == "" ]; then
-  	  sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+#       	  sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
         fi
         sudo chgrp www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
@@ -276,7 +277,7 @@ case "$1" in
         fi
         
         if [ ! "$rpicamdir" == "" ]; then
-          sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
+          sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
 
         $color_green; echo "Installer finished"; $color_reset
