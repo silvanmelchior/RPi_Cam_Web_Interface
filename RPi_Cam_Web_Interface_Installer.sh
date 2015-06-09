@@ -266,9 +266,9 @@ case "$1" in
           sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
-        if [ ! "$rpicamdir" == "" ]; then
+#        if [ ! "$rpicamdir" == "" ]; then
 #       	  sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-        fi
+#        fi
         sudo chgrp www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
         sudo usermod -a -G video www-data
