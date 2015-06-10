@@ -368,7 +368,7 @@ function cmdHelp() {
            echo "<table class='settingsTable'>";
              echo "<tr><th>Command</th><th>Parameters</th><th>Description</th></tr>";
              echo "<tr><td>md</td><td>0/1</td><td>0/1 stop/start motion detection</td></tr>";
-             echo "<tr><td>ca</td><td>0/1</td><td>0/1 stop/start video capture</td></tr>";
+             echo "<tr><td>ca c [t]</td><td>0/1</td><td>c=0/1 stop/start video capture; t=capture secs if present</td></tr>";
              echo "<tr><td>im</td><td></td><td>capture image</td></tr>";
              echo "<tr><td>tl</td><td>0/1</td><td>start/stop timelapse</td></tr>";
              echo "<tr><td>tv</td><td>number</td><td>set timelapse interval between images n * 1/10 seconds.</td></tr>";
