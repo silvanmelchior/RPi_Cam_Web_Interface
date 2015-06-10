@@ -150,6 +150,115 @@ fn_tmp_no ()
 fn_yesno
 }
 
+# Security
+if [ ! -e /var/www/$rpicamdir/.htaccess ]; then
+# We make missing .htacess file
+cat <<EOF > /var/www/$rpicamdir/.htaccess
+AuthName "RPi Cam Web Interface Restricted Area"
+AuthType Basic
+AuthUserFile /usr/local/.htpasswd
+AuthGroupFile /dev/null
+Require valid-user
+EOF
+sudo chown -R www-data:www-data /var/www/$rpicamdir/.htaccess
+fi
+
+fn_secure ()
+{ # This is function secure in config.txt file. Working only apache right now!
+if ! grep -Fq "security=" ./config.txt; then
+tmp_message="Do you want enable web server security?"
+fn_tmp_yes ()
+{
+		sudo echo "# Webserver security" >> ./config.txt
+		sudo echo "security=\"yes\"" >> ./config.txt
+		$color_green; echo "Please enter Username."; $color_reset
+		read user
+		sudo echo "user=\"$user\"" >> ./config.txt
+		$color_green; echo "Please enter Password."; $color_reset
+		read passwd
+		sudo echo "passwd=\"$passwd\"" >> ./config.txt
+		sudo echo "" >> ./config.txt
+}
+fn_tmp_no ()
+{
+		sudo echo "# Webserver security" >> ./config.txt
+		sudo echo "security=\"no\"" >> ./config.txt
+		sudo echo "user=\"\"" >> ./config.txt
+		sudo echo "passwd=\"\"" >> ./config.txt
+		sudo echo "" >> ./config.txt
+}
+fn_yesno
+fi
+
+fn_sec_yes ()
+{
+	tmpfile=$(mktemp)
+	awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && mv "$tmpfile" /etc/apache2/sites-available/default
+	awk '/; netcam_userpass/{c+=1}{if(c==1){sub("; netcam_userpass.*","netcam_userpass '$user':'$passwd'",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && mv "$tmpfile" /etc/motion/motion.conf
+	sudo htpasswd -b -c /usr/local/.htpasswd $user $passwd
+	sudo /etc/init.d/apache2 restart
+}
+
+fn_sec_no ()
+{
+	tmpfile=$(mktemp)
+	awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && mv "$tmpfile" /etc/apache2/sites-available/default
+	awk '/netcam_userpass/{c+=1}{if(c==1){sub("^netcam_userpass.*","; netcam_userpass value",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && mv "$tmpfile" /etc/motion/motion.conf
+	sudo /etc/init.d/apache2 restart
+}
+
+if [[ "$security" == "yes" && ! "$user" == "" && ! "$passwd" == "" ]] ; then
+    	$color_green; echo "Security set to \""$security"\"; User set to \""$user"\"; Password set to \""$passwd"\""; $color_reset
+	tmp_message="Is that correct?"
+	fn_tmp_yes ()
+	{
+		fn_sec_yes
+	}
+	fn_tmp_no ()
+	{
+		tmp_message="Do You want enable web server security?"
+		fn_tmp_yes ()
+		{
+			sudo sed -i "s/^security=.*/security=\"yes\"/g" ./config.txt
+			$color_green; echo "Please enter User Name."; $color_reset
+			read user
+			sudo sed -i "s/^user=.*/user=\"$user\"/g" ./config.txt
+			$color_green; echo "Please enter Password for $user."; $color_reset
+			read passwd			
+			sudo sed -i "s/^passwd=.*/passwd=\"$passwd\"/g" ./config.txt
+			fn_sec_yes
+		}
+		fn_tmp_no ()
+		{
+			sudo sed -i "s/^security=.*/security=\"no\"/g" ./config.txt
+			fn_sec_no
+		}
+		fn_yesno
+		}
+	fn_yesno
+fi
+	if [ "$security" != "yes" ] ; then	
+		tmp_message="Do You want enable webserver security?"
+		fn_tmp_yes ()
+		{
+			sudo sed -i "s/^security=.*/security=\"yes\"/g" ./config.txt
+			$color_green; echo "Please enter User Name."; $color_reset
+			read user
+			sudo sed -i "s/^user=.*/user=\"$user\"/g" ./config.txt
+			$color_green; echo "Please enter Password for $user."; $color_reset
+			read passwd			
+			sudo sed -i "s/^passwd=.*/passwd=\"$passwd\"/g" ./config.txt
+			fn_sec_yes
+		}
+		fn_tmp_no ()
+		{
+			sudo sed -i "s/^security=.*/security=\"no\"/g" ./config.txt
+			fn_sec_no
+		}
+		fn_yesno
+	fi
+}
+
 case "$1" in
 
   remove)
@@ -192,6 +301,7 @@ case "$1" in
 
         fn_rpicamdir
         fn_webport
+        fn_secure
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -419,6 +529,7 @@ case "$1" in
 
         fn_rpicamdir
         fn_webport
+        fn_secure
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
