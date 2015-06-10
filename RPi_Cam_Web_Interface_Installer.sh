@@ -28,6 +28,7 @@
 #
 # Edited by jfarcher to work with github
 # Edited by slabua to support custom installation folder
+# Additions by btidey, miraaz, gigpi 
 
 
 # Configure below the folder name where to install the software to,
@@ -154,22 +155,21 @@ case "$1" in
   remove)
         sudo killall raspimjpeg
         package=('apache2' 'php5' 'libapache2-mod-php5' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
-	for i in "${package[@]}"
-	do
-		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
-		then
-		sudo apt-get remove -y "$i"
-		fi
-	done
+        for i in "${package[@]}"
+         do
+           if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
+           then
+             sudo apt-get remove -y "$i"
+           fi
+         done
         sudo apt-get autoremove -y
 
-	fn_rpicamdir
+        fn_rpicamdir
         sudo rm -r /var/www/$rpicamdir/*
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
-        sudo cp -r /etc/rc.local.bak /etc/rc.local
-        sudo chmod 755 /etc/rc.local
+        sudo sed -i.bak '/#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/d' /etc/rc.local
 
         $color_green; echo "Removed everything"; $color_reset
         ;;
@@ -190,8 +190,8 @@ case "$1" in
         sudo killall raspimjpeg
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
-	fn_rpicamdir
-	fn_webport
+        fn_rpicamdir
+        fn_webport
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -249,12 +249,10 @@ case "$1" in
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
-
-        if [ "$rpicamdir" == "" ]; then
-          cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
-        else
-          sed -e "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+        if [ ! "$rpicamdir" == "" ]; then
+          sed -i "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1
         fi
+        awk 'NR != FNR { if ($0 == "exit 0") printf "%s\n\n\n", a; print; next } /#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/ { a = a n $0; n = RS }' etc/rc_local_run/rc.local.1 /etc/rc.local > etc/rc_local_run/rc.local
         sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
@@ -283,7 +281,7 @@ case "$1" in
         sudo killall raspimjpeg
         sudo apt-get install -y nginx php5-fpm php5-common php-apc
 
-	fn_rpicamdir
+        fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -358,11 +356,10 @@ case "$1" in
         fi
 
 
-        if [ "$rpicamdir" == "" ]; then
-          cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
-        else
-          sed -e "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
+        if [ ! "$rpicamdir" == "" ]; then
+          sed -i "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1
         fi
+        awk 'NR != FNR { if ($0 == "exit 0") printf "%s\n\n\n", a; print; next } /#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/ { a = a n $0; n = RS }' etc/rc_local_run/rc.local.1 /etc/rc.local > etc/rc_local_run/rc.local
         sudo cp -r /etc/rc.local /etc/rc.local.bak
         sudo cp -r etc/rc_local_run/rc.local /etc/
         sudo chmod 755 /etc/rc.local
@@ -374,7 +371,7 @@ case "$1" in
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         if [ ! "$rpicamdir" == "" ]; then
-  	  sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+         sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
         fi
         sudo chgrp www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
@@ -395,8 +392,8 @@ case "$1" in
         ;;
         
   update)
-  	trap 'fn_abort' 0
-	set -e
+        trap 'fn_abort' 0
+        set -e
         remote=$(
             git ls-remote -h origin master |
             awk '{print $1}'
@@ -420,8 +417,8 @@ case "$1" in
         sudo killall raspimjpeg
         sudo apt-get install -y zip
 
-	fn_rpicamdir
-	fn_webport
+        fn_rpicamdir
+        fn_webport
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
