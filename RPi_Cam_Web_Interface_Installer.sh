@@ -300,7 +300,6 @@ case "$1" in
         sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
 
         fn_rpicamdir
-        fn_secure
         sudo mkdir -p /var/www/$rpicamdir/media
         sudo cp -r www/* /var/www/$rpicamdir/
         if [ -e /var/www/$rpicamdir/index.html ]; then
@@ -383,6 +382,7 @@ case "$1" in
           sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
         fn_webport
+        fn_secure
 
         $color_green; echo "Installer finished"; $color_reset
         ;;
@@ -528,7 +528,6 @@ case "$1" in
         sudo apt-get install -y zip
 
         fn_rpicamdir
-        fn_secure
         sudo cp -r bin/raspimjpeg /opt/vc/bin/
         sudo chmod 755 /opt/vc/bin/raspimjpeg
         sudo cp -r www/* /var/www/$rpicamdir/
@@ -538,6 +537,7 @@ case "$1" in
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
         fn_webport
+        fn_secure
 
         $color_green; echo "Upgrade finished"; $color_reset
         ;;
