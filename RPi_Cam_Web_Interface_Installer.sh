@@ -544,23 +544,23 @@ case "$1" in
 
   start)
         fn_stop
-        fn_rpicamdir
         sudo mkdir -p /dev/shm/mjpeg
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
         sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        
         $color_green; echo "Started"; $color_reset
         ;;
 
   debug)
         fn_stop
-        fn_rpicamdir
         sudo mkdir -p /dev/shm/mjpeg
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg &' www-data
         sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
+        
         $color_green; echo "Started with debug"; $color_reset
         ;;
 
