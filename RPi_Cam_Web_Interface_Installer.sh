@@ -80,6 +80,17 @@ fn_stop ()
         $color_green; echo "Stopped"; $color_reset
 }
 
+fn_start ()
+{ # This is function start
+        fn_rpicamdir
+        sudo mkdir -p /dev/shm/mjpeg
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
+        sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        $color_green; echo "Started"; $color_reset
+}
+
 fn_abort()
 {
     $color_red; echo >&2 '
@@ -259,6 +270,88 @@ fi
 	fi
 }
 
+fn_autostart ()
+{
+if ! grep -Fq "fn_raspimjpeg_auto" /etc/rc.local; then
+sudo sed -i '/exit 0/d' /etc/rc.local
+sudo cat <<EOF >> /etc/rc.local
+fn_raspimjpeg_auto ()
+{
+mkdir -p /dev/shm/mjpeg
+chown www-data:www-data /dev/shm/mjpeg
+chmod 777 /dev/shm/mjpeg
+if [ -e /etc/debian_version ]; then
+  sleep 4;su -c 'raspimjpeg > /dev/null 2>&1 &' www-data
+  sleep 4;su -c 'php /var/www/schedule.php > /dev/null  2>&1 &' www-data
+else
+  sleep 4;su -c 'raspimjpeg > /dev/null  2>&1 &' www-data
+  sleep 4;su -s '/bin/bash' -c "php /var/www/schedule.php > /dev/null  2>&1 &" www-data
+fi
+}
+
+fn_raspimjpeg_auto
+
+exit 0
+EOF
+fi
+
+if [ ! "$rpicamdir" == "" ]; then
+    sed -i "s/\/var\/www/\/var\/www\/$rpicamdir/" /etc/rc.local
+else
+    sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
+fi
+
+# Remove old junk in rc.local. Its for compatibility for older version installer.
+tmpfile=$(mktemp)
+sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+
+if ! grep -Fq "autostart=" ./config.txt; then
+		sudo echo "# Enable or disable autostart" >> ./config.txt
+		sudo echo "autostart=\"\"" >> ./config.txt
+		sudo echo "" >> ./config.txt
+fi
+
+fn_autostart_enable ()
+{
+	sudo sed -i "s/^# fn_raspimjpeg_auto/fn_raspimjpeg_auto/g" /etc/rc.local
+	sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
+}
+
+fn_autostart_disable ()
+{
+	tmpfile=$(mktemp)
+	sudo awk '/^fn_raspimjpeg_auto/{c+=1}{if(c==2){sub("fn_raspimjpeg_auto","# fn_raspimjpeg_auto",$0)};print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+	sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+}
+
+
+if [ "$autostart" != "yes" ] ; then
+		$color_red; echo "Auto Start is currently disabled!"; $color_reset
+		tmp_message="Do You want enable Auto Start in boot time?"
+		fn_tmp_yes ()
+		{
+			fn_autostart_enable
+		}
+		fn_tmp_no ()
+		{
+			fn_autostart_disable
+		}
+		fn_yesno
+else
+		$color_green; echo "Auto Start is currently enabled!"; $color_reset
+		tmp_message="Do You want disable Auto Start in boot time?"
+		fn_tmp_yes ()
+		{
+			fn_autostart_disable
+		}
+		fn_tmp_no ()
+		{
+			fn_autostart_enable
+		}
+		fn_yesno		
+fi
+}
+
 case "$1" in
 
   remove)
@@ -278,21 +371,27 @@ case "$1" in
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
-        sudo sed -i.bak '/#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/d' /etc/rc.local
+        
+        # Remove old junk in rc.local. Its for compatibility for older version installer.
+	tmpfile=$(mktemp)
+	sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+	# We disable autostart
+	tmpfile=$(mktemp)
+	sudo awk '/^fn_raspimjpeg_auto/{c+=1}{if(c==2){sub("fn_raspimjpeg_auto","# fn_raspimjpeg_auto",$0)};print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+	sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
 
         $color_green; echo "Removed everything"; $color_reset
         ;;
 
-  autostart_yes)
-        sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-        $color_green; echo "Changed autostart"; $color_reset
-        ;;
-
-  autostart_no)
-        sudo cp -r /etc/rc.local.bak /etc/rc.local
-        sudo chmod 755 /etc/rc.local
-        $color_green; echo "Changed autostart"; $color_reset
+  configure)
+  	fn_stop
+        fn_rpicamdir
+        fn_webport
+        fn_secure
+        fn_autostart
+        fn_start
+        
+        $color_green; echo "Changes applied"; $color_reset
         ;;
 
   install)
@@ -357,14 +456,6 @@ case "$1" in
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
-        if [ ! "$rpicamdir" == "" ]; then
-          sed -i "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1
-        fi
-        awk 'NR != FNR { if ($0 == "exit 0") printf "%s\n\n\n", a; print; next } /#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/ { a = a n $0; n = RS }' etc/rc_local_run/rc.local.1 /etc/rc.local > etc/rc_local_run/rc.local
-        sudo cp -r /etc/rc.local /etc/rc.local.bak
-        sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-
         if [ "$rpicamdir" == "" ]; then
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
@@ -383,6 +474,7 @@ case "$1" in
         fi
         fn_webport
         fn_secure
+        fn_autostart
 
         $color_green; echo "Installer finished"; $color_reset
         ;;
@@ -465,15 +557,6 @@ case "$1" in
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
-
-        if [ ! "$rpicamdir" == "" ]; then
-          sed -i "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1
-        fi
-        awk 'NR != FNR { if ($0 == "exit 0") printf "%s\n\n\n", a; print; next } /#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/ { a = a n $0; n = RS }' etc/rc_local_run/rc.local.1 /etc/rc.local > etc/rc_local_run/rc.local
-        sudo cp -r /etc/rc.local /etc/rc.local.bak
-        sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-
         if [ "$rpicamdir" == "" ]; then
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
@@ -493,6 +576,8 @@ case "$1" in
         if [ ! "$rpicamdir" == "" ]; then
           sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
+        
+        fn_autostart
 
         # Restart nginx and php5-fpm to apply changes
         service nginx restart
@@ -524,7 +609,7 @@ case "$1" in
         ;;
 
   upgrade)
-        sudo killall raspimjpeg
+        fn_stop
         sudo apt-get install -y zip
 
         fn_rpicamdir
@@ -538,19 +623,15 @@ case "$1" in
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
         fn_webport
         fn_secure
+        fn_autostart
+        fn_start
 
         $color_green; echo "Upgrade finished"; $color_reset
         ;;
 
   start)
         fn_stop
-        fn_rpicamdir
-        sudo mkdir -p /dev/shm/mjpeg
-        sudo chown www-data:www-data /dev/shm/mjpeg
-        sudo chmod 777 /dev/shm/mjpeg
-        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
-        sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
-        $color_green; echo "Started"; $color_reset
+	fn_start
         ;;
 
   debug)
@@ -570,7 +651,7 @@ case "$1" in
 
   *)
         $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|configure|debug}"; $color_reset
         ;;
 
 esac
