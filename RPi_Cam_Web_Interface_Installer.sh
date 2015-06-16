@@ -166,28 +166,11 @@ fi
 fn_secure ()
 { # This is function secure in config.txt file. Working only apache right now!
 if ! grep -Fq "security=" ./config.txt; then
-tmp_message="Do you want enable web server security?"
-fn_tmp_yes ()
-{
-		sudo echo "# Webserver security" >> ./config.txt
-		sudo echo "security=\"yes\"" >> ./config.txt
-		$color_green; echo "Please enter Username."; $color_reset
-		read user
-		sudo echo "user=\"$user\"" >> ./config.txt
-		$color_green; echo "Please enter Password."; $color_reset
-		read passwd
-		sudo echo "passwd=\"$passwd\"" >> ./config.txt
-		sudo echo "" >> ./config.txt
-}
-fn_tmp_no ()
-{
 		sudo echo "# Webserver security" >> ./config.txt
 		sudo echo "security=\"no\"" >> ./config.txt
 		sudo echo "user=\"\"" >> ./config.txt
 		sudo echo "passwd=\"\"" >> ./config.txt
 		sudo echo "" >> ./config.txt
-}
-fn_yesno
 fi
 
 fn_sec_yes ()
@@ -216,7 +199,7 @@ if [[ "$security" == "yes" && ! "$user" == "" && ! "$passwd" == "" ]] ; then
 	}
 	fn_tmp_no ()
 	{
-		tmp_message="Do You want enable web server security?"
+		tmp_message="Do You want enable webserver security?"
 		fn_tmp_yes ()
 		{
 			sudo sed -i "s/^security=.*/security=\"yes\"/g" ./config.txt
