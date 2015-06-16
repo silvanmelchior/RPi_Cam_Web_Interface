@@ -259,6 +259,81 @@ fi
 	fi
 }
 
+# Autostart. We edit rc.local
+fn_autostart ()
+{
+if ! grep -Fq "autostart=" ./config.txt; then
+  sudo echo "# Enable or disable autostart" >> ./config.txt
+  sudo echo "autostart=\"\"" >> ./config.txt
+  sudo echo "" >> ./config.txt
+fi
+
+fn_autostart_enable ()
+{
+if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+  sudo sed -i '/exit 0/d' /etc/rc.local
+sudo cat <<EOF >> /etc/rc.local
+#START RASPIMJPEG SECTION
+mkdir -p /dev/shm/mjpeg
+chown www-data:www-data /dev/shm/mjpeg
+chmod 777 /dev/shm/mjpeg
+sleep 4;su -c 'raspimjpeg > /dev/null 2>&1 &' www-data
+if [ -e /etc/debian_version ]; then
+  sleep 4;su -c "php /var/www/schedule.php > /dev/null 2>&1 &" www-data
+else
+  sleep 4;su -s '/bin/bash' -c "php /var/www/schedule.php > /dev/null 2>&1 &" www-data
+fi
+#END RASPIMJPEG SECTION
+
+exit 0
+EOF
+fi
+
+if [ ! "$rpicamdir" == "" ]; then
+  sed -i "s/\/var\/www\/schedule.php/\/var\/www\/$rpicamdir\/schedule.php/" /etc/rc.local
+else
+  sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
+fi
+
+sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
+}
+
+fn_autostart_disable ()
+{
+  tmpfile=$(mktemp)
+  sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+  # Remove to growing plank lines.
+  sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+  sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+}
+
+if [ "$autostart" != "yes" ] ; then
+  $color_red; echo "Auto Start is currently disabled!"; $color_reset
+  tmp_message="Do You want enable Auto Start in boot time?"
+  fn_tmp_yes ()
+    {
+	  fn_autostart_enable
+	}
+	  fn_tmp_no ()
+	{
+	  fn_autostart_disable
+	}
+  fn_yesno
+else
+  $color_green; echo "Auto Start is currently enabled!"; $color_reset
+  tmp_message="Do You want disable Auto Start in boot time?"
+	fn_tmp_yes ()
+	{
+	  fn_autostart_disable
+	}
+	  fn_tmp_no ()
+	{
+	  fn_autostart_enable
+	}
+	fn_yesno		
+fi
+}
+
 case "$1" in
 
   remove)
@@ -283,15 +358,9 @@ case "$1" in
         $color_green; echo "Removed everything"; $color_reset
         ;;
 
-  autostart_yes)
-        sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
-        $color_green; echo "Changed autostart"; $color_reset
-        ;;
-
-  autostart_no)
-        sudo cp -r /etc/rc.local.bak /etc/rc.local
-        sudo chmod 755 /etc/rc.local
+  autostart)
+	fn_autostart
+	
         $color_green; echo "Changed autostart"; $color_reset
         ;;
 
@@ -570,7 +639,7 @@ case "$1" in
 
   *)
         $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart_yes|autostart_no|debug}"; $color_reset
+        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart|debug}"; $color_reset
         ;;
 
 esac
