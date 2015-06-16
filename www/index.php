@@ -84,8 +84,8 @@
       global $config;
       switch ($selKey) {
          case 'flip': 
-            $cvalue = (($config['vflip'] == 'true') ? 2:0);
-            $cvalue += (($config['hflip'] == 'true') ? 1:0);
+            $cvalue = (($config['vflip'] == 'true') || ($config['vflip'] == 1) ? 2:0);
+            $cvalue += (($config['hflip'] == 'true') || ($config['hflip'] == 1) ? 1:0);
             break;
          case 'MP4Box': 
             $cvalue = $config[$selKey];
