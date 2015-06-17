@@ -336,15 +336,24 @@ case "$1" in
 
   remove)
         sudo killall raspimjpeg
-        package=('apache2' 'php5' 'libapache2-mod-php5' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
-        for i in "${package[@]}"
-         do
-           if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
-           then
-             sudo apt-get remove -y "$i"
-           fi
-         done
-        sudo apt-get autoremove -y
+        tmp_message="Do yow want uninstall webserver and php packages also?"
+	fn_tmp_yes ()
+	{
+          package=('apache2' 'php5' 'libapache2-mod-php5' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+          for i in "${package[@]}"
+           do
+             if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
+             then
+               sudo apt-get remove -y "$i"
+             fi
+           done
+          sudo apt-get autoremove -y
+	}
+	fn_tmp_no ()
+	{
+		echo ""
+	}
+	fn_yesno
 
         fn_rpicamdir
         sudo rm -r /var/www/$rpicamdir/*
