@@ -80,6 +80,21 @@ fn_stop ()
         $color_green; echo "Stopped"; $color_reset
 }
 
+fn_reboot ()
+{ # This is function reboot system
+	$color_red; echo "You must reboot your system for the changes to take effect!"; $color_reset
+	tmp_message="Do you want to reboot now?"
+fn_tmp_yes ()
+{
+	sudo reboot
+}
+fn_tmp_no ()
+{
+	$color_red; echo "Pending system changes that require a reboot!"; $color_reset
+}
+fn_yesno
+}
+
 fn_abort()
 {
     $color_red; echo >&2 '
@@ -339,6 +354,7 @@ case "$1" in
         sudo sed -i.bak '/#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/d' /etc/rc.local
 
         $color_green; echo "Removed everything"; $color_reset
+        fn_reboot
         ;;
 
   autostart)
@@ -439,6 +455,7 @@ case "$1" in
         fn_secure
 
         $color_green; echo "Installer finished"; $color_reset
+        fn_reboot
         ;;
 
   install_nginx)
@@ -553,6 +570,7 @@ case "$1" in
         service php5-fpm restart
 
         $color_green; echo "Installer finished"; $color_reset
+        fn_reboot
         ;;
         
   update)
