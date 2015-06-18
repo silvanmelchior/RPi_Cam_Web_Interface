@@ -168,7 +168,7 @@ fn_yesno
 # Security
 if [ ! -e /var/www/$rpicamdir/.htaccess ]; then
 # We make missing .htacess file
-cat <<EOF > /var/www/$rpicamdir/.htaccess
+sudo cat <<EOF > /var/www/$rpicamdir/.htaccess
 AuthName "RPi Cam Web Interface Restricted Area"
 AuthType Basic
 AuthUserFile /usr/local/.htpasswd
