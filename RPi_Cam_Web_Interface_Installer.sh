@@ -336,7 +336,7 @@ case "$1" in
 
   remove)
         sudo killall raspimjpeg
-        tmp_message="Do yow want uninstall webserver and php packages also?"
+        tmp_message="Do You want uninstall webserver and php packages also?"
 	fn_tmp_yes ()
 	{
           package=('apache2' 'php5' 'libapache2-mod-php5' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
