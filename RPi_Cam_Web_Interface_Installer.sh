@@ -214,7 +214,7 @@ if [[ "$security" == "yes" && ! "$user" == "" && ! "$passwd" == "" ]] ; then
 	}
 	fn_tmp_no ()
 	{
-		tmp_message="Do You want enable webserver security?"
+		tmp_message="Do you want to enable webserver security?"
 		fn_tmp_yes ()
 		{
 			sudo sed -i "s/^security=.*/security=\"yes\"/g" ./config.txt
