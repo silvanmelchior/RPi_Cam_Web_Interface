@@ -430,7 +430,6 @@ case "$1" in
           $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         fi
-        sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
         if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
