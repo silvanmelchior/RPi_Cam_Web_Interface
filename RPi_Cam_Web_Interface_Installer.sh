@@ -165,10 +165,11 @@ fn_tmp_no ()
 fn_yesno
 }
 
-# Security
+fn_secure ()
+{ # This is function secure in config.txt file. Working only apache right now!
 if [ ! -e /var/www/$rpicamdir/.htaccess ]; then
 # We make missing .htacess file
-sudo cat <<EOF > /var/www/$rpicamdir/.htaccess
+sudo bash -c "cat > /var/www/$rpicamdir/.htaccess" << EOF
 AuthName "RPi Cam Web Interface Restricted Area"
 AuthType Basic
 AuthUserFile /usr/local/.htpasswd
@@ -177,9 +178,6 @@ Require valid-user
 EOF
 sudo chown -R www-data:www-data /var/www/$rpicamdir/.htaccess
 fi
-
-fn_secure ()
-{ # This is function secure in config.txt file. Working only apache right now!
 if ! grep -Fq "security=" ./config.txt; then
 		sudo echo "# Webserver security" >> ./config.txt
 		sudo echo "security=\"no\"" >> ./config.txt
