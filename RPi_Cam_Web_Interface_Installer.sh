@@ -356,7 +356,12 @@ case "$1" in
 	fn_yesno
 
         fn_rpicamdir
-        sudo rm -r /var/www/$rpicamdir/*
+	if [ ! "$rpicamdir" == "" ]; then
+	  sudo rm -r /var/www/$rpicamdir
+	else
+	  # Here needed think. If rpicamdir not set then removed all webserver content!
+	  sudo rm -r /var/www/*
+	fi
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
