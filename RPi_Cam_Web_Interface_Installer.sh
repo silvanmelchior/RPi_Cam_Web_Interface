@@ -286,9 +286,9 @@ EOF
 fi
 
 if [ ! "$rpicamdir" == "" ]; then
-  sed -i "s/\/var\/www\/schedule.php/\/var\/www\/$rpicamdir\/schedule.php/" /etc/rc.local
+  sudo sed -i "s/\/var\/www\/schedule.php/\/var\/www\/$rpicamdir\/schedule.php/" /etc/rc.local
 else
-  sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
+  sudo sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
 fi
 
 sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
