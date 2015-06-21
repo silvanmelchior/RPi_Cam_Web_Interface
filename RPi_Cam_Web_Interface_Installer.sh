@@ -256,6 +256,15 @@ fi
 }
 
 # Autostart. We edit rc.local
+fn_autostart_disable ()
+{
+  tmpfile=$(mktemp)
+  sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+  # Remove to growing plank lines.
+  sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+  sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+}
+
 fn_autostart ()
 {
 if ! grep -Fq "autostart=" ./config.txt; then
@@ -292,15 +301,6 @@ else
 fi
 
 sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
-}
-
-fn_autostart_disable ()
-{
-  tmpfile=$(mktemp)
-  sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
-  # Remove to growing plank lines.
-  sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
-  sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
 }
 
 if [ "$autostart" != "yes" ] ; then
@@ -363,7 +363,7 @@ case "$1" in
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
-        sudo sed -i.bak '/#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/d' /etc/rc.local
+        fn_autostart_disable
 
         $color_green; echo "Removed everything"; $color_reset
         fn_reboot
@@ -436,15 +436,7 @@ case "$1" in
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
-        if [ ! "$rpicamdir" == "" ]; then
-          sed -e "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
-        else
-          cat etc/rc_local_run/rc.local.1 > etc/rc_local_run/rc.local
-        fi
-#        awk 'NR != FNR { if ($0 == "exit 0") printf "%s\n\n\n", a; print; next } /#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/ { a = a n $0; n = RS }' etc/rc_local_run/rc.local.1 /etc/rc.local > etc/rc_local_run/rc.local
-        sudo cp -r /etc/rc.local /etc/rc.local.bak
-        sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
+	fn_autostart
 
         if [ "$rpicamdir" == "" ]; then
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
@@ -547,14 +539,7 @@ case "$1" in
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
-
-        if [ ! "$rpicamdir" == "" ]; then
-          sed -i "s/\/var\/www/\/var\/www\/$rpicamdir/" etc/rc_local_run/rc.local.1
-        fi
-        awk 'NR != FNR { if ($0 == "exit 0") printf "%s\n\n\n", a; print; next } /#START RASPIMJPEG SECTION/,/#END RASPIMJPEG SECTION/ { a = a n $0; n = RS }' etc/rc_local_run/rc.local.1 /etc/rc.local > etc/rc_local_run/rc.local
-        sudo cp -r /etc/rc.local /etc/rc.local.bak
-        sudo cp -r etc/rc_local_run/rc.local /etc/
-        sudo chmod 755 /etc/rc.local
+	fn_autostart
 
         if [ "$rpicamdir" == "" ]; then
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
