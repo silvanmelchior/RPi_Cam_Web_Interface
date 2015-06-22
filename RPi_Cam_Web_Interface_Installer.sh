@@ -489,9 +489,9 @@ case "$1" in
         fi
 
         if [ "$rpicamdir" == "" ]; then
-          cat etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
+          sudo cat etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
         else
-          sed -e "s:root /var/www;:root /var/www/$rpicamdir;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
+          sudo sed -e "s:root /var/www;:root /var/www/$rpicamdir;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
         fi
         sudo cp -r etc/nginx/sites-available/rpicam /etc/nginx/sites-available/rpicam
         sudo chmod 644 /etc/nginx/sites-available/rpicam
@@ -524,9 +524,9 @@ case "$1" in
         fi
 
         if [ "$rpicamdir" == "" ]; then
-          cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+          sudo cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         else
-          sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+          sudo sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         fi
         if [ -e /etc/raspimjpeg ]; then
           $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
@@ -542,13 +542,13 @@ case "$1" in
 	fn_autostart
 
         if [ "$rpicamdir" == "" ]; then
-          cat etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
-          sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sudo sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         if [ ! "$rpicamdir" == "" ]; then
-         sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+         sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
         fi
         sudo chgrp www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
@@ -558,7 +558,7 @@ case "$1" in
         fi
         
         if [ ! "$rpicamdir" == "" ]; then
-          sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
+          sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
 
         # Restart nginx and php5-fpm to apply changes
