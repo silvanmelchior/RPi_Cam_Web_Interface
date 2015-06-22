@@ -561,10 +561,6 @@ case "$1" in
           sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
 
-        # Restart nginx and php5-fpm to apply changes
-        service nginx restart
-        service php5-fpm restart
-
         $color_green; echo "Installer finished"; $color_reset
         fn_reboot
         ;;
