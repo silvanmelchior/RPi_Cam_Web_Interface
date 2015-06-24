@@ -277,7 +277,7 @@ fn_autostart_enable ()
 {
 if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
   sudo sed -i '/exit 0/d' /etc/rc.local
-sudo cat <<EOF >> /etc/rc.local
+sudo bash -c "cat > /etc/rc.local" << EOF
 #START RASPIMJPEG SECTION
 mkdir -p /dev/shm/mjpeg
 chown www-data:www-data /dev/shm/mjpeg
