@@ -330,6 +330,30 @@ else
 fi
 }
 
+# We edit /etc/apache2/sites-available/default
+fn_apache_default_install ()
+{
+if ! grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
+  if [ ! "$rpicamdir" == "" ]; then
+    sudo sed -i "s/DocumentRoot\ \/var\/www.*/DocumentRoot\ \/var\/www\/$rpicamdir/g" /etc/apache2/sites-available/default
+    sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www\/$rpicamdir\//g" /etc/apache2/sites-available/default
+  fi	
+  sudo sed -i '/CustomLog\ ${APACHE_LOG_DIR}\/access.log\ combined/i \	SetEnvIf\ Request_URI\ "\/cam_pic.php$|\/status_mjpeg.php$"\ dontlog' /etc/apache2/sites-available/default
+  sudo sed -i 's/CustomLog\ ${APACHE_LOG_DIR}\/access.log.*/CustomLog\ ${APACHE_LOG_DIR}\/access.log\ common\ env=!dontlog/g' /etc/apache2/sites-available/default
+fi
+}
+fn_apache_default_remove ()
+{
+if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
+  if [ ! "$rpicamdir" == "" ]; then
+    sudo sed -i 's/DocumentRoot\ \/var\/www.*/DocumentRoot\ \/var\/www/g' /etc/apache2/sites-available/default
+    sudo sed -i "s/<Directory\ \/var\/www\/$rpicamdir\//<Directory\ \/var\/www\//g" /etc/apache2/sites-available/default
+  fi
+  sudo sed -i '/SetEnvIf\ Request_URI\ "\/cam_pic.php$|\/status_mjpeg.php$"\ dontlog/d' /etc/apache2/sites-available/default
+  sudo sed -i 's/CustomLog\ ${APACHE_LOG_DIR}\/access.log\ common\ env=!dontlog/CustomLog\ ${APACHE_LOG_DIR}\/access.log\ combined/g' /etc/apache2/sites-available/default
+fi
+}
+
 case "$1" in
 
   remove)
@@ -364,6 +388,7 @@ case "$1" in
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
         fn_autostart_disable
+        fn_apache_default_remove
 
         $color_green; echo "Removed everything"; $color_reset
         fn_reboot
@@ -402,13 +427,7 @@ case "$1" in
           sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
         fi
 
-        if [ "$rpicamdir" == "" ]; then
-          cat etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
-        else
-         sed -e "s/Directory \/var\/www/Directory \/var\/www\/$rpicamdir/" -e "s/DocumentRoot \/var\/www/DocumentRoot \/var\/www\/$rpicamdir/"  etc/apache2/sites-available/default.1 > etc/apache2/sites-available/default
-        fi
-        sudo cp -r etc/apache2/sites-available/default /etc/apache2/sites-available/
-        sudo chmod 644 /etc/apache2/sites-available/default
+	fn_apache_default_install
         sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
         sudo chmod 644 /etc/apache2/conf.d/other-vhosts-access-log
 
