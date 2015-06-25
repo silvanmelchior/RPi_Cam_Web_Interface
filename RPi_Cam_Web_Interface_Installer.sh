@@ -260,6 +260,7 @@ fn_autostart_disable ()
 {
   tmpfile=$(mktemp)
   sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+  chmod 755 /etc/rc.local
   # Remove to growing plank lines.
   sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
   sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
@@ -292,6 +293,7 @@ fi
 
 exit 0
 EOF
+chmod 755 /etc/rc.local
 fi
 
 if [ ! "$rpicamdir" == "" ]; then
