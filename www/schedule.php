@@ -50,6 +50,7 @@
    define('SCHEDULE_PURGELAPSEHOURS', 'PurgeLapse_Hours');
    define('SCHEDULE_PURGESPACEMODE', 'PurgeSpace_ModeEx');
    define('SCHEDULE_PURGESPACELEVEL', 'PurgeSpace_Level');
+   define('SCHEDULE_AUTOCAPTUREINTERVAL', 'AutoCapture_Interval');
    define('SCHEDULE_COMMANDSON', 'Commands_On');
    define('SCHEDULE_COMMANDSOFF', 'Commands_Off');
    define('SCHEDULE_MODES', 'Modes');
@@ -189,6 +190,7 @@
          SCHEDULE_LONGTITUDE => '0.00',
          SCHEDULE_MAXCAPTURE => '0',
          SCHEDULE_DAYMODE => '1',
+         SCHEDULE_AUTOCAPTUREINTERVAL => '0',
          SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","14:00"),
          SCHEDULE_COMMANDSON => array("ca 1","","","ca 1","","","","","","",""),
          SCHEDULE_COMMANDSOFF => array("ca 0","","","ca 0","","","","","","",""),
@@ -641,12 +643,19 @@ function cmdHelp() {
          $slowPoll = 0;
          $managechecktime = time();
          $modechecktime = $managechecktime;
+         if ($schedulePars[SCHEDULE_AUTOCAPTUREINTERVAL] > $schedulePars[SCHEDULE_MAXCAPTURE] ) {
+            $autocapturetime = $managechecktime;
+            $autoCapture = 2;
+         } else {
+            $autocapturetime = 0;
+            $autoCapture = 0;
+         }
 
          while($timeoutMax == 0 || $timeout < $timeoutMax) {
             usleep($pollTime * 1000000);
             //Check for incoming motion capture requests
             $cmd = checkMotion($pipeIn);
-            if ($cmd == SCHEDULE_STOP) {
+            if ($cmd == SCHEDULE_STOP && $autocapture == 0) {
                if ($lastOnCommand >= 0) {
                   writeLog('Stop capture requested');
                   $send = $schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand];
@@ -658,9 +667,10 @@ function cmdHelp() {
                   writeLog('Stop capture request ignored, already stopped');
                   
                }
-            } else if ($cmd == SCHEDULE_START) {
+            } else if ($cmd == SCHEDULE_START || $autocapture == 1) {
                if ($lastOnCommand < 0 && $lastDayPeriod >= 0) {
                   writeLog('Start capture requested');
+                  $autocapture = 2;
                   $send = $schedulePars[SCHEDULE_COMMANDSON][$lastDayPeriod];
                   if ($send) {
                      sendCmds($send);
@@ -705,6 +715,7 @@ function cmdHelp() {
                         writeLog("Maximum Capture reached. Sending off command");
                         sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
                         $lastOnCommand = -1;
+                        $autoCapture = 1;
                      }
                   }
                }
@@ -719,6 +730,12 @@ function cmdHelp() {
                      writeLog("exec_macro: $cmd");
                      sendCmds("sy $cmd");
                   }
+               }
+               if ($autocapturetime > 0 && $timenow > $autocapturetime) {
+                  // Request autocapture and set next interval
+                  $autocapturetime = $timenow + $schedulePars[SCHEDULE_AUTOCAPTUREINTERVAL];
+                  writeLog("Autocapture request.");
+                  $autocapture = 1;
                }
             }
          }
