@@ -110,6 +110,11 @@ macros_path /var/www/macros
 boxing_path
 subdir_char @
 
+#Job macros - prefix with & to make it run asynchronously
+end_img &end_img.sh
+end_vid end_vid.sh
+end_box &end_box.sh
+
 # thumb generator control
 # Set v, i, or t in string to enable thumbs for images, videos, or lapse
 thumb_gen vit
