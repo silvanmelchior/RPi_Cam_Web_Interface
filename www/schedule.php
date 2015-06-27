@@ -645,10 +645,10 @@ function cmdHelp() {
          $modechecktime = $managechecktime;
          if ($schedulePars[SCHEDULE_AUTOCAPTUREINTERVAL] > $schedulePars[SCHEDULE_MAXCAPTURE] ) {
             $autocapturetime = $managechecktime;
-            $autoCapture = 2;
+            $autocapture = 2;
          } else {
             $autocapturetime = 0;
-            $autoCapture = 0;
+            $autocapture = 0;
          }
 
          while($timeoutMax == 0 || $timeout < $timeoutMax) {
@@ -715,7 +715,7 @@ function cmdHelp() {
                         writeLog("Maximum Capture reached. Sending off command");
                         sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
                         $lastOnCommand = -1;
-                        $autoCapture = 1;
+                        $autocapture = 1;
                      }
                   }
                }
