@@ -670,7 +670,7 @@ function cmdHelp() {
             } else if ($cmd == SCHEDULE_START || $autocapture == 1) {
                if ($lastOnCommand < 0 && $lastDayPeriod >= 0) {
                   writeLog('Start capture requested');
-                  $autocapture = 2;
+                  if ($autocapture == 1) $autocapture = 2;
                   $send = $schedulePars[SCHEDULE_COMMANDSON][$lastDayPeriod];
                   if ($send) {
                      sendCmds($send);
@@ -715,7 +715,7 @@ function cmdHelp() {
                         writeLog("Maximum Capture reached. Sending off command");
                         sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
                         $lastOnCommand = -1;
-                        $autocapture = 1;
+                        $autocapture = 0;
                      }
                   }
                }
