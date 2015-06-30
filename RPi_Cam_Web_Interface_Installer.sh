@@ -344,7 +344,6 @@ fn_apache_default_install ()
 {
 if ! grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
   if [ ! "$rpicamdir" == "" ]; then
-    sudo sed -i "s/DocumentRoot\ \/var\/www.*/DocumentRoot\ \/var\/www\/$rpicamdir/g" /etc/apache2/sites-available/default
     sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www\/$rpicamdir\/>/g" /etc/apache2/sites-available/default
   fi	
   sudo sed -i '/CustomLog\ ${APACHE_LOG_DIR}\/access.log\ combined/i \	SetEnvIf\ Request_URI\ "\/cam_pic.php$|\/status_mjpeg.php$"\ dontlog' /etc/apache2/sites-available/default
@@ -470,6 +469,7 @@ case "$1" in
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
           sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf		
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo usermod -a -G video www-data
@@ -573,11 +573,9 @@ case "$1" in
           sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
           sudo sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
-        if [ ! "$rpicamdir" == "" ]; then
-         sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-        fi
         sudo usermod -a -G video www-data
         if [ -e /var/www/$rpicamdir/uconfig ]; then
           sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
