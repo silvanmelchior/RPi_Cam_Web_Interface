@@ -159,7 +159,7 @@ fn_tmp_yes ()
 	else
 	  sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
 	fi
-	sudo chgrp www-data /etc/motion/motion.conf
+	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 	sudo service apache2 restart
 	webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
@@ -482,7 +482,7 @@ case "$1" in
         fi
         fn_webport
         fn_secure
-        sudo chgrp www-data /etc/motion/motion.conf
+	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
         $color_green; echo "Installer finished"; $color_reset
@@ -584,7 +584,7 @@ case "$1" in
         if [ ! "$rpicamdir" == "" ]; then
           sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
-        sudo chgrp www-data /etc/motion/motion.conf
+	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
         $color_green; echo "Installer finished"; $color_reset
