@@ -110,6 +110,7 @@ fn_abort()
 if [ ! -e ./config.txt ]; then
       sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
       sudo echo "" >> ./config.txt
+      sudo chmod 664 ./config.txt
 fi
 
 source ./config.txt
@@ -139,6 +140,7 @@ else
 		}
 		fn_yesno
 fi
+sudo chmod 664 ./config.txt
 }
 
 fn_webport ()
@@ -191,6 +193,7 @@ if ! grep -Fq "security=" ./config.txt; then
 		sudo echo "user=\"\"" >> ./config.txt
 		sudo echo "passwd=\"\"" >> ./config.txt
 		sudo echo "" >> ./config.txt
+		sudo chmod 664 ./config.txt
 fi
 
 fn_sec_yes ()
@@ -260,6 +263,7 @@ fi
 		}
 		fn_yesno
 	fi
+sudo chmod 664 ./config.txt
 }
 
 # Autostart. We edit rc.local
@@ -271,6 +275,7 @@ fn_autostart_disable ()
   sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
   sudo chmod 755 /etc/rc.local
   sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+  sudo chmod 664 ./config.txt
 }
 
 fn_autostart ()
@@ -279,6 +284,7 @@ if ! grep -Fq "autostart=" ./config.txt; then
   sudo echo "# Enable or disable autostart" >> ./config.txt
   sudo echo "autostart=\"\"" >> ./config.txt
   sudo echo "" >> ./config.txt
+  sudo chmod 664 ./config.txt
 fi
 
 fn_autostart_enable ()
@@ -337,6 +343,7 @@ else
 	}
 	fn_yesno		
 fi
+sudo chmod 664 ./config.txt
 }
 
 # We edit /etc/apache2/sites-available/default
