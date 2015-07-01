@@ -1,7 +1,9 @@
 <?php
- 
+  define('BASE_DIR', dirname(__FILE__));
+  define('SERVO_CMD', '/dev/servoblaster');  
+  define('SERVO_COORDINATES', 'servo_on');  
   //
-  // settings
+  // pipansettings
   //
   $min_pan = 60;
   $max_pan = 190;
@@ -10,7 +12,7 @@
  
  
   //
-  // code
+  // code for pipan
   //
   if(isset($_GET["pan"])) {
     if(is_numeric($_GET["pan"])) {
@@ -35,6 +37,46 @@
         }
       }
     }
+  }
+  //
+  // code for servo
+  //
+  if(isset($_GET["action"])) {
+    $coordinates = json_decode(file_get_contents(BASE_DIR . '/' . SERVO_COORDINATES), true);
+    $servo = '';
+    if (!array_key_exists('x', $coordinates) || !array_key_exists('y', $coordinates)) {
+       $coordinates = array();
+       $coordinates['x'] = 165;
+       $coordinates['y'] = 165;
+    }
+    switch ($_GET["action"]) {
+       case 'left':
+         $coordinates['x'] += 7;
+         if ($coordinates['x'] > 235) $coordinates['x'] = 235;
+         $servo = '1=' . $coordinates['x'] . "\n";
+         break;
+       case 'right':
+         $coordinates['x'] -= 7;
+         if ($coordinates['x'] < 95) $coordinates['x'] = 95;
+         $servo = '1=' . $coordinates['x'] . "\n";
+         break;
+       case 'up':
+         $coordinates['y'] -= 7;
+         if ($coordinates['y'] < 95) $coordinates['y'] = 95;
+         $servo = '0=' . $coordinates['y'] . "\n";
+         break;
+       case 'down':
+         $coordinates['y'] += 7;
+         if ($coordinates['y'] > 235) $coordinates['y'] = 235;
+         $servo = '0=' . $coordinates['y'] . "\n";
+         break;
+    }
+    if ($servo != '') {
+       $fs = fopen(SERVO_CMD, "w");
+       fwrite($fs, $servo);
+       fclose($fs);
+    }
+    file_put_contents(BASE_DIR . '/' . SERVO_COORDINATES, json_encode($coordinates));
   }
  
 ?>

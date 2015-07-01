@@ -1,0 +1,23 @@
+server {
+	listen   80;
+
+	root /var/www;
+	index index.php index.html index.htm;
+	server_name localhost;
+
+	location / {
+		try_files $uri $uri/ /index.html;
+	}
+    location ~ [^/]\.php(/|$) {
+            fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+            if (!-f $document_root$fastcgi_script_name) {
+                    return 404;
+            }
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_index index.php;
+            include fastcgi_params;
+    }
+	location ~ /\.ht {
+		deny all;
+	}
+}

@@ -11,7 +11,7 @@
    define('BTN_SELECTALL', 'Select All');
    define('BTN_SELECTNONE', 'Select None');
    define('BTN_GETZIP', 'Get Zip');
-   define('BTN_UPDATESIZES', 'Update Sizes');
+   define('BTN_UPDATESIZEORDER', 'Update Sizes / Order');
    define('TXT_PREVIEW', 'Preview');
    define('TXT_THUMB', 'Thumb');
    define('TXT_FILES', 'Files');
@@ -22,11 +22,15 @@
    //Set size defaults and try to get from cookies
    $previewSize = 640;
    $thumbSize = 96;
+   $sortOrder = 1;
    if(isset($_COOKIE["previewSize"])) {
       $previewSize = $_COOKIE["previewSize"];
    }
    if(isset($_COOKIE["thumbSize"])) {
       $thumbSize = $_COOKIE["thumbSize"];
+   }
+   if(isset($_COOKIE["sortOrder"])) {
+      $sortOrder = $_COOKIE["sortOrder"];
    }
    $dSelect = "";
    $pFile = "";
@@ -105,7 +109,7 @@
             }        
             maintainFolders(MEDIA_PATH, false, false);
             break;
-         case 'updateSizes':
+         case 'updateSizeOrder':
             if(!empty($_POST['previewSize'])) {
                $previewSize = $_POST['previewSize'];
                if ($previewSize < 100 || $previewSize > 1920) $previewSize = 640;
@@ -115,6 +119,10 @@
                $thumbSize = $_POST['thumbSize'];
                if ($thumbSize < 32 || $thumbSize > 320) $thumbSize = 96;
                setcookie("thumbSize", $thumbSize, time() + (86400 * 365), "/");
+            }        
+            if(!empty($_POST['sortOrder'])) {
+               $sortOrder = $_POST['sortOrder'];
+               setcookie("sortOrder", $sortOrder, time() + (86400 * 365), "/");
             }        
             break;
          case 'zipSel':
@@ -130,7 +138,8 @@
       writeLog("Making zip $zipname");
       $zipfiles = fopen($zipname.".files", "w");
       foreach ($files as $file) {
-         if (getFileType($file) == 't') {
+         $t = getFileType($file);
+         if ($t == 't') {
             $lapses = findLapseFiles($file);
             if (!empty($lapses)) {
                foreach($lapses as $lapse) {
@@ -141,6 +150,9 @@
             $base = dataFilename($file);
             if (file_exists(MEDIA_PATH . "/$base")) {
                fprintf($zipfiles, MEDIA_PATH . "/$base\n");
+            }
+            if ($t == 'v' && file_exists(MEDIA_PATH . "/$base.dat")) {
+               fprintf($zipfiles, MEDIA_PATH . "/$base.dat\n");
             }
          }
       }
@@ -211,9 +223,13 @@
          case 'i': $fIcon = 'image.png'; break;
          default : $fIcon = 'image.png'; break;
       }
+      $duration ='';
       if (file_exists(MEDIA_PATH . "/$rFile")) {
          $fsz = round ((filesize(MEDIA_PATH . "/$rFile")) / 1024);
          $fModTime = filemtime(MEDIA_PATH . "/$rFile");
+         if ($fType == 'v') {
+            $duration = ($fModTime - filemtime(MEDIA_PATH . "/$f")) . 's';
+         }
       } else {
          $fsz = 0;
          $fModTime = filemtime(MEDIA_PATH . "/$f");
@@ -229,12 +245,24 @@
       echo "<img src='$fIcon' style='width:24px'/>";
       echo "<input type='checkbox' name='check_list[]' $sel value='$f' style='float:right;'/>";
       echo "</legend>";
-      if ($fsz > 0) echo "$fsz Kb $lapseCount"; else echo 'Busy';
+      if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
       echo "<br>$fDate<br>$fTime<br>";
       if ($fsz > 0) echo "<a title='$rFile' href='preview.php?preview=$f'>";
       echo "<img src='" . MEDIA_PATH . "/$f' style='width:" . $ts . "px'/>";
       if ($fsz > 0) echo "</a>";
       echo "</fieldset> ";
+   }
+   
+   function getThumbnails() {
+      global $sortOrder;
+      $files = scandir(MEDIA_PATH, $sortOrder - 1);
+      $thumbnails = array();
+      foreach($files as $file) {
+         if($file != '.' && $file != '..' && isThumbnail($file)) {
+            $thumbnails[] = $file;
+         } 
+      }
+      return $thumbnails;   
    }
    
    function diskUsage() {
@@ -280,8 +308,20 @@
       <div class="container-fluid">
       <form action="preview.php" method="POST">
       <?php
+         $thumbnails = getThumbnails();
          if ($pFile != "") {
+            $pIndex = array_search($tFile, $thumbnails);
             echo "<h1>" . TXT_PREVIEW . ":  " . getFileType($tFile) . getFileIndex($tFile);
+            if ($pIndex > 0)
+               $attr = 'onclick="location.href=\'preview.php?preview=' . $thumbnails[$pIndex-1] . '\'"';
+            else
+               $attr = 'disabled';
+            echo "&nbsp;&nbsp;<input type='button' value='&larr;' class='btn btn-primary' name='prev' $attr >";
+            if (($pIndex+1) < count($thumbnails))
+               $attr = 'onclick="location.href=\'preview.php?preview=' . $thumbnails[$pIndex+1] . '\'"';
+            else
+               $attr = 'disabled';
+            echo "&nbsp;&nbsp;<input type='button' value='&rarr;' class='btn btn-primary' name='next' $attr>";
             echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='download1' value='$tFile'>" . BTN_DOWNLOAD . "</button>";
             echo "&nbsp;<button class='btn btn-danger' type='submit' name='delete1' value='$tFile'>" . BTN_DELETE . "</button>";
             if(getFileType($tFile) == "t") {
@@ -306,18 +346,21 @@
          echo "</h1>";
          diskUsage();
          if ($debugString !="") echo "$debugString<br>";
-         $files = scandir(MEDIA_PATH);
-         if(count($files) == 2) echo "<p>No videos/images saved</p>";
+         if(count($thumbnails) == 0) echo "<p>No videos/images saved</p>";
          else {
-            foreach($files as $file) {
-               if(($file != '.') && ($file != '..') && isThumbnail($file, -7)) {
-                  drawFile($file, $thumbSize, $dSelect);
-               } 
+            foreach($thumbnails as $file) {
+              drawFile($file, $thumbSize, $dSelect);
             }
          }
          echo "<p><p>" . TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
          echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='text' size='3' name='thumbSize' value='$thumbSize'>";
-         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizes'>" . BTN_UPDATESIZES . "</button>";
+         echo "&nbsp;Sort Order&nbsp;<select id='sortOrder' name='sortOrder'>";
+         if ($sortOrder == 1) $selected = "selected"; else $selected = "";
+         echo "<option value='1' $selected>Ascending</option>";
+         if ($sortOrder == 2) $selected = "selected"; else $selected = "";
+         echo "<option value='2'  $selected>Descending</option>";
+         echo '</select>';
+         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button>";
       ?>
       </form>
       

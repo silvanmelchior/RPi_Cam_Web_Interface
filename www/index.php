@@ -19,6 +19,9 @@
    $options_ab = array('Off' => '0', 'On' => '1');
    $options_vs = array('Off' => '0', 'On' => '1');
    $options_rl = array('Off' => '0', 'On' => '1');
+   $options_vp = array('Off' => '0', 'On' => '1');
+   $options_mx = array('Internal' => '0', 'External' => '1');
+   $options_mf = array('Off' => '0', 'On' => '1');
 
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
@@ -31,14 +34,25 @@
       }
    }
 
-   function pipan_controls() {
-      initCamPos();
-      echo "<div class='container-fluid text-center liveimage'>";
-      echo "<input type='button' class='btn btn-primary' value='up' onclick='servo_up();'><br>";
-      echo "&nbsp<input type='button' class='btn btn-primary' value='left' onclick='servo_left();'>";
-      echo "&nbsp<input type='button' class='btn btn-primary' value='down' onclick='servo_down();'>";
-      echo "&nbsp<input type='button' class='btn btn-primary' value='right' onclick='servo_right();'>";
-      echo "</div>";   
+   function pan_controls() {
+      $mode = 0;
+      if (file_exists("pipan_on")){
+         initCamPos();
+         $mode = 1;
+      } else if (file_exists("servo_on")){
+         $mode = 2;
+      }
+      if ($mode <> 0) {
+         echo '<script type="text/javascript">set_panmode(',$mode,');</script>';
+         echo "<div class='container-fluid text-center liveimage'>";
+         echo "<div alt='Up' id='arrowUp' style='margin-bottom: 2px;width: 0;height: 0;border-left: 20px solid transparent;border-right: 20px solid transparent;border-bottom: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;margin-left: auto; margin-right: auto;' onclick='servo_up();'></div>";
+         echo "<div>";
+         echo "<div alt='Left' id='arrowLeft' style='margin-right: 22px;display: inline-block;height: 0;border-top: 20px solid transparent;border-bottom: 20px solid transparent;border-right: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;' onclick='servo_left();'></div>";
+         echo "<div alt='Right' id='arrowRight' style='margin-left: 22px;display: inline-block;height: 0;border-top: 20px solid transparent;border-bottom: 20px solid transparent;border-left: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;' onclick='servo_right();'></div>";
+         echo "</div>";
+         echo "<div alt='Down' id='arrowDown' style='margin-top: 2px;width: 0;height: 0;border-left: 20px solid transparent;border-right: 20px solid transparent;border-top: 40px solid #428bca;font-size: 0;line-height: 0;vertical-align: middle;margin-left: auto; margin-right: auto;' onclick='servo_down();'></div>";
+         echo "</div>";
+      }
    }
   
    function pilight_controls() {
@@ -70,8 +84,8 @@
       global $config;
       switch ($selKey) {
          case 'flip': 
-            $cvalue = (($config['vflip'] == 'true') ? 2:0);
-            $cvalue += (($config['hflip'] == 'true') ? 1:0);
+            $cvalue = (($config['vflip'] == 'true') || ($config['vflip'] == 1) ? 2:0);
+            $cvalue += (($config['hflip'] == 'true') || ($config['hflip'] == 1) ? 1:0);
             break;
          case 'MP4Box': 
             $cvalue = $config[$selKey];
@@ -114,6 +128,14 @@
       echo "<input type='text' size=$size id='$id' value='$value'>";
    }
    
+   function getImgWidth() {
+      global $config;
+      if($config['vector_preview'])
+         return 'style="width:' . $config['width'] . 'px;"';
+      else
+         return '';
+   }
+   
    if (isset($_POST['extrastyle'])) {
       if (file_exists('css/' . $_POST['extrastyle'])) {
          $fp = fopen(BASE_DIR . '/css/extrastyle.txt', "w");
@@ -139,15 +161,12 @@
          $mjpegmode = 1;
       }
    }
-
-   
    $config = readConfig($config, CONFIG_FILE1);
    $config = readConfig($config, CONFIG_FILE2);
-
    $video_fps = $config['video_fps'];
    $divider = $config['divider'];
-   $width = $config['width'];
-   ?>
+  ?>
+
 <html>
    <head>
       <meta name="viewport" content="width=550, initial-scale=1">
@@ -168,7 +187,7 @@
       </div>
       <input id="toggle_display" type="button" class="btn btn-primary" value="<?php echo $toggleButton; ?>" style="position:absolute;top:60px;right:10px;" onclick="set_display(this.value);">
       <div class="container-fluid text-center liveimage">
-         <div><img id="mjpeg_dest" style="width:<?php echo $width;?>px;" <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="/loading.jpg"></div>
+         <div><img id="mjpeg_dest" <?php echo getImgWidth();?> <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="/loading.jpg"></div>
          <div id="main-buttons" <?php echo $displayStyle; ?> >
             <input id="video_button" type="button" class="btn btn-primary">
             <input id="image_button" type="button" class="btn btn-primary">
@@ -178,11 +197,10 @@
          </div>
       </div>
       <div id="secondary-buttons" class="container-fluid text-center" <?php echo $displayStyle; ?> >
-         <?php  if (file_exists("pipan_on")) pipan_controls(); ?>
+         <?php pan_controls(); ?>
          <a href="preview.php" class="btn btn-default">Download Videos and Images</a>
          &nbsp;&nbsp;
-         <a href="motion.php" class="btn btn-default">Edit motion settings</a>
-         &nbsp;&nbsp;
+         <?php  if($config['motion_external']): ?><a href="motion.php" class="btn btn-default">Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
          <a href="schedule.php" class="btn btn-default">Edit schedule settings</a>
       </div>
     
@@ -201,10 +219,11 @@
                            <td>Resolutions:</td>
                            <td>Load Preset: <select onchange="set_preset(this.value)">
                                  <option value="1920 1080 25 25 2592 1944">Select option...</option>
-                                 <option value="1920 1080 25 25 2592 1944">Std FOV</option>
-                                 <option value="1296 730 25 25 2592 1944">16:9 wide FOV</option>
-                                 <option value="1296 976 25 25 2592 1944">4:3 full FOV</option>
-                                 <option value="1920 1080 01 30 2592 1944">Std FOV, x30 Timelapse</option>
+                                 <option value="1920 1080 25 25 2592 1944">Full HD 1080p 16:9</option>
+                                 <option value="1280 0720 25 25 2592 1944">HD-ready 720p 16:9</option>
+                                 <option value="1296 972 25 25 2592 1944">Max View 972p 4:3</option>
+                                 <option value="768 576 25 25 2592 1944">SD TV 576p 4:3</option>
+                                 <option value="1920 1080 01 30 2592 1944">Full HD Timelapse (x30) 1080p 16:9</option>
                               </select><br>
                               Custom Values:<br>
                               Video res: <?php makeInput('video_width', 4); ?>x<?php makeInput('video_height', 4); ?>px<br>
@@ -308,7 +327,6 @@
                         <tr>
                            <td>Preview quality (0...100) Default 25:<br>Width (128...1024) Default 512:<br>Divider (1-16) Default 1:</td>
                            <td>
-
                               Qu: <?php makeInput('quality', 4); ?>
                               Wi: <?php makeInput('width', 4); ?>
                               Di: <?php makeInput('divider', 4); ?>
@@ -355,6 +373,63 @@
                            <input type="button" value="OK" onclick="send_cmd('wd ' + 10 * document.getElementById('watchdog_interval').value + ' ' + document.getElementById('watchdog_errors').value)">
                            </td>
                         </tr>
+                        <tr>
+                           <td>Motion detect mode :</td>
+                           <td><select onchange="send_cmd('mx ' + this.value);setTimeout(function(){location.reload(true);}, 1000);"><?php makeOptions($options_mx, 'motion_external'); ?></select></td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+            </div>
+            <div class="panel panel-default" <?php  if($config['motion_external']) echo "style ='display:none;'"; ?>>
+               <div class="panel-heading">
+                  <h2 class="panel-title">
+                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Motion Settings</a>
+                  </h2>
+               </div>
+               <div id="collapseTwo" class="panel-collapse collapse">
+                  <div class="panel-body">
+                     <table class="settingsTable">
+                        <tr>
+                          <td>Motion Vector Preview:</td>
+                          <td>
+                            <select onchange="send_cmd('vp ' + this.value);setTimeout(function(){location.reload(true);}, 1000);" id="preview_select"><?php makeOptions($options_vp, 'vector_preview'); ?></select>
+                          </td>
+                        </tr>
+                        <tr>
+                           <td>Noise level (1-255):</td>
+                           <td>
+                              <?php makeInput('motion_noise', 5); ?><input type="button" value="OK" onclick="send_cmd('mn ' + document.getElementById('motion_noise').value)">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Threshold (1-32000):</td>
+                           <td>
+                              <?php makeInput('motion_threshold', 5); ?><input type="button" value="OK" onclick="send_cmd('mt ' + document.getElementById('motion_threshold').value)">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Mask Image:</td>
+                           <td>
+                              <?php makeInput('motion_image', 30); ?><input type="button" value="OK" onclick="send_cmd('mi ' + document.getElementById('motion_image').value)">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Change Frames to start:</td>
+                           <td>
+                              <?php makeInput('motion_startframes', 5); ?><input type="button" value="OK" onclick="send_cmd('mb ' + document.getElementById('motion_startframes').value)">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Still Frames to stop:</td>
+                           <td>
+                              <?php makeInput('motion_stopframes', 5); ?><input type="button" value="OK" onclick="send_cmd('me ' + document.getElementById('motion_stopframes').value)">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Save vectors to .dat :<br>Uses more space</td>
+                           <td><select onchange="send_cmd('mf ' + this.value);"><?php makeOptions($options_mf, 'motion_file'); ?></select></td>
+                        </tr>
                      </table>
                   </div>
                </div>
@@ -362,10 +437,10 @@
             <div class="panel panel-default">
                <div class="panel-heading">
                   <h2 class="panel-title">
-                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">System</a>
+                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">System</a>
                   </h2>
                </div>
-               <div id="collapseTwo" class="panel-collapse collapse">
+               <div id="collapseThree" class="panel-collapse collapse">
                   <div class="panel-body">
                      <input id="toggle_stream" type="button" class="btn btn-primary" value="<?php echo $streamButton; ?>" onclick="set_stream_mode(this.value);">
                      <input id="shutdown_button" type="button" value="shutdown system" onclick="sys_shutdown();" class="btn btn-danger">

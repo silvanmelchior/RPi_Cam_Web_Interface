@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v5.1.6');
+   define('APP_VERSION', 'v6.0.1');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -51,7 +51,7 @@
 
    // schedule log function
    function writeLog($msg) {
-      $log = fopen(LBASE_DIR . '/' . LOGFILE_SCHEDULE, 'a');
+      $log = fopen(getLogFile(), 'a');
       $time = date('[Y/m/d H:i:s]');
       fwrite($log, "$time $msg" . PHP_EOL);
       fclose($log);
@@ -69,7 +69,11 @@
                if ($index !== false) {
                   $key = substr($line, 0, $index);
                   $value = trim(substr($line, $index +1));
+                  if ($value == 'true') $value = 1;
+                  if ($value == 'false') $value = 0;
                   $config[$key] = $value;
+               } else {
+                  $config[$line] = "";
                }
             }
          }
@@ -97,7 +101,7 @@
       $files = array();
       foreach($scanfiles as $file) {
          if(($file != '.') && ($file != '..') && isThumbnail($file)) {
-            $fDate = filemtime(MEDIA_PATH . "/$file");
+            $fDate = filemtime(LBASE_DIR . '/' . MEDIA_PATH . "/$file");
             $files[$file] = $fDate;
          } 
       }
@@ -160,6 +164,10 @@
             $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
             if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
          }
+         if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
+            $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+            if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+         }
       }
       $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
       if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
@@ -204,5 +212,17 @@
       else
          return ""; 
    }
+
+   function getLogFile() {
+      global $logFile;
+      if ($logFile != "")
+         return $logFile;
+      else
+         return LBASE_DIR . '/' . LOGFILE_SCHEDULE;
+   }
+   $config = array();
+   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE1);
+   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE2);
+   $logFile = $config['log_file'];
 
 ?>
