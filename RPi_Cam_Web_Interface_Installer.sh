@@ -460,6 +460,9 @@ case "$1" in
         else
           sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         fi
+        if [ `cat /proc/cmdline |awk -v RS=' ' -F= '/boardrev/ { print $2 }'` == "0x11" ]; then
+          sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
+        fi
         if [ -e /etc/raspimjpeg ]; then
           $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
@@ -562,6 +565,9 @@ case "$1" in
           sudo cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         else
           sudo sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+        fi
+        if [ `cat /proc/cmdline |awk -v RS=' ' -F= '/boardrev/ { print $2 }'` == "0x11" ]; then
+          sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
         fi
         if [ -e /etc/raspimjpeg ]; then
           $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
