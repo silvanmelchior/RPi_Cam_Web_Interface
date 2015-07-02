@@ -417,7 +417,7 @@ case "$1" in
 
   install)
         sudo killall raspimjpeg
-        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
+        sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
@@ -501,7 +501,7 @@ case "$1" in
 
   install_nginx)
         sudo killall raspimjpeg
-        sudo apt-get install -y nginx php5-fpm php5-common php-apc
+        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
