@@ -22,7 +22,8 @@
    $options_vp = array('Off' => '0', 'On' => '1');
    $options_mx = array('Internal' => '0', 'External' => '1');
    $options_mf = array('Off' => '0', 'On' => '1');
-
+   $options_cn = array('First' => '1', 'Second' => '2');
+   
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
       if($tr){
@@ -232,6 +233,14 @@
                               <input type="button" value="OK" onclick="set_res();">
                            </td>
                         </tr>
+                        <?php  if($config['camera_num'] > 0): ?> 
+                        <tr>
+                           <td>Camera select (Compute module only)</td>
+                           <td>
+                              Use camera: <select onchange="send_cmd('cn ' + this.value)"><?php makeOptions($options_cn, 'camera_num'); ?></select>
+                           </td>
+                        </tr>
+                        <?php endif; ?>
                         <tr>
                            <td>Timelapse-Interval (0.1...3200):</td>
                            <td><?php makeInput('tl_interval', 4); ?>s <input type="button" value="OK" onclick="send_cmd('tv ' + 10 * document.getElementById('tl_interval').value)"></td>

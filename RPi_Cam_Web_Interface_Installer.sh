@@ -110,6 +110,7 @@ fn_abort()
 if [ ! -e ./config.txt ]; then
       sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
       sudo echo "" >> ./config.txt
+      sudo chmod 664 ./config.txt
 fi
 
 source ./config.txt
@@ -139,6 +140,7 @@ else
 		}
 		fn_yesno
 fi
+sudo chmod 664 ./config.txt
 }
 
 fn_webport ()
@@ -191,6 +193,7 @@ if ! grep -Fq "security=" ./config.txt; then
 		sudo echo "user=\"\"" >> ./config.txt
 		sudo echo "passwd=\"\"" >> ./config.txt
 		sudo echo "" >> ./config.txt
+		sudo chmod 664 ./config.txt
 fi
 
 fn_sec_yes ()
@@ -260,6 +263,7 @@ fi
 		}
 		fn_yesno
 	fi
+sudo chmod 664 ./config.txt
 }
 
 # Autostart. We edit rc.local
@@ -271,6 +275,7 @@ fn_autostart_disable ()
   sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
   sudo chmod 755 /etc/rc.local
   sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+  sudo chmod 664 ./config.txt
 }
 
 fn_autostart ()
@@ -279,6 +284,7 @@ if ! grep -Fq "autostart=" ./config.txt; then
   sudo echo "# Enable or disable autostart" >> ./config.txt
   sudo echo "autostart=\"\"" >> ./config.txt
   sudo echo "" >> ./config.txt
+  sudo chmod 664 ./config.txt
 fi
 
 fn_autostart_enable ()
@@ -337,6 +343,7 @@ else
 	}
 	fn_yesno		
 fi
+sudo chmod 664 ./config.txt
 }
 
 # We edit /etc/apache2/sites-available/default
@@ -344,7 +351,6 @@ fn_apache_default_install ()
 {
 if ! grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
   if [ ! "$rpicamdir" == "" ]; then
-    sudo sed -i "s/DocumentRoot\ \/var\/www.*/DocumentRoot\ \/var\/www\/$rpicamdir/g" /etc/apache2/sites-available/default
     sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www\/$rpicamdir\/>/g" /etc/apache2/sites-available/default
   fi	
   sudo sed -i '/CustomLog\ ${APACHE_LOG_DIR}\/access.log\ combined/i \	SetEnvIf\ Request_URI\ "\/cam_pic.php$|\/status_mjpeg.php$"\ dontlog' /etc/apache2/sites-available/default
@@ -454,6 +460,9 @@ case "$1" in
         else
           sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         fi
+        if [ `cat /proc/cmdline |awk -v RS=' ' -F= '/boardrev/ { print $2 }'` == "0x11" ]; then
+          sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
+        fi
         if [ -e /etc/raspimjpeg ]; then
           $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
@@ -470,6 +479,7 @@ case "$1" in
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
           sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf		
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo usermod -a -G video www-data
@@ -556,6 +566,9 @@ case "$1" in
         else
           sudo sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
         fi
+        if [ `cat /proc/cmdline |awk -v RS=' ' -F= '/boardrev/ { print $2 }'` == "0x11" ]; then
+          sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
+        fi
         if [ -e /etc/raspimjpeg ]; then
           $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
@@ -573,11 +586,9 @@ case "$1" in
           sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
           sudo sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
-        if [ ! "$rpicamdir" == "" ]; then
-         sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-        fi
         sudo usermod -a -G video www-data
         if [ -e /var/www/$rpicamdir/uconfig ]; then
           sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
