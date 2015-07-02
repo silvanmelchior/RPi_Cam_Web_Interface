@@ -384,7 +384,7 @@ case "$1" in
         tmp_message="Do You want uninstall webserver and php packages also?"
 	fn_tmp_yes ()
 	{
-          package=('apache2' 'php5' 'libapache2-mod-php5' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+          package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
           for i in "${package[@]}"
            do
              if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
@@ -425,7 +425,7 @@ case "$1" in
 
   install)
         sudo killall raspimjpeg
-        sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion zip
+        sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
@@ -509,7 +509,7 @@ case "$1" in
 
   install_nginx)
         sudo killall raspimjpeg
-        sudo apt-get install -y nginx php5-fpm php5-common php-apc
+        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
