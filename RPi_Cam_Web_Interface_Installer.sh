@@ -400,7 +400,6 @@ case "$1" in
 	}
 	fn_yesno
 
-        fn_rpicamdir
 	if [ ! "$rpicamdir" == "" ]; then
 	  sudo rm -r /var/www/$rpicamdir
 	else
