@@ -673,8 +673,11 @@ case "$1" in
         sudo chown www-data:www-data /dev/shm/mjpeg
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg &' www-data
-        sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        
+        if [ -e /etc/debian_version ]; then
+          sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
+        else
+          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
+        fi        
         $color_green; echo "Started with debug"; $color_reset
         ;;
 
