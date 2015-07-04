@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v6.0.1');
+   define('APP_VERSION', 'v6.0.2');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -68,7 +68,7 @@
                $index = strpos($line, ' ');
                if ($index !== false) {
                   $key = substr($line, 0, $index);
-                  $value = trim(substr($line, $index +1));
+                  $value = substr($line, $index +1);
                   if ($value == 'true') $value = 1;
                   if ($value == 'false') $value = 0;
                   $config[$key] = $value;
