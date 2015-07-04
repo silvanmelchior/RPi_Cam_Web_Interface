@@ -655,6 +655,7 @@ function cmdHelp() {
          while($timeoutMax == 0 || $timeout < $timeoutMax) {
             usleep($pollTime * 1000000);
             //Check for incoming motion capture requests
+            $cmd = "";
             $cmd = checkMotion($pipeIn);
             if ($cmd == SCHEDULE_STOP && $autocapture == 0) {
                if ($lastOnCommand >= 0) {
@@ -670,8 +671,12 @@ function cmdHelp() {
                }
             } else if ($cmd == SCHEDULE_START || $autocapture == 1) {
                if ($lastOnCommand < 0 && $lastDayPeriod >= 0) {
-                  writeLog('Start capture requested');
-                  if ($autocapture == 1) $autocapture = 2;
+                  if ($autocapture == 1) {
+                     $autocapture = 2;
+                     writeLog('Start triggered by autocapture');
+                  } else {
+                     writeLog('Start capture requested from Pipe');
+                  }
                   $send = $schedulePars[SCHEDULE_COMMANDSON][$lastDayPeriod];
                   if ($send) {
                      sendCmds($send);
