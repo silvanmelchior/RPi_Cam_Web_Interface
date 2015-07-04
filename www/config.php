@@ -68,7 +68,7 @@
                $index = strpos($line, ' ');
                if ($index !== false) {
                   $key = substr($line, 0, $index);
-                  $value = trim(substr($line, $index +1));
+                  $value = substr($line, $index +1);
                   if ($value == 'true') $value = 1;
                   if ($value == 'false') $value = 0;
                   $config[$key] = $value;
