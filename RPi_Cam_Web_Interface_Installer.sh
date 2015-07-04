@@ -677,8 +677,7 @@ case "$1" in
           sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
         else
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        fi
-        
+        fi        
         $color_green; echo "Started with debug"; $color_reset
         ;;
 
