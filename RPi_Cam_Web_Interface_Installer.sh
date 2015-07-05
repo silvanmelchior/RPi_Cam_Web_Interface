@@ -177,7 +177,25 @@ fn_tmp_yes ()
 }
 fn_tmp_no ()
 {
-	echo ""
+	tmpfile=$(mktemp)
+	sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+	sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+	if [ ! "$rpicamdir" == "" ]; then
+	  if [ "$webport" != "80" ]; then
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+	  else
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+	  fi
+	else
+	  if [ "$webport" != "80" ]; then
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
+	  else
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
+	  fi
+	fi
+	sudo chown motion:www-data /etc/motion/motion.conf
+        sudo chmod 664 /etc/motion/motion.conf
+	sudo service apache2 restart
 }
 fn_yesno
 }
