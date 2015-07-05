@@ -264,14 +264,11 @@
    function getThumbnails() {
       global $sortOrder;
       global $showTypes;
-      global $debugString;
       $files = scandir(MEDIA_PATH, $sortOrder - 1);
       $thumbnails = array();
-      $debugString = "type $showTypes ";
       foreach($files as $file) {
          if($file != '.' && $file != '..' && isThumbnail($file)) {
             $fType = getFileType($file);
-            $debugString .=  $fType;              
             if($showTypes == '1') {
                $thumbnails[] = $file;
             }
