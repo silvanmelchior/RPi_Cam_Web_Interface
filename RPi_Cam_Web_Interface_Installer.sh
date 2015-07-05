@@ -77,7 +77,7 @@ fn_stop ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
-        $color_green; echo "Stopped"; $color_reset
+        dialog --title 'Stop message' --timeout 3 --msgbox 'Stopped' 5 16
 }
 
 fn_reboot ()
@@ -448,14 +448,14 @@ do
         fn_autostart_disable
         fn_apache_default_remove
 
-        $color_green; echo "Removed everything"; $color_reset
+        dialog --title 'Remove message' --timeout 3 --msgbox 'Removed everything' 5 23
         fn_reboot
         ;;
 
   autostart)
 	fn_autostart
 	
-        $color_green; echo "Changed autostart"; $color_reset
+        dialog --title 'Autostart message' --timeout 3 --msgbox 'Changed autostart' 5 23
         ;;
 
   install)
@@ -538,7 +538,7 @@ do
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
-        $color_green; echo "Installer finished"; $color_reset
+        dialog --title 'Install message' --timeout 3 --msgbox 'Installer finished' 5 25
         fn_reboot
         ;;
 
@@ -643,7 +643,7 @@ do
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
-        $color_green; echo "Installer finished"; $color_reset
+        dialog --title 'Install message' --timeout 3 --msgbox 'Installer finished' 5 25
         fn_reboot
         ;;
         
@@ -666,7 +666,7 @@ do
         fi
         trap : 0
 
-        $color_green; echo "Update finished"; $color_reset
+        dialog --title 'Update message' --timeout 3 --msgbox 'Update finished' 5 23
         ;;
 
   upgrade)
@@ -685,7 +685,7 @@ do
         fn_webport
         fn_secure
 
-        $color_green; echo "Upgrade finished"; $color_reset
+        dialog --title 'upgrade message' --timeout 3 --msgbox 'Upgrade finished' 5 23
         ;;
 
   start)
@@ -700,7 +700,7 @@ do
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
         fi
         
-        $color_green; echo "Started"; $color_reset
+        dialog --title 'Start message' --timeout 3 --msgbox 'Started' 5 16
         ;;
 
   debug)
@@ -714,16 +714,12 @@ do
         else
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
         fi        
-        $color_green; echo "Started with debug"; $color_reset
+        
+        dialog --title 'Debug message' --timeout 3 --msgbox 'Started with debug' 5 25
         ;;
 
   stop)
         fn_stop
-        ;;
-
-  *)
-        $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart|debug}"; $color_reset
         ;;
 
   esac
