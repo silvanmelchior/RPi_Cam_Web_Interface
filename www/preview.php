@@ -11,7 +11,7 @@
    define('BTN_SELECTALL', 'Select All');
    define('BTN_SELECTNONE', 'Select None');
    define('BTN_GETZIP', 'Get Zip');
-   define('BTN_UPDATESIZEORDER', 'Update Sizes / Order');
+   define('BTN_UPDATESIZEORDER', 'Update Settings');
    define('TXT_PREVIEW', 'Preview');
    define('TXT_THUMB', 'Thumb');
    define('TXT_FILES', 'Files');
@@ -23,6 +23,7 @@
    $previewSize = 640;
    $thumbSize = 96;
    $sortOrder = 1;
+   $showTypes = 1;
    if(isset($_COOKIE["previewSize"])) {
       $previewSize = $_COOKIE["previewSize"];
    }
@@ -31,6 +32,9 @@
    }
    if(isset($_COOKIE["sortOrder"])) {
       $sortOrder = $_COOKIE["sortOrder"];
+   }
+   if(isset($_COOKIE["showTypes"])) {
+      $showTypes = $_COOKIE["showTypes"];
    }
    $dSelect = "";
    $pFile = "";
@@ -123,6 +127,10 @@
             if(!empty($_POST['sortOrder'])) {
                $sortOrder = $_POST['sortOrder'];
                setcookie("sortOrder", $sortOrder, time() + (86400 * 365), "/");
+            }        
+            if(!empty($_POST['showTypes'])) {
+               $showTypes = $_POST['showTypes'];
+               setcookie("showTypes", $showTypes, time() + (86400 * 365), "/");
             }        
             break;
          case 'zipSel':
@@ -255,12 +263,25 @@
    
    function getThumbnails() {
       global $sortOrder;
+      global $showTypes;
+      global $debugString;
       $files = scandir(MEDIA_PATH, $sortOrder - 1);
       $thumbnails = array();
+      $debugString = "type $showTypes ";
       foreach($files as $file) {
          if($file != '.' && $file != '..' && isThumbnail($file)) {
-            $thumbnails[] = $file;
-         } 
+            $fType = getFileType($file);
+            $debugString .=  $fType;              
+            if($showTypes == '1') {
+               $thumbnails[] = $file;
+            }
+            elseif($showTypes == '2' && ($fType == 'i' || $fType == 't')) {
+               $thumbnails[] = $file;
+           }
+            elseif($showTypes == '3' && ($fType == 'v')) {
+               $thumbnails[] = $file; 
+            }
+         }
       }
       return $thumbnails;   
    }
@@ -359,6 +380,14 @@
          echo "<option value='1' $selected>Ascending</option>";
          if ($sortOrder == 2) $selected = "selected"; else $selected = "";
          echo "<option value='2'  $selected>Descending</option>";
+         echo '</select>';
+         echo "&nbsp;File Types&nbsp;<select id='showTypes' name='showTypes'>";
+         if ($showTypes == 1) $selected = "selected"; else $selected = "";
+         echo "<option value='1' $selected>Images and Videos</option>";
+         if ($showTypes == 2) $selected = "selected"; else $selected = "";
+         echo "<option value='2'  $selected>Images only</option>";
+         if ($showTypes == 3) $selected = "selected"; else $selected = "";
+         echo "<option value='3'  $selected>Videos only</option>";
          echo '</select>';
          echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button>";
       ?>
