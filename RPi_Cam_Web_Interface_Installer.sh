@@ -395,8 +395,26 @@ if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
 fi
 }
 
-case "$1" in
+sudo apt-get install -y dialog
+backtitle="Copyright (c) 2014, Silvan Melchior"
+cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --menu "Select your option:" 16 76 16)
 
+options=("1 install" "Install (Apache web server based)"
+         "2 install_nginx" "Install (Nginx web server based)"
+         "3 start" "Start RPi Cam"
+         "4 stop" "Stop RPi Cam"
+		 "5 autostart" "Autostart ON/OFF RPi Cam"
+		 "6 update" "Update RPi Cam installer"
+		 "7 upgrade" "Upgrade RPi Cam"
+		 "8 debug" "Run RPi Cam with debug mode"
+		 "9 remove" "Remove RPi Cam")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+  case $choice in
+  
   remove)
         sudo killall raspimjpeg
         tmp_message="Do You want uninstall webserver and php packages also?"
@@ -708,5 +726,5 @@ case "$1" in
         echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart|debug}"; $color_reset
         ;;
 
-esac
-
+  esac
+done
