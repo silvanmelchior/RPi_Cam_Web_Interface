@@ -267,14 +267,17 @@
       $files = scandir(MEDIA_PATH, $sortOrder - 1);
       $thumbnails = array();
       foreach($files as $file) {
-         if($showTypes == '1') {
-            if($file != '.' && $file != '..' && isThumbnail($file)) { $thumbnails[] = $file; }
-         }
-         elseif($showTypes == '2') {
-            if($file != '.' && $file != '..' && isThumbnail($file) && (strpos($file, 'im') !== false)) { $thumbnails[] = $file; }
-         }
-         elseif($showTypes == '3') {
-            if($file != '.' && $file != '..' && isThumbnail($file) && (strpos($file, 'vi') !== false)) { $thumbnails[] = $file; }
+         if($file != '.' && $file != '..' && isThumbnail($file)) {
+            $fType = getFileType($file);
+            if($showTypes == '1') {
+               $thumbnails[] = $file;
+            }
+            elseif($showTypes == '2' && ($fType == 'i' || $fType == 't')) {
+               $thumbnails[] = $file;
+           }
+            elseif($showTypes == '3' && ($fType == 'v')) {
+               $thumbnails[] = $file; 
+            }
          }
       }
       return $thumbnails;   

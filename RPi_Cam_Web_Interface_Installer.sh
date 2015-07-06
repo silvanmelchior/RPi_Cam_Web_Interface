@@ -77,7 +77,7 @@ fn_stop ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
-        $color_green; echo "Stopped"; $color_reset
+        dialog --title 'Stop message' --timeout 3 --msgbox 'Stopped' 5 16
 }
 
 fn_reboot ()
@@ -177,7 +177,25 @@ fn_tmp_yes ()
 }
 fn_tmp_no ()
 {
-	echo ""
+	tmpfile=$(mktemp)
+	sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+	sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+	if [ ! "$rpicamdir" == "" ]; then
+	  if [ "$webport" != "80" ]; then
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+	  else
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+	  fi
+	else
+	  if [ "$webport" != "80" ]; then
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
+	  else
+	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
+	  fi
+	fi
+	sudo chown motion:www-data /etc/motion/motion.conf
+        sudo chmod 664 /etc/motion/motion.conf
+	sudo service apache2 restart
 }
 fn_yesno
 }
@@ -377,7 +395,25 @@ if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
 fi
 }
 
-case "$1" in
+sudo apt-get install -y dialog
+backtitle="Copyright (c) 2014, Silvan Melchior"
+cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --menu "Select your option:" 16 76 16)
+
+options=("1 install" "Install (Apache web server based)"
+         "2 install_nginx" "Install (Nginx web server based)"
+         "3 start" "Start RPi Cam"
+         "4 stop" "Stop RPi Cam"
+	 "5 autostart" "Autostart ON/OFF RPi Cam"
+	 "6 update" "Update RPi Cam installer"
+	 "7 upgrade" "Upgrade RPi Cam"
+	 "8 debug" "Run RPi Cam with debug mode"
+	 "9 remove" "Remove RPi Cam")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+  case $choice in
 
   remove)
         sudo killall raspimjpeg
@@ -412,14 +448,14 @@ case "$1" in
         fn_autostart_disable
         fn_apache_default_remove
 
-        $color_green; echo "Removed everything"; $color_reset
+        dialog --title 'Remove message' --timeout 3 --msgbox 'Removed everything' 5 23
         fn_reboot
         ;;
 
   autostart)
 	fn_autostart
 	
-        $color_green; echo "Changed autostart"; $color_reset
+        dialog --title 'Autostart message' --timeout 3 --msgbox 'Changed autostart' 5 23
         ;;
 
   install)
@@ -502,7 +538,7 @@ case "$1" in
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
-        $color_green; echo "Installer finished"; $color_reset
+        dialog --title 'Install message' --timeout 3 --msgbox 'Installer finished' 5 25
         fn_reboot
         ;;
 
@@ -607,7 +643,7 @@ case "$1" in
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
-        $color_green; echo "Installer finished"; $color_reset
+        dialog --title 'Install message' --timeout 3 --msgbox 'Installer finished' 5 25
         fn_reboot
         ;;
         
@@ -630,7 +666,7 @@ case "$1" in
         fi
         trap : 0
 
-        $color_green; echo "Update finished"; $color_reset
+        dialog --title 'Update message' --timeout 3 --msgbox 'Update finished' 5 23
         ;;
 
   upgrade)
@@ -649,7 +685,7 @@ case "$1" in
         fn_webport
         fn_secure
 
-        $color_green; echo "Upgrade finished"; $color_reset
+        dialog --title 'upgrade message' --timeout 3 --msgbox 'Upgrade finished' 5 23
         ;;
 
   start)
@@ -664,7 +700,7 @@ case "$1" in
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
         fi
         
-        $color_green; echo "Started"; $color_reset
+        dialog --title 'Start message' --timeout 3 --msgbox 'Started' 5 16
         ;;
 
   debug)
@@ -678,17 +714,13 @@ case "$1" in
         else
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
         fi        
-        $color_green; echo "Started with debug"; $color_reset
+        
+        dialog --title 'Debug message' --timeout 3 --msgbox 'Started with debug' 5 25
         ;;
 
   stop)
         fn_stop
         ;;
 
-  *)
-        $color_red; echo "No or invalid option selected"
-        echo "Usage: ./RPi_Cam_Web_Interface_Installer.sh {install|install_nginx|update|upgrade|remove|start|stop|autostart|debug}"; $color_reset
-        ;;
-
-esac
-
+  esac
+done
