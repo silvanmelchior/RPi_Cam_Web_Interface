@@ -192,7 +192,7 @@ fn_apacheport ()
   fi
   sudo chown motion:www-data /etc/motion/motion.conf
   sudo chmod 664 /etc/motion/motion.conf
-  wsudo service apache2 restart
+  sudo service apache2 restart
 }
 
 fn_secure ()
