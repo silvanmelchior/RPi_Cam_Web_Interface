@@ -143,61 +143,56 @@ fi
 sudo chmod 664 ./config.txt
 }
 
-fn_webport ()
-{ # This is function to change webserver port. Currently running only with Apache.
-webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-$color_green; echo "Currently webserver is using port \"$webport\""; $color_reset
-tmp_message="Do you want to change it?"
-fn_tmp_yes ()
-{
-	$color_green; echo "Please enter new port for webserver."; $color_reset
-	read webport
-	tmpfile=$(mktemp)
-	sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	sudo awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
-	if [ ! "$rpicamdir" == "" ]; then
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	else
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	fi
-	sudo chown motion:www-data /etc/motion/motion.conf
-        sudo chmod 664 /etc/motion/motion.conf
-	sudo service apache2 restart
-	webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-	$color_green; echo "Now webserver using port \"$webport\""; $color_reset
-}
-fn_tmp_no ()
-{
-	tmpfile=$(mktemp)
-	sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	if [ ! "$rpicamdir" == "" ]; then
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	else
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	fi
-	sudo chown motion:www-data /etc/motion/motion.conf
-        sudo chmod 664 /etc/motion/motion.conf
-	sudo service apache2 restart
-}
-fn_yesno
+fn_apacheport ()
+{		
+  if ! grep -Fq "webport=" ./config.txt; then
+    webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+    sudo echo "# Apache web server port" >> ./config.txt
+    sudo echo "webport=\"$webport\"" >> ./config.txt
+    sudo echo "" >> ./config.txt
+  fi
+		
+  source ./config.txt
+		
+  if [ "$webport" == "" ]; then
+    webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+    sudo sed -i "s/^webport=.*/webport=\"$webport\"/g" ./config.txt
+  fi		
+		
+  tmpfile=$(mktemp)
+  dialog  --backtitle "$backtitle" --title "Current Apache web server port is $webport" --inputbox "Enter new port:" 8 40 $webport 2>$tmpfile
+			
+  sel=$?
+			
+  webport=`cat $tmpfile`
+  case $sel in
+  0)
+    sudo sed -i "s/^webport=.*/webport=\"$webport\"/g" ./config.txt	
+  ;;
+  1) source ./config.txt ;;
+  255) source ./config.txt ;;
+  esac
+			
+  tmpfile=$(mktemp)
+  sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+  sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+  sudo awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
+  if [ ! "$rpicamdir" == "" ]; then
+    if [ "$webport" != "80" ]; then
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+    else
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+    fi
+  else
+    if [ "$webport" != "80" ]; then
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
+    else
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
+    fi
+  fi
+  sudo chown motion:www-data /etc/motion/motion.conf
+  sudo chmod 664 /etc/motion/motion.conf
+  wsudo service apache2 restart
 }
 
 fn_secure ()
@@ -533,7 +528,7 @@ do
         if [ ! "$rpicamdir" == "" ]; then
           sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
-        fn_webport
+        fn_apacheport
         fn_secure
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
@@ -682,7 +677,7 @@ do
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
-        fn_webport
+        fn_apacheport
         fn_secure
 
         dialog --title 'upgrade message' --timeout 3 --msgbox 'Upgrade finished' 5 23
