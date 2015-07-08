@@ -44,6 +44,14 @@ color_reset="tput sgr0"
 
 cd $(dirname $(readlink -f $0))
 
+# We enable debug installer script
+if ! grep -Fq "debug=" ./config.txt; then
+  sudo echo "# Enable or disable debug for installer script" >> ./config.txt
+  sudo echo "debug=\"no\"" >> ./config.txt
+  sudo echo "" >> ./config.txt
+  sudo chmod 664 ./config.txt
+fi
+
 fn_yesno ()
 { # This is function yes or no
         $color_green; read -p "$tmp_message <y/n> " prompt; $color_reset
@@ -294,25 +302,33 @@ fn_autostart_disable ()
   sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
   # Remove to growing plank lines.
   sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
-  sudo chmod 755 /etc/rc.local
   sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+			  
+  # Finally we set owners and permissions all files what we changed.
+  sudo chown root:root /etc/rc.local
+  sudo chmod 755 /etc/rc.local
   sudo chmod 664 ./config.txt
+			  
+  if [ "$debug" == "yes" ]; then
+    dialog --title "fn_autostart_disable /etc/rc.local contains" --textbox /etc/rc.local 22 70
+    dialog --title "fn_autostart_disable ./config.txt contains" --textbox ./config.txt 22 70
+  fi
 }
 
 fn_autostart ()
 {
-if ! grep -Fq "autostart=" ./config.txt; then
-  sudo echo "# Enable or disable autostart" >> ./config.txt
-  sudo echo "autostart=\"\"" >> ./config.txt
-  sudo echo "" >> ./config.txt
-  sudo chmod 664 ./config.txt
-fi
-
+  if ! grep -Fq "autostart=" ./config.txt; then
+    sudo echo "# Enable or disable autostart" >> ./config.txt
+    sudo echo "autostart=\"\"" >> ./config.txt
+    sudo echo "" >> ./config.txt
+    sudo chmod 664 ./config.txt
+  fi
+		
 fn_autostart_enable ()
 {
 if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
   sudo sed -i '/exit 0/d' /etc/rc.local
-sudo bash -c "cat > /etc/rc.local" << EOF
+sudo bash -c "cat >> /etc/rc.local" << EOF
 #START RASPIMJPEG SECTION
 mkdir -p /dev/shm/mjpeg
 chown www-data:www-data /dev/shm/mjpeg
@@ -327,7 +343,7 @@ fi
 
 exit 0
 EOF
-sudo chmod 755 /etc/rc.local
+  sudo chmod 755 /etc/rc.local
 fi
 
 if [ ! "$rpicamdir" == "" ]; then
@@ -337,34 +353,64 @@ else
 fi
 
 sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
-}
-
-if [ "$autostart" != "yes" ] ; then
-  $color_red; echo "Auto Start is currently disabled!"; $color_reset
-  tmp_message="Do You want enable Auto Start in boot time?"
-  fn_tmp_yes ()
-    {
-	  fn_autostart_enable
-	}
-	  fn_tmp_no ()
-	{
-	  fn_autostart_disable
-	}
-  fn_yesno
-else
-  $color_green; echo "Auto Start is currently enabled!"; $color_reset
-  tmp_message="Do You want disable Auto Start in boot time?"
-	fn_tmp_yes ()
-	{
-	  fn_autostart_disable
-	}
-	  fn_tmp_no ()
-	{
-	  fn_autostart_enable
-	}
-	fn_yesno		
-fi
+			  
+# Finally we set owners and permissions all files what we changed.
+sudo chown root:root /etc/rc.local
+sudo chmod 755 /etc/rc.local
 sudo chmod 664 ./config.txt
+			  
+if [ "$debug" == "yes" ]; then
+  dialog --title "fn_autostart_enable /etc/rc.local contains" --textbox /etc/rc.local 22 70
+  dialog --title "fn_autostart_enable ./config.txt contains" --textbox ./config.txt 22 70
+fi
+}
+		
+source ./config.txt
+		
+if [ "$autostart" == "" ]; then
+  if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+    sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
+  else
+    sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+  fi
+fi
+			
+if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+  status="Enabled"
+else
+  status="Disabled"
+fi
+		
+# We look is autostart manually set.
+if [[ "$autostart" == "yes" && "$status" == "Disabled" ]] ; then
+  fn_autostart_enable
+elif [[ "$autostart" == "no" && "$status" == "Enabled" ]] ; then
+  fn_autostart_disable
+else
+  dialog --title "Curently auto start in boot time is $status" --backtitle "$backtitle" --yesno "Do you want enable auto start in boot time?" 7 60
+  response=$?
+    case $response in
+      0) fn_autostart_enable;;
+      1) fn_autostart_disable;;
+      255) echo "[ESC] key pressed.";;
+esac
+fi
+		
+if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+  dialog --title 'Autostart message' --timeout 3 --msgbox 'Autostart Enabled' 5 23
+else
+  dialog --title 'Autostart message' --timeout 3 --msgbox 'Autostart Disabled' 5 23
+fi
+			
+# Finally we set owners and permissions all files what we changed.
+sudo chown root:root /etc/rc.local
+sudo chmod 755 /etc/rc.local
+sudo chmod 664 ./config.txt
+			
+if [ "$debug" == "yes" ]; then
+  dialog --title "fn_autostart /etc/rc.local contains" --textbox /etc/rc.local 22 70
+  dialog --title "fn_autostart ./config.txt contains" --textbox ./config.txt 22 70
+fi
 }
 
 # We edit /etc/apache2/sites-available/default
