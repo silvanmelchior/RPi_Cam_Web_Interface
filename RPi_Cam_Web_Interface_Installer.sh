@@ -436,8 +436,18 @@ if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
 fi
 }
 
-sudo apt-get install -y dialog
-backtitle="Copyright (c) 2014, Silvan Melchior"
+if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+  sudo apt-get install -y dialog
+fi
+
+if [ "$rpicamdir" == "" ]; then
+  versionfile="/var/www/config.php"
+else
+  versionfile="/var/www/$rpicamdir/config.php"
+fi
+
+version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
+backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
 cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --menu "Select your option:" 16 76 16)
 
 options=("1 install" "Install (Apache web server based)"
