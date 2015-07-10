@@ -44,6 +44,14 @@ color_reset="tput sgr0"
 
 cd $(dirname $(readlink -f $0))
 
+# We enable debug installer script
+if ! grep -Fq "debug=" ./config.txt; then
+  sudo echo "# Enable or disable debug for installer script" >> ./config.txt
+  sudo echo "debug=\"no\"" >> ./config.txt
+  sudo echo "" >> ./config.txt
+  sudo chmod 664 ./config.txt
+fi
+
 fn_yesno ()
 { # This is function yes or no
         $color_green; read -p "$tmp_message <y/n> " prompt; $color_reset
@@ -143,61 +151,56 @@ fi
 sudo chmod 664 ./config.txt
 }
 
-fn_webport ()
-{ # This is function to change webserver port. Currently running only with Apache.
-webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-$color_green; echo "Currently webserver is using port \"$webport\""; $color_reset
-tmp_message="Do you want to change it?"
-fn_tmp_yes ()
-{
-	$color_green; echo "Please enter new port for webserver."; $color_reset
-	read webport
-	tmpfile=$(mktemp)
-	sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	sudo awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
-	if [ ! "$rpicamdir" == "" ]; then
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	else
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	fi
-	sudo chown motion:www-data /etc/motion/motion.conf
-        sudo chmod 664 /etc/motion/motion.conf
-	sudo service apache2 restart
-	webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-	$color_green; echo "Now webserver using port \"$webport\""; $color_reset
-}
-fn_tmp_no ()
-{
-	tmpfile=$(mktemp)
-	sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-	if [ ! "$rpicamdir" == "" ]; then
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	else
-	  if [ "$webport" != "80" ]; then
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
-	  else
-	    sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
-	  fi
-	fi
-	sudo chown motion:www-data /etc/motion/motion.conf
-        sudo chmod 664 /etc/motion/motion.conf
-	sudo service apache2 restart
-}
-fn_yesno
+fn_apacheport ()
+{		
+  if ! grep -Fq "webport=" ./config.txt; then
+    webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+    sudo echo "# Apache web server port" >> ./config.txt
+    sudo echo "webport=\"$webport\"" >> ./config.txt
+    sudo echo "" >> ./config.txt
+  fi
+		
+  source ./config.txt
+		
+  if [ "$webport" == "" ]; then
+    webport=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+    sudo sed -i "s/^webport=.*/webport=\"$webport\"/g" ./config.txt
+  fi		
+		
+  tmpfile=$(mktemp)
+  dialog  --backtitle "$backtitle" --title "Current Apache web server port is $webport" --inputbox "Enter new port:" 8 40 $webport 2>$tmpfile
+			
+  sel=$?
+			
+  webport=`cat $tmpfile`
+  case $sel in
+  0)
+    sudo sed -i "s/^webport=.*/webport=\"$webport\"/g" ./config.txt	
+  ;;
+  1) source ./config.txt ;;
+  255) source ./config.txt ;;
+  esac
+			
+  tmpfile=$(mktemp)
+  sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+  sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+  sudo awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
+  if [ ! "$rpicamdir" == "" ]; then
+    if [ "$webport" != "80" ]; then
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+    else
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" /etc/motion/motion.conf
+    fi
+  else
+    if [ "$webport" != "80" ]; then
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost:$webport\/cam_pic.php/g" /etc/motion/motion.conf
+    else
+      sudo sed -i "s/^netcam_url\ http.*/netcam_url\ http:\/\/localhost\/cam_pic.php/g" /etc/motion/motion.conf
+    fi
+  fi
+  sudo chown motion:www-data /etc/motion/motion.conf
+  sudo chmod 664 /etc/motion/motion.conf
+  sudo service apache2 restart
 }
 
 fn_secure ()
@@ -299,25 +302,33 @@ fn_autostart_disable ()
   sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
   # Remove to growing plank lines.
   sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
-  sudo chmod 755 /etc/rc.local
   sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+			  
+  # Finally we set owners and permissions all files what we changed.
+  sudo chown root:root /etc/rc.local
+  sudo chmod 755 /etc/rc.local
   sudo chmod 664 ./config.txt
+			  
+  if [ "$debug" == "yes" ]; then
+    dialog --title "fn_autostart_disable /etc/rc.local contains" --textbox /etc/rc.local 22 70
+    dialog --title "fn_autostart_disable ./config.txt contains" --textbox ./config.txt 22 70
+  fi
 }
 
 fn_autostart ()
 {
-if ! grep -Fq "autostart=" ./config.txt; then
-  sudo echo "# Enable or disable autostart" >> ./config.txt
-  sudo echo "autostart=\"\"" >> ./config.txt
-  sudo echo "" >> ./config.txt
-  sudo chmod 664 ./config.txt
-fi
-
+  if ! grep -Fq "autostart=" ./config.txt; then
+    sudo echo "# Enable or disable autostart" >> ./config.txt
+    sudo echo "autostart=\"\"" >> ./config.txt
+    sudo echo "" >> ./config.txt
+    sudo chmod 664 ./config.txt
+  fi
+		
 fn_autostart_enable ()
 {
 if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
   sudo sed -i '/exit 0/d' /etc/rc.local
-sudo bash -c "cat > /etc/rc.local" << EOF
+sudo bash -c "cat >> /etc/rc.local" << EOF
 #START RASPIMJPEG SECTION
 mkdir -p /dev/shm/mjpeg
 chown www-data:www-data /dev/shm/mjpeg
@@ -332,7 +343,7 @@ fi
 
 exit 0
 EOF
-sudo chmod 755 /etc/rc.local
+  sudo chmod 755 /etc/rc.local
 fi
 
 if [ ! "$rpicamdir" == "" ]; then
@@ -342,34 +353,64 @@ else
 fi
 
 sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
-}
-
-if [ "$autostart" != "yes" ] ; then
-  $color_red; echo "Auto Start is currently disabled!"; $color_reset
-  tmp_message="Do You want enable Auto Start in boot time?"
-  fn_tmp_yes ()
-    {
-	  fn_autostart_enable
-	}
-	  fn_tmp_no ()
-	{
-	  fn_autostart_disable
-	}
-  fn_yesno
-else
-  $color_green; echo "Auto Start is currently enabled!"; $color_reset
-  tmp_message="Do You want disable Auto Start in boot time?"
-	fn_tmp_yes ()
-	{
-	  fn_autostart_disable
-	}
-	  fn_tmp_no ()
-	{
-	  fn_autostart_enable
-	}
-	fn_yesno		
-fi
+			  
+# Finally we set owners and permissions all files what we changed.
+sudo chown root:root /etc/rc.local
+sudo chmod 755 /etc/rc.local
 sudo chmod 664 ./config.txt
+			  
+if [ "$debug" == "yes" ]; then
+  dialog --title "fn_autostart_enable /etc/rc.local contains" --textbox /etc/rc.local 22 70
+  dialog --title "fn_autostart_enable ./config.txt contains" --textbox ./config.txt 22 70
+fi
+}
+		
+source ./config.txt
+		
+if [ "$autostart" == "" ]; then
+  if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+    sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
+  else
+    sudo sed -i "s/^autostart.*/autostart=\"no\"/g" ./config.txt
+  fi
+fi
+			
+if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+  status="Enabled"
+else
+  status="Disabled"
+fi
+		
+# We look is autostart manually set.
+if [[ "$autostart" == "yes" && "$status" == "Disabled" ]] ; then
+  fn_autostart_enable
+elif [[ "$autostart" == "no" && "$status" == "Enabled" ]] ; then
+  fn_autostart_disable
+else
+  dialog --title "Curently auto start in boot time is $status" --backtitle "$backtitle" --yesno "Do you want enable auto start in boot time?" 7 60
+  response=$?
+    case $response in
+      0) fn_autostart_enable;;
+      1) fn_autostart_disable;;
+      255) echo "[ESC] key pressed.";;
+esac
+fi
+		
+if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+  dialog --title 'Autostart message' --timeout 3 --msgbox 'Autostart Enabled' 5 23
+else
+  dialog --title 'Autostart message' --timeout 3 --msgbox 'Autostart Disabled' 5 23
+fi
+			
+# Finally we set owners and permissions all files what we changed.
+sudo chown root:root /etc/rc.local
+sudo chmod 755 /etc/rc.local
+sudo chmod 664 ./config.txt
+			
+if [ "$debug" == "yes" ]; then
+  dialog --title "fn_autostart /etc/rc.local contains" --textbox /etc/rc.local 22 70
+  dialog --title "fn_autostart ./config.txt contains" --textbox ./config.txt 22 70
+fi
 }
 
 # We edit /etc/apache2/sites-available/default
@@ -395,8 +436,18 @@ if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
 fi
 }
 
-sudo apt-get install -y dialog
-backtitle="Copyright (c) 2014, Silvan Melchior"
+if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+  sudo apt-get install -y dialog
+fi
+
+if [ "$rpicamdir" == "" ]; then
+  versionfile="/var/www/config.php"
+else
+  versionfile="/var/www/$rpicamdir/config.php"
+fi
+
+version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
+backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
 cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --menu "Select your option:" 16 76 16)
 
 options=("1 install" "Install (Apache web server based)"
@@ -533,7 +584,7 @@ do
         if [ ! "$rpicamdir" == "" ]; then
           sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
-        fn_webport
+        fn_apacheport
         fn_secure
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
@@ -682,7 +733,7 @@ do
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
-        fn_webport
+        fn_apacheport
         fn_secure
 
         dialog --title 'upgrade message' --timeout 3 --msgbox 'Upgrade finished' 5 23
