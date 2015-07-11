@@ -85,7 +85,7 @@ fn_stop ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
-        dialog --title 'Stop message' --timeout 3 --msgbox 'Stopped' 5 16
+        dialog --title 'Stop message' --infobox 'Stopped.' 4 16 ; sleep 2
 }
 
 fn_reboot ()
@@ -397,9 +397,9 @@ esac
 fi
 		
 if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
-  dialog --title 'Autostart message' --timeout 3 --msgbox 'Autostart Enabled' 5 23
+  dialog --title 'Autostart message' --infobox 'Autostart Enabled.' 4 23 ; sleep 2
 else
-  dialog --title 'Autostart message' --timeout 3 --msgbox 'Autostart Disabled' 5 23
+  dialog --title 'Autostart message' --infobox 'Autostart Disabled.' 4 23 ; sleep 2
 fi
 			
 # Finally we set owners and permissions all files what we changed.
@@ -440,6 +440,8 @@ if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed
   sudo apt-get install -y dialog
 fi
 
+fn_menu_installer ()
+{
 if [ "$rpicamdir" == "" ]; then
   versionfile="/var/www/config.php"
 else
@@ -499,14 +501,14 @@ do
         fn_autostart_disable
         fn_apache_default_remove
 
-        dialog --title 'Remove message' --timeout 3 --msgbox 'Removed everything' 5 23
+        dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
         fn_reboot
         ;;
 
   autostart)
 	fn_autostart
 	
-        dialog --title 'Autostart message' --timeout 3 --msgbox 'Changed autostart' 5 23
+        dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
         ;;
 
   install)
@@ -589,7 +591,7 @@ do
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
-        dialog --title 'Install message' --timeout 3 --msgbox 'Installer finished' 5 25
+        dialog --title 'Install message' --infobox 'Installer finished.' 4 25 ; sleep 2
         fn_reboot
         ;;
 
@@ -694,7 +696,7 @@ do
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
-        dialog --title 'Install message' --timeout 3 --msgbox 'Installer finished' 5 25
+        dialog --title 'Install message' --infobox 'Installer finished.' 4 25 ; sleep 2
         fn_reboot
         ;;
         
@@ -710,14 +712,15 @@ do
         printf "Local : %s\nRemote: %s\n" $local $remote
 
         if [[ $local == $remote ]]; then
-            $color_green; echo "Commits match."; $color_reset
+          dialog --title 'Update message' --infobox 'Commits match. Nothing update.' 4 35 ; sleep 2
         else
-            $color_red; echo "Commits don't match. We update."; $color_reset
-            git pull origin master
+          dialog --title 'Update message' --infobox "Commits don't match. We update." 4 35 ; sleep 2
+          git pull origin master
         fi
         trap : 0
 
-        dialog --title 'Update message' --timeout 3 --msgbox 'Update finished' 5 23
+        dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
+        fn_menu_installer
         ;;
 
   upgrade)
@@ -736,7 +739,7 @@ do
         fn_apacheport
         fn_secure
 
-        dialog --title 'upgrade message' --timeout 3 --msgbox 'Upgrade finished' 5 23
+        dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
         ;;
 
   start)
@@ -751,7 +754,8 @@ do
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
         fi
         
-        dialog --title 'Start message' --timeout 3 --msgbox 'Started' 5 16
+        dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
+        fn_menu_installer
         ;;
 
   debug)
@@ -766,12 +770,16 @@ do
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
         fi        
         
-        dialog --title 'Debug message' --timeout 3 --msgbox 'Started with debug' 5 25
+        dialog --title 'Debug message' --infobox 'Started with debug.' 4 25 ; sleep 2
+        fn_menu_installer
         ;;
 
   stop)
         fn_stop
+        fn_menu_installer
         ;;
 
   esac
 done
+}
+fn_menu_installer
