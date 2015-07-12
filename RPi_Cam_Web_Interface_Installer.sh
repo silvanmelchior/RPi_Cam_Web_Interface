@@ -37,8 +37,9 @@
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 
-version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
-backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
+if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+  sudo apt-get install -y dialog
+fi
 
 # Terminal colors
 color_red="tput setaf 1"
@@ -445,9 +446,29 @@ if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
 fi
 }
 
-if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-  sudo apt-get install -y dialog
-fi
+# Start and Stop without GUI mode.
+case "$1" in
+  start)
+        fn_stop
+        sudo mkdir -p /dev/shm/mjpeg
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
+        if [ -e /etc/debian_version ]; then
+          sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        else
+          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        fi
+
+        dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
+	exit
+        ;;
+
+  stop)
+        fn_stop
+	exit
+        ;;  
+esac
 
 fn_menu_installer ()
 {
@@ -456,6 +477,9 @@ if [ "$rpicamdir" == "" ]; then
 else
   versionfile="/var/www/$rpicamdir/config.php"
 fi
+
+version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
+backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
 
 cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --menu "Select your option:" 16 76 16)
 
