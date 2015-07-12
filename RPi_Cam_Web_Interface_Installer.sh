@@ -597,7 +597,7 @@ do
 
   install_nginx)
         sudo killall raspimjpeg
-        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc
+        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
