@@ -468,12 +468,7 @@ esac
 
 fn_menu_installer ()
 {
-if [ "$rpicamdir" == "" ]; then
-  versionfile="/var/www/config.php"
-else
-  versionfile="/var/www/$rpicamdir/config.php"
-fi
-
+versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
 
