@@ -37,6 +37,10 @@
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 
+if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+  sudo apt-get install -y dialog
+fi
+
 # Terminal colors
 color_red="tput setaf 1"
 color_green="tput setaf 2"
@@ -125,30 +129,36 @@ source ./config.txt
 
 fn_rpicamdir ()
 { # This is function rpicamdir in config.txt file
-if ! grep -Fq "rpicamdir=" ./config.txt; then
-		$color_green; echo "Where do you want to install? Please enter subfolder name or press enter for www-root."; $color_reset
-		read rpicamdir
-		sudo echo "# Rpicam install directory" >> ./config.txt
-		sudo echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
-		sudo echo "" >> ./config.txt
-		$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
-else
-		$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
-		tmp_message="Is that right?"
-		fn_tmp_yes ()
-		{
-			echo ""
-		}
-		fn_tmp_no ()
-		{
-			$color_green; echo "Please enter subfolder name or press enter for www-root."; $color_reset
-			read rpicamdir
-			sudo sed -i "s/^rpicamdir=.*/rpicamdir=\"$rpicamdir\"/g" ./config.txt
-			$color_green; echo "\"Install directory is /var/www/$rpicamdir\""; $color_reset
-		}
-		fn_yesno
-fi
-sudo chmod 664 ./config.txt
+  if ! grep -Fq "rpicamdir=" ./config.txt; then
+    sudo echo "# Rpicam install directory" >> ./config.txt
+    sudo echo "rpicamdir=\"\"" >> ./config.txt
+    sudo echo "" >> ./config.txt
+  fi
+
+  source ./config.txt
+  
+  tmpfile=$(mktemp)
+  dialog  --backtitle "$backtitle" --title "Default www-root is /var/www" --cr-wrap --inputbox "\
+  Current install bath is /var/www/$rpicamdir
+  Enter new install Subfolder if you like." 8 52 $rpicamdir 2>$tmpfile
+			
+  sel=$?
+			
+  rpicamdir=`cat $tmpfile`
+  case $sel in
+  0)
+    sudo sed -i "s/^rpicamdir=.*/rpicamdir=\"$rpicamdir\"/g" ./config.txt	
+  ;;
+  1) source ./config.txt ;;
+  255) source ./config.txt ;;
+  esac
+
+  dialog --title 'Install bath' --infobox "Install bath is set /var/www/$rpicamdir" 4 48 ; sleep 3
+  sudo chmod 664 ./config.txt
+
+  if [ "$debug" == "yes" ]; then
+    dialog --title "fn_rpicamdir ./config.txt contains" --textbox ./config.txt 22 70
+  fi
 }
 
 fn_apacheport ()
@@ -436,9 +446,29 @@ if grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
 fi
 }
 
-if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-  sudo apt-get install -y dialog
-fi
+# Start and Stop without GUI mode.
+case "$1" in
+  start)
+        fn_stop
+        sudo mkdir -p /dev/shm/mjpeg
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
+        if [ -e /etc/debian_version ]; then
+          sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        else
+          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        fi
+
+        dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
+	exit
+        ;;
+
+  stop)
+        fn_stop
+	exit
+        ;;  
+esac
 
 fn_menu_installer ()
 {
@@ -450,6 +480,7 @@ fi
 
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
+
 cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --menu "Select your option:" 16 76 16)
 
 options=("1 install" "Install (Apache web server based)"
@@ -597,7 +628,7 @@ do
 
   install_nginx)
         sudo killall raspimjpeg
-        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc
+        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
