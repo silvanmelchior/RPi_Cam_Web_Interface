@@ -94,17 +94,13 @@ fn_stop ()
 
 fn_reboot ()
 { # This is function reboot system
-	$color_red; echo "You must reboot your system for the changes to take effect!"; $color_reset
-	tmp_message="Do you want to reboot now?"
-fn_tmp_yes ()
-{
-	sudo reboot
-}
-fn_tmp_no ()
-{
-	$color_red; echo "Pending system changes that require a reboot!"; $color_reset
-}
-fn_yesno
+  dialog --title "You must reboot your system!" --backtitle "$backtitle" --yesno "Do you want to reboot now?" 5 33
+  response=$?
+    case $response in
+      0) sudo reboot;;
+      1) dialog --title 'Reboot message' --infobox 'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
+      255) dialog --title 'Reboot message' --infobox 'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
+    esac
 }
 
 fn_abort()
@@ -472,12 +468,7 @@ esac
 
 fn_menu_installer ()
 {
-if [ "$rpicamdir" == "" ]; then
-  versionfile="/var/www/config.php"
-else
-  versionfile="/var/www/$rpicamdir/config.php"
-fi
-
+versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
 
