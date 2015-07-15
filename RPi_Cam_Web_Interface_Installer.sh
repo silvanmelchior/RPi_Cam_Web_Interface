@@ -486,24 +486,23 @@ do
 
   remove)
         sudo killall raspimjpeg
-        tmp_message="Do You want uninstall webserver and php packages also?"
-	fn_tmp_yes ()
-	{
-          package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
-          for i in "${package[@]}"
-           do
-             if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
-             then
-               sudo apt-get remove -y "$i"
-             fi
-           done
-          sudo apt-get autoremove -y
-	}
-	fn_tmp_no ()
-	{
-		echo ""
-	}
-	fn_yesno
+        
+	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 5 33
+	response=$?
+	  case $response in
+	    0) 
+	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+	      for i in "${package[@]}"
+	      do
+		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		  sudo apt-get remove -y "$i"
+		fi
+	      done
+	    sudo apt-get autoremove -y	  
+	    ;;
+	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 28 ; sleep 2;;
+	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 28 ; sleep 2;;
+	  esac
 
 	if [ ! "$rpicamdir" == "" ]; then
 	  sudo rm -r /var/www/$rpicamdir
@@ -516,9 +515,9 @@ do
         sudo rm /etc/raspimjpeg
         fn_autostart_disable
         
-        if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-  	  fn_apache_default_remove
-  	  fn_secure_apache_no
+	if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+	  fn_apache_default_remove
+	  fn_secure_apache_no
 	fi
 
         dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
