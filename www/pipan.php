@@ -5,9 +5,9 @@
   //
   // pipansettings
   //
-  $min_pan = 60;
-  $max_pan = 190;
-  $min_tilt = 120;
+  $min_pan = 50;
+  $max_pan = 250;
+  $min_tilt = 80;
   $max_tilt = 220;
  
  
