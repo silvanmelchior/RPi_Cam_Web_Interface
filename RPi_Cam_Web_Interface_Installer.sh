@@ -487,7 +487,7 @@ do
   remove)
         sudo killall raspimjpeg
         
-	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 5 33
+	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
 	response=$?
 	  case $response in
 	    0) 
@@ -500,16 +500,22 @@ do
 	      done
 	    sudo apt-get autoremove -y	  
 	    ;;
-	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 28 ; sleep 2;;
-	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 28 ; sleep 2;;
+	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
+	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
 	  esac
-
+	
+	sudo mkdir ./Backup
+	
 	if [ ! "$rpicamdir" == "" ]; then
+	  sudo cp /var/www/$rpicamdir/uconfig ./Backup
 	  sudo rm -r /var/www/$rpicamdir
 	else
 	  # Here needed think. If rpicamdir not set then removed all webserver content!
+	  sudo cp /var/www/uconfig ./Backup
 	  sudo rm -r /var/www/*
 	fi
+	sudo cp /etc/motion/motion.conf ./Backup
+	sudo cp /etc/raspimjpeg ./Backup
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
