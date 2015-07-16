@@ -472,69 +472,17 @@ options=("1 install" "Install (Apache web server based)"
          "2 install_nginx" "Install (Nginx web server based)"
          "3 start" "Start RPi Cam"
          "4 stop" "Stop RPi Cam"
-	 "5 autostart" "Autostart ON/OFF RPi Cam"
-	 "6 update" "Update RPi Cam installer"
-	 "7 upgrade" "Upgrade RPi Cam"
-	 "8 debug" "Run RPi Cam with debug mode"
-	 "9 remove" "Remove RPi Cam")
+         "5 autostart" "Autostart ON/OFF RPi Cam"
+         "6 update" "Update RPi Cam installer"
+         "7 upgrade" "Upgrade RPi Cam"
+         "8 debug" "Run RPi Cam with debug mode"
+         "9 remove" "Remove RPi Cam")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
 for choice in $choices
 do
   case $choice in
-
-  remove)
-        sudo killall raspimjpeg
-        
-	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
-	response=$?
-	  case $response in
-	    0) 
-	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
-	      for i in "${package[@]}"
-	      do
-		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-		  sudo apt-get remove -y "$i"
-		fi
-	      done
-	    sudo apt-get autoremove -y	  
-	    ;;
-	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
-	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
-	  esac
-	
-	sudo mkdir ./Backup
-	
-	if [ ! "$rpicamdir" == "" ]; then
-	  sudo cp /var/www/$rpicamdir/uconfig ./Backup
-	  sudo rm -r /var/www/$rpicamdir
-	else
-	  # Here needed think. If rpicamdir not set then removed all webserver content!
-	  sudo cp /var/www/uconfig ./Backup
-	  sudo rm -r /var/www/*
-	fi
-	sudo cp /etc/motion/motion.conf ./Backup
-	sudo cp /etc/raspimjpeg ./Backup
-        sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
-        sudo rm /usr/bin/raspimjpeg
-        sudo rm /etc/raspimjpeg
-        fn_autostart_disable
-        
-	if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-	  fn_apache_default_remove
-	  fn_secure_apache_no
-	fi
-
-        dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
-        fn_reboot
-        ;;
-
-  autostart)
-	fn_autostart
-	
-        dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
-        ;;
 
   install)
         sudo killall raspimjpeg
@@ -724,6 +672,33 @@ do
         dialog --title 'Install message' --infobox 'Installer finished.' 4 25 ; sleep 2
         fn_reboot
         ;;
+
+  start)
+        fn_stop
+        sudo mkdir -p /dev/shm/mjpeg
+        sudo chown www-data:www-data /dev/shm/mjpeg
+        sudo chmod 777 /dev/shm/mjpeg
+        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
+        if [ -e /etc/debian_version ]; then
+          sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        else
+          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+        fi
+        
+        dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
+        fn_menu_installer
+        ;;
+        
+  stop)
+        fn_stop
+        fn_menu_installer
+        ;;
+        
+  autostart)
+	fn_autostart
+	
+        dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
+        ;;
         
   update)
         trap 'fn_abort' 0
@@ -767,22 +742,6 @@ do
         dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
         ;;
 
-  start)
-        fn_stop
-        sudo mkdir -p /dev/shm/mjpeg
-        sudo chown www-data:www-data /dev/shm/mjpeg
-        sudo chmod 777 /dev/shm/mjpeg
-        sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
-        if [ -e /etc/debian_version ]; then
-          sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
-        else
-          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
-        fi
-        
-        dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
-        fn_menu_installer
-        ;;
-
   debug)
         fn_stop
         sudo mkdir -p /dev/shm/mjpeg
@@ -798,9 +757,50 @@ do
         $color_red; echo "Started with debug"; $color_reset
         ;;
 
-  stop)
-        fn_stop
-        fn_menu_installer
+  remove)
+	sudo killall raspimjpeg
+        
+	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
+	response=$?
+	  case $response in
+	    0) 
+	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+	      for i in "${package[@]}"
+	      do
+		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		  sudo apt-get remove -y "$i"
+		fi
+	      done
+	    sudo apt-get autoremove -y	  
+	    ;;
+	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
+	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
+	  esac
+	
+	sudo mkdir ./Backup
+	
+	if [ ! "$rpicamdir" == "" ]; then
+	  sudo cp /var/www/$rpicamdir/uconfig ./Backup
+	  sudo rm -r /var/www/$rpicamdir
+	else
+	  # Here needed think. If rpicamdir not set then removed all webserver content!
+	  sudo cp /var/www/uconfig ./Backup
+	  sudo rm -r /var/www/*
+	fi
+	sudo cp /etc/motion/motion.conf ./Backup
+	sudo cp /etc/raspimjpeg ./Backup
+	sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
+	sudo rm /usr/bin/raspimjpeg
+	sudo rm /etc/raspimjpeg
+	fn_autostart_disable
+        
+	if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+	  fn_apache_default_remove
+	  fn_secure_apache_no
+	fi
+
+        dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
+        fn_reboot
         ;;
 
   esac
