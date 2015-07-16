@@ -209,19 +209,16 @@ fn_apacheport ()
   sudo service apache2 restart
 }
 
-fn_secure ()
-{ # This is function secure in config.txt file. Working only apache right now!
-if [ ! -e /var/www/$rpicamdir/.htaccess ]; then
-# We make missing .htacess file
-sudo bash -c "cat > /var/www/$rpicamdir/.htaccess" << EOF
-AuthName "RPi Cam Web Interface Restricted Area"
-AuthType Basic
-AuthUserFile /usr/local/.htpasswd
-AuthGroupFile /dev/null
-Require valid-user
-EOF
-sudo chown -R www-data:www-data /var/www/$rpicamdir/.htaccess
-fi
+fn_secure_apache_no ()
+{
+	tmpfile=$(mktemp)
+	sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
+	sudo awk '/netcam_userpass/{c+=1}{if(c==1){sub("^netcam_userpass.*","; netcam_userpass value",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
+	sudo /etc/init.d/apache2 restart
+}
+
+fn_secure_apache ()
+{ # This is function secure in config.txt file. Working only apache right now! GUI mode.
 if ! grep -Fq "security=" ./config.txt; then
 		sudo echo "# Webserver security" >> ./config.txt
 		sudo echo "security=\"no\"" >> ./config.txt
@@ -231,7 +228,9 @@ if ! grep -Fq "security=" ./config.txt; then
 		sudo chmod 664 ./config.txt
 fi
 
-fn_sec_yes ()
+source ./config.txt
+
+fn_secure_apache_yes ()
 {
 	tmpfile=$(mktemp)
 	sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
@@ -240,65 +239,60 @@ fn_sec_yes ()
 	sudo /etc/init.d/apache2 restart
 }
 
-fn_sec_no ()
-{
-	tmpfile=$(mktemp)
-	sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
-	sudo awk '/netcam_userpass/{c+=1}{if(c==1){sub("^netcam_userpass.*","; netcam_userpass value",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
-	sudo /etc/init.d/apache2 restart
+# We make missing .htacess file
+if [ ! -e /var/www/$rpicamdir/.htaccess ]; then
+sudo bash -c "cat > /var/www/$rpicamdir/.htaccess" << EOF
+AuthName "RPi Cam Web Interface Restricted Area"
+AuthType Basic
+AuthUserFile /usr/local/.htpasswd
+AuthGroupFile /dev/null
+Require valid-user
+EOF
+sudo chown -R www-data:www-data /var/www/$rpicamdir/.htaccess
+fi
+
+exec 3>&1
+
+dialog                                         \
+--separate-widget $'\n'                        \
+--title "RPi Cam Apache Webserver Security"    \
+--backtitle "$backtitle"					   \
+--form ""                                      \
+0 0 0                                          \
+"Enable:(yes/no)" 1 1   "$security" 1 18 15 0  \
+"User:"           2 1   "$user"     2 18 15 0  \
+"Password:"       3 1   "$passwd"   3 18 15 0  \
+2>&1 1>&3 | {
+    read -r security
+    read -r user
+    read -r passwd
+
+if [[ ! "$security" == "" || ! "$user" == "" || ! "$passwd" == "" ]] ; then
+  sudo sed -i "s/^security=.*/security=\"$security\"/g" ./config.txt
+  sudo sed -i "s/^user=.*/user=\"$user\"/g" ./config.txt
+  sudo sed -i "s/^passwd=.*/passwd=\"$passwd\"/g" ./config.txt
+fi
 }
 
-if [[ "$security" == "yes" && ! "$user" == "" && ! "$passwd" == "" ]] ; then
-    	$color_green; echo "Security set to \""$security"\"; User set to \""$user"\"; Password set to \""$passwd"\""; $color_reset
-	tmp_message="Is that correct?"
-	fn_tmp_yes ()
-	{
-		fn_sec_yes
-	}
-	fn_tmp_no ()
-	{
-		tmp_message="Do you want to enable webserver security?"
-		fn_tmp_yes ()
-		{
-			sudo sed -i "s/^security=.*/security=\"yes\"/g" ./config.txt
-			$color_green; echo "Please enter User Name."; $color_reset
-			read user
-			sudo sed -i "s/^user=.*/user=\"$user\"/g" ./config.txt
-			$color_green; echo "Please enter Password for $user."; $color_reset
-			read passwd			
-			sudo sed -i "s/^passwd=.*/passwd=\"$passwd\"/g" ./config.txt
-			fn_sec_yes
-		}
-		fn_tmp_no ()
-		{
-			sudo sed -i "s/^security=.*/security=\"no\"/g" ./config.txt
-			fn_sec_no
-		}
-		fn_yesno
-		}
-	fn_yesno
+exec 3>&-
+
+if [ ! "$security" == "yes" ]; then
+  fn_secure_apache_no
+  sudo sed -i "s/^security=.*/security=\"no\"/g" ./config.txt
+else
+  fn_secure_apache_yes
 fi
-	if [ "$security" != "yes" ] ; then	
-		tmp_message="Do You want enable webserver security?"
-		fn_tmp_yes ()
-		{
-			sudo sed -i "s/^security=.*/security=\"yes\"/g" ./config.txt
-			$color_green; echo "Please enter User Name."; $color_reset
-			read user
-			sudo sed -i "s/^user=.*/user=\"$user\"/g" ./config.txt
-			$color_green; echo "Please enter Password for $user."; $color_reset
-			read passwd			
-			sudo sed -i "s/^passwd=.*/passwd=\"$passwd\"/g" ./config.txt
-			fn_sec_yes
-		}
-		fn_tmp_no ()
-		{
-			sudo sed -i "s/^security=.*/security=\"no\"/g" ./config.txt
-			fn_sec_no
-		}
-		fn_yesno
-	fi
+
+sudo chown motion:www-data /etc/motion/motion.conf
+sudo chmod 664 /etc/motion/motion.conf
 sudo chmod 664 ./config.txt
+sudo service apache2 restart
+
+if [ "$debug" == "yes" ]; then
+  dialog --title "fn_secure_apache /etc/apache2/sites-available/default contains" --textbox /etc/apache2/sites-available/default 22 70
+  dialog --title "fn_secure_apache /etc/motion/motion.conf contains" --textbox /etc/motion/motion.conf 22 70
+  dialog --title "fn_secure_apache ./config.txt contains" --textbox ./config.txt 22 70
+fi
 }
 
 # Autostart. We edit rc.local
@@ -492,36 +486,45 @@ do
 
   remove)
         sudo killall raspimjpeg
-        tmp_message="Do You want uninstall webserver and php packages also?"
-	fn_tmp_yes ()
-	{
-          package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
-          for i in "${package[@]}"
-           do
-             if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ];
-             then
-               sudo apt-get remove -y "$i"
-             fi
-           done
-          sudo apt-get autoremove -y
-	}
-	fn_tmp_no ()
-	{
-		echo ""
-	}
-	fn_yesno
-
+        
+	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
+	response=$?
+	  case $response in
+	    0) 
+	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+	      for i in "${package[@]}"
+	      do
+		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		  sudo apt-get remove -y "$i"
+		fi
+	      done
+	    sudo apt-get autoremove -y	  
+	    ;;
+	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
+	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
+	  esac
+	
+	sudo mkdir ./Backup
+	
 	if [ ! "$rpicamdir" == "" ]; then
+	  sudo cp /var/www/$rpicamdir/uconfig ./Backup
 	  sudo rm -r /var/www/$rpicamdir
 	else
 	  # Here needed think. If rpicamdir not set then removed all webserver content!
+	  sudo cp /var/www/uconfig ./Backup
 	  sudo rm -r /var/www/*
 	fi
+	sudo cp /etc/motion/motion.conf ./Backup
+	sudo cp /etc/raspimjpeg ./Backup
         sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
         sudo rm /usr/bin/raspimjpeg
         sudo rm /etc/raspimjpeg
         fn_autostart_disable
-        fn_apache_default_remove
+        
+	if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+	  fn_apache_default_remove
+	  fn_secure_apache_no
+	fi
 
         dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
         fn_reboot
@@ -609,7 +612,7 @@ do
           sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
         fn_apacheport
-        fn_secure
+        fn_secure_apache
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
@@ -759,7 +762,7 @@ do
         fi
         sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
         fn_apacheport
-        fn_secure
+        fn_secure_apache
 
         dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
         ;;
@@ -792,8 +795,7 @@ do
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
         fi        
         
-        dialog --title 'Debug message' --infobox 'Started with debug.' 4 25 ; sleep 2
-        fn_menu_installer
+        $color_red; echo "Started with debug"; $color_reset
         ;;
 
   stop)
