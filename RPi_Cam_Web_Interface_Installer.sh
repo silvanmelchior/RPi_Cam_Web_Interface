@@ -795,8 +795,7 @@ do
           sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
         fi        
         
-        dialog --title 'Debug message' --infobox 'Started with debug.' 4 25 ; sleep 2
-        fn_menu_installer
+        $color_red; echo "Started with debug"; $color_reset
         ;;
 
   stop)
