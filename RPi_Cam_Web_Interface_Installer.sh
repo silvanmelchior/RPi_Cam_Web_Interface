@@ -470,6 +470,31 @@ esac
 
 fn_menu_installer ()
 {
+# We using only "raspimjpeg" right now, but we need extracted values also for future development.
+process=('raspimjpeg' 'php' 'motion'); 
+for i in "${process[@]}"
+  do
+    ps cax | grep $i > /dev/null
+    if [ $? -eq 0 ]; then
+      echo "process_$i="started"" >> tmp_status
+    else
+      echo "process_$i="stopped"" >> tmp_status
+    fi
+  done
+  
+source ./tmp_status
+
+# Do not put values here! Its for reset variables after function reloaded.
+stopped_rpicam=""
+started_rpicam=""
+
+if [ "$process_raspimjpeg" == "started" ] ; then
+  started_rpicam="(started)"
+else
+  stopped_rpicam="(stopped)"
+fi
+rm ./tmp_status
+	
 versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2014, Silvan Melchior. RPi Cam $version"
@@ -478,8 +503,8 @@ cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" -
 
 options=("1 install" "Install (Apache web server based)"
          "2 install_nginx" "Install (Nginx web server based)"
-         "3 start" "Start RPi Cam"
-         "4 stop" "Stop RPi Cam"
+         "3 start" "Start RPi Cam \Zb\Z1$stopped_rpicam"
+         "4 stop" "Stop RPi Cam \Zb\Z2$started_rpicam"
          "5 autostart" "Autostart ON/OFF RPi Cam"
          "6 update" "Update RPi Cam installer"
          "7 upgrade" "Upgrade RPi Cam"
