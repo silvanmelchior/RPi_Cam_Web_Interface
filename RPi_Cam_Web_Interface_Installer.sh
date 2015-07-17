@@ -135,7 +135,7 @@ fn_rpicamdir ()
   
   tmpfile=$(mktemp)
   dialog  --backtitle "$backtitle" --title "Default www-root is /var/www" --cr-wrap --inputbox "\
-  Current install bath is /var/www/$rpicamdir
+  Current install path is /var/www/$rpicamdir
   Enter new install Subfolder if you like." 8 52 $rpicamdir 2>$tmpfile
 			
   sel=$?
@@ -149,7 +149,7 @@ fn_rpicamdir ()
   255) source ./config.txt ;;
   esac
 
-  dialog --title 'Install bath' --infobox "Install bath is set /var/www/$rpicamdir" 4 48 ; sleep 3
+  dialog --title 'Install path' --infobox "Install path is set /var/www/$rpicamdir" 4 48 ; sleep 3
   sudo chmod 664 ./config.txt
 
   if [ "$debug" == "yes" ]; then
