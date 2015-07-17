@@ -735,7 +735,7 @@ cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator
 
 options=("1 update" "Update RPi Cam installer"
 		 "2 upgrade" "Upgrade RPi Cam"
-		 "3 apache_serurity" "Change Apache web server security" 
+		 "3 apache_security" "Change Apache web server security" 
 		 "4 apache_port" "Change Apache web server port"
 		 "5 autostart" "Autostart ON/OFF RPi Cam"
 		 "6 debug" "Run RPi Cam with debug mode")
