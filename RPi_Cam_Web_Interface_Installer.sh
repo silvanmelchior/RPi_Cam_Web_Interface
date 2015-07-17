@@ -135,7 +135,7 @@ fn_rpicamdir ()
   
   tmpfile=$(mktemp)
   dialog  --backtitle "$backtitle" --title "Default www-root is /var/www" --cr-wrap --inputbox "\
-  Current install bath is /var/www/$rpicamdir
+  Current install path is /var/www/$rpicamdir
   Enter new install Subfolder if you like." 8 52 $rpicamdir 2>$tmpfile
 			
   sel=$?
@@ -149,7 +149,7 @@ fn_rpicamdir ()
   255) source ./config.txt ;;
   esac
 
-  dialog --title 'Install bath' --infobox "Install bath is set /var/www/$rpicamdir" 4 48 ; sleep 3
+  dialog --title 'Install path' --infobox "Install path is set /var/www/$rpicamdir" 4 48 ; sleep 3
   sudo chmod 664 ./config.txt
 
   if [ "$debug" == "yes" ]; then
@@ -211,6 +211,9 @@ fn_apacheport ()
 
 fn_secure_apache_no ()
 {
+	if [ "$debug" == "yes" ]; then
+	  dialog --title 'fn_secure_apache_no' --infobox 'fn_secure_apache_no STARTED.' 4 25 ; sleep 2
+	fi
 	tmpfile=$(mktemp)
 	sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
 	sudo awk '/netcam_userpass/{c+=1}{if(c==1){sub("^netcam_userpass.*","; netcam_userpass value",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
@@ -232,6 +235,9 @@ source ./config.txt
 
 fn_secure_apache_yes ()
 {
+	if [ "$debug" == "yes" ]; then
+	  dialog --title 'fn_secure_apache_yes' --infobox 'fn_secure_apache_yes STARTED.' 4 25 ; sleep 2
+	fi
 	tmpfile=$(mktemp)
 	sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/sites-available/default
 	sudo awk '/; netcam_userpass/{c+=1}{if(c==1){sub("; netcam_userpass.*","netcam_userpass '$user':'$passwd'",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
@@ -275,6 +281,8 @@ fi
 }
 
 exec 3>&-
+
+source ./config.txt
 
 if [ ! "$security" == "yes" ]; then
   fn_secure_apache_no
