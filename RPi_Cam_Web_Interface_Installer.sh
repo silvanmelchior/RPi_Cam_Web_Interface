@@ -788,7 +788,7 @@ do
         dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
         ;;
 
-  apache_serurity)
+  apache_security)
 	fn_secure_apache
   
         dialog --title 'Apache web security message' --infobox "Apache web security changed." 4 23 ; sleep 2
