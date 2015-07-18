@@ -713,7 +713,7 @@ do
                 trap : 0
 
                 dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
-                fn_configure
+                . ./RPi_Cam_Web_Interface_Installer.sh
                 ;;
 
           upgrade)
