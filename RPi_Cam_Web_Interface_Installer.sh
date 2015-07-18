@@ -55,34 +55,6 @@ if ! grep -Fq "debug=" ./config.txt; then
   sudo echo "" >> ./config.txt
   sudo chmod 664 ./config.txt
 fi
-
-fn_yesno ()
-{ # This is function yes or no
-        $color_green; read -p "$tmp_message <y/n> " prompt; $color_reset
-		
-		if [[ $prompt =~ [yY](es)* ]]; then
-#			$color_green; echo "Your answer was YES"; $color_reset
-			fn_tmp_yes
-		elif [[ $prompt =~ [nN](o)* ]]; then
-#			$color_green; echo "Your answer was NO"; $color_reset
-			fn_tmp_no
-		else
-			$color_red; echo "Please type Y or N!"; $color_reset
-			fn_yesno
-		fi
-}
-: '
-tmp_message="Are you sure you want to continue?"
-fn_tmp_yes ()
-{
-	echo "YES script"
-}
-fn_tmp_no ()
-{
-	echo "NO script"
-}
-fn_yesno
-'
 	
 fn_stop ()
 { # This is function stop
@@ -500,17 +472,14 @@ else
 fi
 rm ./tmp_status	
 	
-cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --colors --menu "Select your option:" 16 76 16)
+cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --colors --menu "Select your option:" 13 76 16)
 
 options=("1 install" "Install (Apache web server based)"
          "2 install_nginx" "Install (Nginx web server based)"
-         "3 start" "Start RPi Cam \Zb\Z2$started_rpicam"
-         "4 stop" "Stop RPi Cam \Zb\Z1$stopped_rpicam"
-         "5 configure" "Configure RPi Cam"
-         "6 update" "Update RPi Cam installer"
-         "7 upgrade" "Upgrade RPi Cam"
-         "8 debug" "Run RPi Cam with debug mode"
-         "9 remove" "Remove RPi Cam")
+         "3 configure" "Configure RPi Cam (After install)"
+         "4 start" "Start RPi Cam \Zb\Z2$started_rpicam"
+         "5 stop" "Stop RPi Cam \Zb\Z1$stopped_rpicam"
+         "6 remove" "Remove RPi Cam")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -519,6 +488,7 @@ do
   case $choice in
 
   install)
+        dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
         sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip
 
@@ -576,8 +546,6 @@ do
           sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
         fi
 
-	fn_autostart
-
         if [ "$rpicamdir" == "" ]; then
           cat etc/motion/motion.conf.1 > etc/motion/motion.conf
         else
@@ -593,8 +561,7 @@ do
         if [ ! "$rpicamdir" == "" ]; then
           sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
         fi
-        fn_apacheport
-        fn_secure_apache
+
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
 
@@ -603,6 +570,7 @@ do
         ;;
 
   install_nginx)
+        dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
         sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip
 
@@ -707,6 +675,107 @@ do
         fn_reboot
         ;;
 
+  configure)
+        fn_configure ()
+        { 
+        cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
+
+        options=("1 update" "Update RPi Cam installer"
+		 "2 upgrade" "Upgrade RPi Cam"
+		 "3 apache_security" "Change Apache web server security" 
+		 "4 apache_port" "Change Apache web server port"
+		 "5 autostart" "Autostart ON/OFF RPi Cam"
+		 "6 debug" "Run RPi Cam with debug mode")
+
+        choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+        for choice in $choices
+        do
+          case $choice in
+  
+          update)
+                trap 'fn_abort' 0
+                set -e
+                remote=$(
+                    git ls-remote -h origin master |
+                    awk '{print $1}'
+                )
+                local=$(git rev-parse HEAD)
+
+                printf "Local : %s\nRemote: %s\n" $local $remote
+
+                if [[ $local == $remote ]]; then
+                  dialog --title 'Update message' --infobox 'Commits match. Nothing update.' 4 35 ; sleep 2
+                else
+                  dialog --title 'Update message' --infobox "Commits don't match. We update." 4 35 ; sleep 2
+                  git pull origin master
+                fi
+                trap : 0
+
+                dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
+                fn_configure
+                ;;
+
+          upgrade)
+                sudo killall raspimjpeg
+                sudo apt-get install -y zip
+
+                fn_rpicamdir
+                sudo cp -r bin/raspimjpeg /opt/vc/bin/
+                sudo chmod 755 /opt/vc/bin/raspimjpeg
+                sudo cp -r www/* /var/www/$rpicamdir/
+
+                if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
+                  sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
+                fi
+                sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
+                fn_apacheport
+                fn_secure_apache
+
+                dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
+                ;;
+
+          apache_security)
+                fn_secure_apache
+  
+                dialog --title 'Apache web security message' --infobox "Apache web security changed." 4 23 ; sleep 2
+                fn_configure
+                ;;
+		
+          apache_port)
+                fn_apacheport
+  
+                dialog --title 'Apache web port message' --infobox "Apache web port: $webport." 4 23 ; sleep 2
+                fn_configure
+                ;;
+		
+          autostart)
+                fn_autostart
+		
+                dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
+                fn_configure
+                ;;
+
+          debug)
+                fn_stop
+                sudo mkdir -p /dev/shm/mjpeg
+                sudo chown www-data:www-data /dev/shm/mjpeg
+                sudo chmod 777 /dev/shm/mjpeg
+                sleep 1;sudo su -c 'raspimjpeg &' www-data
+                if [ -e /etc/debian_version ]; then
+                  sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
+                else
+                  sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
+                fi        
+        
+                $color_red; echo "Started with debug"; $color_reset
+                ;;
+                  esac
+                done
+        }
+        fn_configure
+        ;;
+
   start)
         fn_stop
         sudo mkdir -p /dev/shm/mjpeg
@@ -726,164 +795,6 @@ do
   stop)
         fn_stop
         fn_menu_installer
-        ;;
-        
-  configure)
-fn_configure ()
-{ 
-cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
-
-options=("1 update" "Update RPi Cam installer"
-		 "2 upgrade" "Upgrade RPi Cam"
-		 "3 apache_security" "Change Apache web server security" 
-		 "4 apache_port" "Change Apache web server port"
-		 "5 autostart" "Autostart ON/OFF RPi Cam"
-		 "6 debug" "Run RPi Cam with debug mode")
-
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-
-for choice in $choices
-do
-  case $choice in
-  
-  update)
-        trap 'fn_abort' 0
-        set -e
-        remote=$(
-            git ls-remote -h origin master |
-            awk '{print $1}'
-        )
-        local=$(git rev-parse HEAD)
-
-        printf "Local : %s\nRemote: %s\n" $local $remote
-
-        if [[ $local == $remote ]]; then
-          dialog --title 'Update message' --infobox 'Commits match. Nothing update.' 4 35 ; sleep 2
-        else
-          dialog --title 'Update message' --infobox "Commits don't match. We update." 4 35 ; sleep 2
-          git pull origin master
-        fi
-        trap : 0
-
-        dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
-        fn_configure
-        ;;
-
-  upgrade)
-        sudo killall raspimjpeg
-        sudo apt-get install -y zip
-
-        fn_rpicamdir
-        sudo cp -r bin/raspimjpeg /opt/vc/bin/
-        sudo chmod 755 /opt/vc/bin/raspimjpeg
-        sudo cp -r www/* /var/www/$rpicamdir/
-
-        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
-        fi
-        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
-        fn_apacheport
-        fn_secure_apache
-
-        dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
-        ;;
-
-  apache_security)
-	fn_secure_apache
-  
-        dialog --title 'Apache web security message' --infobox "Apache web security changed." 4 23 ; sleep 2
-        fn_configure
-        ;;
-		
-  apache_port)
-        fn_apacheport
-  
-        dialog --title 'Apache web port message' --infobox "Apache web port: $webport." 4 23 ; sleep 2
-        fn_configure
-        ;;
-		
-  autostart)
-        fn_autostart
-		
-        dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
-        fn_configure
-        ;;
-
-  debug)
-        fn_stop
-        sudo mkdir -p /dev/shm/mjpeg
-        sudo chown www-data:www-data /dev/shm/mjpeg
-        sudo chmod 777 /dev/shm/mjpeg
-        sleep 1;sudo su -c 'raspimjpeg &' www-data
-        if [ -e /etc/debian_version ]; then
-          sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        else
-          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        fi        
-        
-        $color_red; echo "Started with debug"; $color_reset
-        ;;
-  esac
-done
-}
-fn_configure
-	;;
-        
-  update)
-        trap 'fn_abort' 0
-        set -e
-        remote=$(
-            git ls-remote -h origin master |
-            awk '{print $1}'
-        )
-        local=$(git rev-parse HEAD)
-
-        printf "Local : %s\nRemote: %s\n" $local $remote
-
-        if [[ $local == $remote ]]; then
-          dialog --title 'Update message' --infobox 'Commits match. Nothing update.' 4 35 ; sleep 2
-        else
-          dialog --title 'Update message' --infobox "Commits don't match. We update." 4 35 ; sleep 2
-          git pull origin master
-        fi
-        trap : 0
-
-        dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
-        fn_menu_installer
-        ;;
-
-  upgrade)
-        sudo killall raspimjpeg
-        sudo apt-get install -y zip
-
-        fn_rpicamdir
-        sudo cp -r bin/raspimjpeg /opt/vc/bin/
-        sudo chmod 755 /opt/vc/bin/raspimjpeg
-        sudo cp -r www/* /var/www/$rpicamdir/
-
-        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
-        fi
-        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
-        fn_apacheport
-        fn_secure_apache
-
-        dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
-        ;;
-
-  debug)
-        fn_stop
-        sudo mkdir -p /dev/shm/mjpeg
-        sudo chown www-data:www-data /dev/shm/mjpeg
-        sudo chmod 777 /dev/shm/mjpeg
-        sleep 1;sudo su -c 'raspimjpeg &' www-data
-        if [ -e /etc/debian_version ]; then
-          sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        else
-          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
-        fi        
-        
-        $color_red; echo "Started with debug"; $color_reset
         ;;
 
   remove)
