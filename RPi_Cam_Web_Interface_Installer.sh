@@ -37,6 +37,8 @@
 #  accordingly, and must not include leading nor trailing / character.
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 
+cd $(dirname $(readlink -f $0))
+
 if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
   sudo apt-get install -y dialog
 fi
@@ -45,8 +47,6 @@ fi
 color_red="tput setaf 1"
 color_green="tput setaf 2"
 color_reset="tput sgr0"
-
-cd $(dirname $(readlink -f $0))
 
 # We enable debug installer script
 if ! grep -Fq "debug=" ./config.txt; then
@@ -677,14 +677,22 @@ do
 
   configure)
         fn_configure ()
-        { 
+        {
+        WEBPORT=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+		
+        if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+          AUTOSTART="\Zb\Z2(Enabled)"
+        else
+          AUTOSTART="\Zb\Z1(Disabled)"
+        fi	
+        	
         cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
 
         options=("1 update" "Update RPi Cam installer"
 		 "2 upgrade" "Upgrade RPi Cam"
 		 "3 apache_security" "Change Apache web server security" 
-		 "4 apache_port" "Change Apache web server port"
-		 "5 autostart" "Autostart ON/OFF RPi Cam"
+		 "4 apache_port" "Change Apache web server port \Zb\Z2($WEBPORT)"
+		 "5 autostart" "RPi Cam Autostart Enable/Disable $AUTOSTART"
 		 "6 debug" "Run RPi Cam with debug mode")
 
         choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
