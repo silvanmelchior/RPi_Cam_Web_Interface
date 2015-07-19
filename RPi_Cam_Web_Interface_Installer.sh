@@ -713,7 +713,10 @@ do
                 trap : 0
 
                 dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
-                fn_configure
+                
+                # We call updated script
+                SCRIPT="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+                ./$SCRIPT
                 ;;
 
           upgrade)
