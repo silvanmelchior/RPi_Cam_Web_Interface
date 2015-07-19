@@ -70,8 +70,8 @@ fn_reboot ()
   response=$?
     case $response in
       0) sudo reboot;;
-      1) dialog --title 'Reboot message' --infobox 'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
-      255) dialog --title 'Reboot message' --infobox 'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
+      1) dialog --title 'Reboot message' --colors --infobox "\Zb\Z1"'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
+      255) dialog --title 'Reboot message' --colors --infobox "\Zb\Z1"'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
     esac
 }
 
