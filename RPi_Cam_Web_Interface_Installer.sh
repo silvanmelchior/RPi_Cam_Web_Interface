@@ -685,12 +685,19 @@ do
         else
           AUTOSTART="\Zb\Z1(Disabled)"
         fi	
+        
+        TMP_SECURITY=$(awk '/AllowOverride/ {i++}i==2{print $2; exit}' /etc/apache2/sites-available/default)
+        if [ "$TMP_SECURITY" == "All" ]; then
+          SECURITY="\Zb\Z2(Enabled)"
+        else
+          SECURITY="\Zb\Z1(Disabled)"
+        fi
         	
         cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
 
         options=("1 update" "Update RPi Cam installer"
 		 "2 upgrade" "Upgrade RPi Cam"
-		 "3 apache_security" "Change Apache web server security" 
+		 "3 apache_security" "Change Apache web server security $SECURITY" 
 		 "4 apache_port" "Change Apache web server port \Zb\Z2($WEBPORT)"
 		 "5 autostart" "RPi Cam Autostart Enable/Disable $AUTOSTART"
 		 "6 debug" "Run RPi Cam with debug mode")
