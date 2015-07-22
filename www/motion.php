@@ -127,7 +127,7 @@
       <title>RPi Cam Download</title>
       <link rel="stylesheet" href="css/style_minified.css" />
       <link rel="stylesheet" href="css/preview.css" />
-      <link rel="stylesheet" href="css/extrastyle.css" />
+      <link rel="stylesheet" href="<?php echo getStyle(); ?>" />
       <script src="js/style_minified.js"></script>
    </head>
    <body>
