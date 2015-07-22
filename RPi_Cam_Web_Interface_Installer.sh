@@ -685,23 +685,29 @@ do
         else
           AUTOSTART="\Zb\Z1(Disabled)"
         fi	
+        
+        TMP_SECURITY=$(awk '/AllowOverride/ {i++}i==2{print $2; exit}' /etc/apache2/sites-available/default)
+        if [ "$TMP_SECURITY" == "All" ]; then
+          SECURITY="\Zb\Z2(Enabled)"
+        else
+          SECURITY="\Zb\Z1(Disabled)"
+        fi
         	
         cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
-
-        options=("1 update" "Update RPi Cam installer"
-		 "2 upgrade" "Upgrade RPi Cam"
-		 "3 apache_security" "Change Apache web server security" 
-		 "4 apache_port" "Change Apache web server port \Zb\Z2($WEBPORT)"
-		 "5 autostart" "RPi Cam Autostart Enable/Disable $AUTOSTART"
-		 "6 debug" "Run RPi Cam with debug mode")
-
+        options=(
+            "1 update" "Update RPi Cam installer"
+            "2 upgrade" "Upgrade RPi Cam"
+            "3 apache_security" "Change Apache web server security $SECURITY" 
+            "4 apache_port" "Change Apache web server port \Zb\Z2($WEBPORT)"
+            "5 autostart" "RPi Cam Autostart Enable/Disable $AUTOSTART"
+            "6 debug" "Run RPi Cam with debug mode"
+            )
         choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-
-        for choice in $choices
-        do
-          case $choice in
-  
-          update)
+        if [[ -n "$choices" ]]; then
+          for choice in $choices
+          do
+            case $choice in
+             update)
                 trap 'fn_abort' 0
                 set -e
                 remote=$(
@@ -709,9 +715,7 @@ do
                     awk '{print $1}'
                 )
                 local=$(git rev-parse HEAD)
-
                 printf "Local : %s\nRemote: %s\n" $local $remote
-
                 if [[ $local == $remote ]]; then
                   dialog --title 'Update message' --infobox 'Commits match. Nothing update.' 4 35 ; sleep 2
                 else
@@ -719,55 +723,42 @@ do
                   git pull origin master
                 fi
                 trap : 0
-
                 dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
-                
                 # We call updated script
                 SCRIPT="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
                 ./$SCRIPT
                 ;;
-
-          upgrade)
+             upgrade)
                 sudo killall raspimjpeg
                 sudo apt-get install -y zip
-
                 fn_rpicamdir
                 sudo cp -r bin/raspimjpeg /opt/vc/bin/
                 sudo chmod 755 /opt/vc/bin/raspimjpeg
                 sudo cp -r www/* /var/www/$rpicamdir/
-
                 if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
                   sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
                 fi
                 sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
                 fn_apacheport
                 fn_secure_apache
-
                 dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
                 ;;
-
-          apache_security)
+             apache_security)
                 fn_secure_apache
-  
                 dialog --title 'Apache web security message' --infobox "Apache web security changed." 4 23 ; sleep 2
                 fn_configure
                 ;;
-		
-          apache_port)
+             apache_port)
                 fn_apacheport
-  
                 dialog --title 'Apache web port message' --infobox "Apache web port: $webport." 4 23 ; sleep 2
                 fn_configure
                 ;;
-		
-          autostart)
+             autostart)
                 fn_autostart
-		
                 dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
                 fn_configure
                 ;;
-
-          debug)
+             debug)
                 fn_stop
                 sudo mkdir -p /dev/shm/mjpeg
                 sudo chown www-data:www-data /dev/shm/mjpeg
@@ -778,11 +769,13 @@ do
                 else
                   sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
                 fi        
-        
                 $color_red; echo "Started with debug"; $color_reset
                 ;;
-                  esac
-                done
+            esac
+            done
+        else
+          fn_menu_installer
+        fi
         }
         fn_configure
         ;;
