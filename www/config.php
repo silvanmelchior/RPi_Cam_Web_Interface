@@ -220,6 +220,11 @@
       else
          return LBASE_DIR . '/' . LOGFILE_SCHEDULE;
    }
+   
+   function getStyle() {
+      return 'css/' . file_get_contents(BASE_DIR . '/css/extrastyle.txt');
+   }
+
    $config = array();
    $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE1);
    $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE2);
