@@ -48,6 +48,15 @@ color_red="tput setaf 1"
 color_green="tput setaf 2"
 color_reset="tput sgr0"
 
+# Config options located in ./config.txt. In first run script makes that file for you.
+if [ ! -e ./config.txt ]; then
+      sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
+      sudo echo "" >> ./config.txt
+      sudo chmod 664 ./config.txt
+fi
+
+source ./config.txt
+
 # We enable debug installer script
 if ! grep -Fq "debug=" ./config.txt; then
   sudo echo "# Enable or disable debug for installer script" >> ./config.txt
@@ -85,15 +94,6 @@ fn_abort()
     echo "An error occurred. Exiting..." >&2; $color_reset
     exit 1
 }
-
-# Config options located in ./config.txt. In first run script makes that file for you.
-if [ ! -e ./config.txt ]; then
-      sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
-      sudo echo "" >> ./config.txt
-      sudo chmod 664 ./config.txt
-fi
-
-source ./config.txt
 
 fn_rpicamdir ()
 { # This is function rpicamdir in config.txt file
