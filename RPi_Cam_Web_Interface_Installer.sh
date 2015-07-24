@@ -742,6 +742,7 @@ do
                 fi
                 sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
                 dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
+                fn_configure_menu
                 ;;
              apache_security)
                 fn_secure_apache
