@@ -700,7 +700,8 @@ do
             "3 apache_security" "Change Apache web server security $SECURITY" 
             "4 apache_port" "Change Apache web server port \Zb\Z2($WEBPORT)"
             "5 autostart" "RPi Cam Autostart Enable/Disable $AUTOSTART"
-            "6 debug" "Run RPi Cam with debug mode"
+            "6 backup_restore" "RPi Cam Backup or Restore"
+            "7 debug" "Run RPi Cam with debug mode"
             )
         choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choices" ]]; then
@@ -758,6 +759,108 @@ do
                 dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
                 fn_configure
                 ;;
+             backup_restore)
+                fn_backup () 
+                {
+                  BACKUPDIR="$(date '+%d-%b-%Y-%H-%M')"
+                  sudo mkdir -p ./Backup/$BACKUPDIR
+                  sudo cp ./config.txt ./Backup/$BACKUPDIR
+                  sudo cp /etc/motion/motion.conf ./Backup/$BACKUPDIR
+                  sudo cp /etc/raspimjpeg ./Backup/$BACKUPDIR				
+                  if [ ! "$rpicamdir" == "" ]; then
+                    sudo cp /var/www/$rpicamdir/uconfig ./Backup/$BACKUPDIR
+                  else
+                    sudo cp /var/www/uconfig ./Backup/$BACKUPDIR
+                  fi
+                }
+				
+                fn_restore () 
+                {
+                  sudo cp $ANSW/config.txt ./config.txt
+                  sudo cp $ANSW/motion.conf /etc/motion/motion.conf
+                  sudo cp $ANSW/raspimjpeg /etc/raspimjpeg
+                  if [ ! "$rpicamdir" == "" ]; then
+                    sudo cp $ANSW/uconfig /var/www/$rpicamdir/uconfig
+                  else
+                    sudo cp $ANSW/uconfig /var/www/uconfig
+                  fi
+                }
+				
+                fn_remove_backup ()
+                {
+                  let i=0
+                  W=()
+                  while read -r line; do
+                    let i=$i+1
+                    W+=($i "$line")
+                  done < <( ls -1d ./Backup/*/ )
+                  FILE=$(dialog --title "List Directorys of Backup ./Backup" --backtitle "$backtitle" --colors --menu "Chose Backup what you want to \Zb\Z1remove\Zn?" 24 80 17 "${W[@]}" 3>&2 2>&1 1>&3)
+                  if [ "$FILE" == "" ]; then
+                    fn_backup_restore_menu
+                  else
+                    clear
+                    if [ $? -eq 0 ]; then # Exit with OK
+                      ANSW=$(readlink -f $(ls -1d ./Backup/*/ | sed -n "`echo "$FILE p" | sed 's/ //'`"))
+                      sudo rm -r $ANSW
+                      fn_remove_backup
+                    fi
+                  fi
+                }
+				  
+                fn_restore_backup ()
+                {
+                  let i=0
+                  W=()
+                  while read -r line; do
+                    let i=$i+1
+                    W+=($i "$line")
+                  done < <( ls -1d ./Backup/*/ )
+                  FILE=$(dialog --title "List Directorys of Backup ./Backup" --backtitle "$backtitle" --colors --menu "Chose Backup what you want to \Zb\Z5restore\Zn?" 24 80 17 "${W[@]}" 3>&2 2>&1 1>&3)
+                  if [ "$FILE" == "" ]; then
+                    fn_backup_restore_menu
+                  else
+                    clear
+                    if [ $? -eq 0 ]; then # Exit with OK
+                      ANSW=$(readlink -f $(ls -1d ./Backup/*/ | sed -n "`echo "$FILE p" | sed 's/ //'`"))
+                      fn_restore
+                      dialog --title 'Restore message' --colors --infobox "Restored \Zb\Z5$ANSW." 4 80 ; sleep 3
+                      fn_configure_menu
+                    fi
+                  fi
+                }
+				
+                fn_backup_restore_menu ()
+                {
+                  dialog --title "Backup or Restore message" \
+                  --backtitle "$backtitle"                   \
+                  --help-button --help-label "Remove backup" \
+                  --extra-button --extra-label Restore       \
+                  --ok-label Backup                          \
+                  --yesno "Backup or Restore your RPi Cam config files." 5 68
+                  response=$?
+                  case $response in
+                    0) #echo "[Backup] key pressed."
+                      fn_backup
+                      dialog --title 'Backup message' --colors --infobox "Backup \Zb\Z5$BACKUPDIR\Zn done." 4 40 ; sleep 3
+                      fn_configure_menu
+                    ;;
+                    1) #echo "[Cansel] key pressed."
+                      fn_configure_menu
+                    ;;
+                    2) #echo "[Remove backup] key pressed."
+                      fn_remove_backup
+                    ;;
+                    3) #echo "[Restore] key pressed."
+                      fn_restore_backup
+                    ;;
+                    255) #echo "[ESC] key pressed."
+                      fn_configure_menu
+                    ;;
+                  esac
+                }
+                fn_backup_restore_menu
+             ;;
+                
              debug)
                 fn_stop
                 sudo mkdir -p /dev/shm/mjpeg
@@ -821,18 +924,23 @@ do
 	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
 	  esac
 	
-	sudo mkdir ./Backup
-	
+	BACKUPDIR="$(date '+%d-%b-%Y-%H-%M')"
+	sudo mkdir -p ./Backup/removed-$BACKUPDIR
+	sudo cp ./config.txt ./Backup/removed-$BACKUPDIR
+	sudo cp /etc/motion/motion.conf ./removed-$BACKUPDIR
+	sudo cp /etc/raspimjpeg ./Backup/removed-$BACKUPDIR				
 	if [ ! "$rpicamdir" == "" ]; then
-	  sudo cp /var/www/$rpicamdir/uconfig ./Backup
+	  sudo cp /var/www/$rpicamdir/uconfig ./Backup/removed-$BACKUPDIR
+	else
+	  sudo cp /var/www/uconfig ./Backup/removed-$BACKUPDIR
+	fi
+
+	if [ ! "$rpicamdir" == "" ]; then
 	  sudo rm -r /var/www/$rpicamdir
 	else
 	  # Here needed think. If rpicamdir not set then removed all webserver content!
-	  sudo cp /var/www/uconfig ./Backup
 	  sudo rm -r /var/www/*
 	fi
-	sudo cp /etc/motion/motion.conf ./Backup
-	sudo cp /etc/raspimjpeg ./Backup
 	sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
 	sudo rm /usr/bin/raspimjpeg
 	sudo rm /etc/raspimjpeg
