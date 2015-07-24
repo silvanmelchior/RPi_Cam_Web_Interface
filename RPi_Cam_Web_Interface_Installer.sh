@@ -676,7 +676,7 @@ do
         ;;
 
   configure)
-        fn_configure ()
+        fn_configure_menu ()
         {
         WEBPORT=$(cat /etc/apache2/sites-available/default | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
 		
@@ -747,17 +747,17 @@ do
              apache_security)
                 fn_secure_apache
                 dialog --title 'Apache web security message' --infobox "Apache web security changed." 4 23 ; sleep 2
-                fn_configure
+                fn_configure_menu
                 ;;
              apache_port)
                 fn_apacheport
                 dialog --title 'Apache web port message' --infobox "Apache web port: $webport." 4 23 ; sleep 2
-                fn_configure
+                fn_configure_menu
                 ;;
              autostart)
                 fn_autostart
                 dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
-                fn_configure
+                fn_configure_menu
                 ;;
              backup_restore)
                 fn_backup () 
@@ -880,7 +880,7 @@ do
           fn_menu_installer
         fi
         }
-        fn_configure
+        fn_configure_menu
         ;;
 
   start)
