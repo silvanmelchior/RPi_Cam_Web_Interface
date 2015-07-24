@@ -731,8 +731,9 @@ do
                 ;;
              upgrade)
                 sudo killall raspimjpeg
-                sudo apt-get install -y zip
-                fn_rpicamdir
+                if [ $(dpkg-query -W -f='${Status}' "zip" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+                  sudo apt-get install -y zip
+                fi
                 sudo cp -r bin/raspimjpeg /opt/vc/bin/
                 sudo chmod 755 /opt/vc/bin/raspimjpeg
                 sudo cp -r www/* /var/www/$rpicamdir/
@@ -740,8 +741,6 @@ do
                   sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
                 fi
                 sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
-                fn_apacheport
-                fn_secure_apache
                 dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
                 ;;
              apache_security)
