@@ -309,7 +309,7 @@
             echo '<meta name="viewport" content="width=550, initial-scale=1">';
             echo '<title>RPi Cam Download</title>';
             echo '<link rel="stylesheet" href="css/style_minified.css" />';
-            echo '<link rel="stylesheet" href="css/extrastyle.css" />';
+            echo '<link rel="stylesheet" href="' . getStyle() . '" />';
             echo '<script src="js/style_minified.js"></script>';
             echo '<script src="js/script.js"></script>';
          echo '</head>';
