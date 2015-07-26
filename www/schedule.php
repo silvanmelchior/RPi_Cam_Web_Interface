@@ -170,8 +170,8 @@
 
    function initPars() {
       $pars = array(
-         SCHEDULE_FIFOIN => '/var/www/FIFO1',
-         SCHEDULE_FIFOOUT => '/var/www/FIFO',
+         SCHEDULE_FIFOIN => BASE_DIR.'/FIFO1',
+         SCHEDULE_FIFOOUT => BASE_DIR.'/FIFO',
          SCHEDULE_CMDPOLL => '0.03',
          SCHEDULE_MODEPOLL => '10',
          SCHEDULE_MANAGEMENTINTERVAL => '3600',
