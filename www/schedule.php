@@ -671,7 +671,7 @@ function cmdHelp() {
                   
                }
             } else if ($cmd == SCHEDULE_START || $autocapture == 1) {
-               if ($lastOnCommand < 0 && $lastDayPeriod >= 0) {
+               if ($lastDayPeriod >= 0) {
                   if ($autocapture == 1) {
                      $autocapture = 2;
                      writeLog('Start triggered by autocapture');
@@ -685,7 +685,7 @@ function cmdHelp() {
                      $captureStart = time();
                   }
                } else {
-                  writeLog('Start capture request ignored, already started');
+                  writeLog('Start capture request ignored, day period not initialised yet');
                }
             } else if ($cmd == SCHEDULE_RESET) {
                writeLog("Reload parameters command requested");
