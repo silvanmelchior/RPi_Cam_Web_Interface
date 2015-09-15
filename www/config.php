@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v6.0.7');
+   define('APP_VERSION', 'v6.0.8');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -40,6 +40,9 @@
 
    // file where schedule log is stored
    define('LOGFILE_SCHEDULE', 'scheduleLog.txt');
+
+   // control how filesize is extracted, 0 is fast and works for files up to 4GB, 1 is slower
+   define('FILESIZE_METHOD', '0');
 
    // debug log function
    function writeDebugLog($msg) {
@@ -145,6 +148,19 @@
       return $lapsefiles;
    }
 
+   //function to get filesize (native php has 2GB limit)
+   function filesize_n($path) {
+      if (FILESIZE_METHOD == '0') {
+         $size = filesize($path);
+         if ($size > 0)
+            return $size;
+         else
+            return 4294967296 - $size;
+      } else {
+         return trim(`stat -c%s $path`);
+      }
+   }
+
    //function to delete all files associated with a thumb name
    //returns space freed in kB
    //if $del = false just calculate space which would be freed
@@ -155,21 +171,21 @@
          // For time lapse try to delete all from this batch
          $files = findLapseFiles($d);
          foreach($files as $file) {
-            $size += filesize($file);
+            $size += filesize_n($file);
             if ($del) if(!unlink($file)) $debugString .= "F ";
          }
       } else {
          $tFile = dataFilename($d);
          if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile")) {
-            $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
+            $size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
             if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
          }
          if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
-            $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+            $size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
             if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
          }
       }
-      $size += filesize(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
+      $size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
       if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
       return $size / 1024;
    }
