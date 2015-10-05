@@ -38,6 +38,7 @@
 # Default upstream behaviour: rpicamdir="" (installs in /var/www/)
 
 cd $(dirname $(readlink -f $0))
+sudo sed -i "s/www-data:\/var\/www:\/usr\/sbin\/nologin/www-data:\/var\/www:\/bin\/bash/g" /etc/passwd	
 
 if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
   sudo apt-get install -y dialog
@@ -396,6 +397,15 @@ fi
 # We edit /etc/apache2/sites-available/default
 fn_apache_default_install ()
 {
+#For wheezy the default has changed. Remove and put in the local copy if required
+if [ -e /etc/apache2/sites-available/000-default.conf ]; then
+      sudo rm /etc/apache2/sites-available/000-default.conf
+fi
+
+if [ ! -e /etc/apache2/sites-available/default ]; then
+     sudo cp etc/apache2/sites-available/default.1 /etc/apache2/sites-available/default
+fi
+
 if ! grep -Fq 'cam_pic.php' /etc/apache2/sites-available/default; then
   if [ ! "$rpicamdir" == "" ]; then
     sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www\/$rpicamdir\/>/g" /etc/apache2/sites-available/default
@@ -490,7 +500,7 @@ do
   install)
         dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
-        sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip
+        sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
@@ -515,9 +525,9 @@ do
           sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
         fi
 
-	fn_apache_default_install
-        sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
-        sudo chmod 644 /etc/apache2/conf.d/other-vhosts-access-log
+        fn_apache_default_install
+#        sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
+#        sudo chmod 644 /etc/apache2/conf.d/other-vhosts-access-log
 
         sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
         sudo chmod 440 /etc/sudoers.d/RPI_Cam_Web_Interface
@@ -572,7 +582,7 @@ do
   install_nginx)
         dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
-        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip
+        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip libav-tools
 
         fn_rpicamdir
         sudo mkdir -p /var/www/$rpicamdir/media
