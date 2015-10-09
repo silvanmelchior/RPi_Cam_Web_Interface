@@ -9,7 +9,7 @@ while read line
 do  
     COUNTER=$((COUNTER + 1))   
     echo $COUNTER "/" $TOTAL > $COUNTFILE 
-    zip -q $ZIPNAME $line 
+    zip -0 -q $ZIPNAME $line 
 done <$FILELIST
 
 rm -f $COUNTFILE
