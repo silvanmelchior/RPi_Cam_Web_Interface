@@ -406,6 +406,7 @@ function cmdHelp() {
              echo "<tr><td>sc</td><td>1</td><td>Rescan for video and image indexes</td></tr>";
              echo "<tr><td>sy</td><td>macro</td><td>Execute macro</td></tr>";
              echo "<tr><td>cn</td><td>1/2</td><td>Select camera (Compute model only)</td></tr>";
+             echo "<tr><td>st</td><td>0/1</td><td>Camera statistics</td></tr>";
            echo "</table>";
          echo "</div>";
        echo "</div>";

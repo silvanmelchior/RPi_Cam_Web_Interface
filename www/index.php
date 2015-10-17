@@ -25,6 +25,7 @@
    $options_mx = array('Internal' => '0', 'External' => '1');
    $options_mf = array('Off' => '0', 'On' => '1');
    $options_cn = array('First' => '1', 'Second' => '2');
+   $options_st = array('Off' => '0', 'On' => '1');
    
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
@@ -306,6 +307,10 @@
                               u:v = <?php makeInput('ce_u', 4, 'colour_effect_u'); ?>:<?php makeInput('ce_v', 4, 'colour_effect_v'); ?>
                               <input type="button" value="OK" onclick="set_ce();">
                            </td>
+                        </tr>
+                        <tr>
+                           <td>Image Statistics, default 'Off':</td>
+                           <td><select onchange="send_cmd('st ' + this.value)"><?php makeOptions($options_st, 'stat_pass'); ?></select></td>
                         </tr>
                         <tr>
                            <td>Rotation, default 0:</td>
