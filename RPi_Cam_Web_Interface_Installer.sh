@@ -33,9 +33,9 @@
 
 # Configure below the folder name where to install the software to,
 #  or leave empty to install to the root of the webserver.
-# The folder name must be a subfolder of /var/www/ which will be created
+# The folder name must be a subfolder of /var/www/ or /var/www/html/ which will be created
 #  accordingly, and must not include leading nor trailing / character.
-# Default upstream behaviour: rpicamdir="" (installs in /var/www/)
+# Default upstream behaviour: rpicamdir="" (installs in /var/www/ or /var/www/html)
 
 cd $(dirname $(readlink -f $0))
 
@@ -56,6 +56,19 @@ if [ ! -e ./config.txt ]; then
 fi
 
 source ./config.txt
+
+# Tedect version
+version=$(cat /etc/issue)
+if [ "$version" == "Raspbian GNU/Linux 7 \n \l" ]; then
+  echo "Raspbian Wheezy";
+  wwwroot="/var/www"
+elif [ "$version" == "Raspbian GNU/Linux 8 \n \l" ]; then
+  echo "Raspbian Jessie";
+  wwwroot="/var/www/html"
+else
+  echo "Unknown"
+  wwwroot="/var/www"
+fi
 
 # We enable debug installer script
 if ! grep -Fq "debug=" ./config.txt; then
@@ -106,8 +119,8 @@ fn_rpicamdir ()
   source ./config.txt
   
   tmpfile=$(mktemp)
-  dialog  --backtitle "$backtitle" --title "Default www-root is /var/www" --cr-wrap --inputbox "\
-  Current install path is /var/www/$rpicamdir
+  dialog  --backtitle "$backtitle" --title "Default www-root is $wwwroot" --cr-wrap --inputbox "\
+  Current install path is $wwwroot/$rpicamdir
   Enter new install Subfolder if you like." 8 52 $rpicamdir 2>$tmpfile
 			
   sel=$?
@@ -121,7 +134,7 @@ fn_rpicamdir ()
   255) source ./config.txt ;;
   esac
 
-  dialog --title 'Install path' --infobox "Install path is set /var/www/$rpicamdir" 4 48 ; sleep 3
+  dialog --title 'Install path' --infobox "Install path is set $wwwroot/$rpicamdir" 4 48 ; sleep 3
   sudo chmod 664 ./config.txt
 
   if [ "$debug" == "yes" ]; then
@@ -218,15 +231,15 @@ fn_secure_apache_yes ()
 }
 
 # We make missing .htacess file
-if [ ! -e /var/www/$rpicamdir/.htaccess ]; then
-sudo bash -c "cat > /var/www/$rpicamdir/.htaccess" << EOF
+if [ ! -e $wwwroot/$rpicamdir/.htaccess ]; then
+sudo bash -c "cat > $wwwroot/$rpicamdir/.htaccess" << EOF
 AuthName "RPi Cam Web Interface Restricted Area"
 AuthType Basic
 AuthUserFile /usr/local/.htpasswd
 AuthGroupFile /dev/null
 Require valid-user
 EOF
-sudo chown -R www-data:www-data /var/www/$rpicamdir/.htaccess
+sudo chown -R www-data:www-data $wwwroot/$rpicamdir/.htaccess
 fi
 
 exec 3>&1
@@ -425,9 +438,9 @@ case "$1" in
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
         if [ -e /etc/debian_version ]; then
-          sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+          sleep 1;sudo su -c "php $wwwroot/$rpicamdir/schedule.php > /dev/null &" www-data
         else
-          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+          sleep 1;sudo su -c '/bin/bash' -c "php $wwwroot/$rpicamdir/schedule.php > /dev/null &" www-data
         fi
 
         dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
@@ -493,26 +506,26 @@ do
         sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip
 
         fn_rpicamdir
-        sudo mkdir -p /var/www/$rpicamdir/media
-        sudo cp -r www/* /var/www/$rpicamdir/
-        if [ -e /var/www/$rpicamdir/index.html ]; then
-          sudo rm /var/www/$rpicamdir/index.html
+        sudo mkdir -p $wwwroot/$rpicamdir/media
+        sudo cp -r www/* $wwwroot/$rpicamdir/
+        if [ -e $wwwroot/$rpicamdir/index.html ]; then
+          sudo rm $wwwroot/$rpicamdir/index.html
         fi
-        sudo chown -R www-data:www-data /var/www/$rpicamdir
+        sudo chown -R www-data:www-data $wwwroot/$rpicamdir
         
-        if [ ! -e /var/www/$rpicamdir/FIFO ]; then
-          sudo mknod /var/www/$rpicamdir/FIFO p
+        if [ ! -e $wwwroot/$rpicamdir/FIFO ]; then
+          sudo mknod $wwwroot/$rpicamdir/FIFO p
         fi
-        sudo chmod 666 /var/www/$rpicamdir/FIFO
+        sudo chmod 666 $wwwroot/$rpicamdir/FIFO
         
-        if [ ! -e /var/www/$rpicamdir/FIFO1 ]; then
-          sudo mknod /var/www/$rpicamdir/FIFO1 p
+        if [ ! -e $wwwroot/$rpicamdir/FIFO1 ]; then
+          sudo mknod $wwwroot/$rpicamdir/FIFO1 p
         fi
-        sudo chmod 666 /var/www/$rpicamdir/FIFO1
-        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
+        sudo chmod 666 $wwwroot/$rpicamdir/FIFO1
+        sudo chmod 755 $wwwroot/$rpicamdir/raspizip.sh
 
-        if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
-          sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
+        if [ ! -e $wwwroot/$rpicamdir/cam.jpg ]; then
+          sudo ln -sf /run/shm/mjpeg/cam.jpg $wwwroot/$rpicamdir/cam.jpg
         fi
 
 	fn_apache_default_install
@@ -542,8 +555,8 @@ do
         fi
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
-        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
+        if [ ! -e $wwwroot/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg $wwwroot/$rpicamdir/raspimjpeg
         fi
 
         if [ "$rpicamdir" == "" ]; then
@@ -554,12 +567,12 @@ do
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo usermod -a -G video www-data
-        if [ -e /var/www/$rpicamdir/uconfig ]; then
-          sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
+        if [ -e $wwwroot/$rpicamdir/uconfig ]; then
+          sudo chown www-data:www-data $wwwroot/$rpicamdir/uconfig
         fi
         
         if [ ! "$rpicamdir" == "" ]; then
-          sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
+          sudo sed -i "s/www\//www\/$rpicamdir\//g" $wwwroot/$rpicamdir/schedule.php
         fi
 
 	sudo chown motion:www-data /etc/motion/motion.conf
@@ -575,32 +588,32 @@ do
         sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip
 
         fn_rpicamdir
-        sudo mkdir -p /var/www/$rpicamdir/media
-        sudo cp -r www/* /var/www/$rpicamdir/
-        if [ -e /var/www/$rpicamdir/index.html ]; then
-          sudo rm /var/www/$rpicamdir/index.html
+        sudo mkdir -p $wwwroot/$rpicamdir/media
+        sudo cp -r www/* $wwwroot/$rpicamdir/
+        if [ -e $wwwroot/$rpicamdir/index.html ]; then
+          sudo rm $wwwroot/$rpicamdir/index.html
         fi
-        sudo chown -R www-data:www-data /var/www/$rpicamdir
+        sudo chown -R www-data:www-data $wwwroot/$rpicamdir
 
-        if [ ! -e /var/www/$rpicamdir/FIFO ]; then
-          sudo mknod /var/www/$rpicamdir/FIFO p
+        if [ ! -e $wwwroot/$rpicamdir/FIFO ]; then
+          sudo mknod $wwwroot/$rpicamdir/FIFO p
         fi
-        sudo chmod 666 /var/www/$rpicamdir/FIFO
+        sudo chmod 666 $wwwroot/$rpicamdir/FIFO
 
-        if [ ! -e /var/www/$rpicamdir/FIFO1 ]; then
-          sudo mknod /var/www/$rpicamdir/FIFO1 p
+        if [ ! -e $wwwroot/$rpicamdir/FIFO1 ]; then
+          sudo mknod $wwwroot/$rpicamdir/FIFO1 p
         fi
-        sudo chmod 666 /var/www/$rpicamdir/FIFO1
-        sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
+        sudo chmod 666 $wwwroot/$rpicamdir/FIFO1
+        sudo chmod 755 $wwwroot/$rpicamdir/raspizip.sh
 
-        if [ ! -e /var/www/$rpicamdir/cam.jpg ]; then
-          sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www/$rpicamdir/cam.jpg
+        if [ ! -e $wwwroot/$rpicamdir/cam.jpg ]; then
+          sudo ln -sf /run/shm/mjpeg/cam.jpg $wwwroot/$rpicamdir/cam.jpg
         fi
 
         if [ "$rpicamdir" == "" ]; then
           sudo cat etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
         else
-          sudo sed -e "s:root /var/www;:root /var/www/$rpicamdir;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
+          sudo sed -e "s:root $wwwroot;:root $wwwroot/$rpicamdir;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
         fi
         sudo cp -r etc/nginx/sites-available/rpicam /etc/nginx/sites-available/rpicam
         sudo chmod 644 /etc/nginx/sites-available/rpicam
@@ -647,8 +660,8 @@ do
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
         sudo chmod 644 /etc/raspimjpeg
-        if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
-          sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
+        if [ ! -e $wwwroot/$rpicamdir/raspimjpeg ]; then
+          sudo ln -s /etc/raspimjpeg $wwwroot/$rpicamdir/raspimjpeg
         fi
 
 	fn_autostart
@@ -661,12 +674,12 @@ do
         fi
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo usermod -a -G video www-data
-        if [ -e /var/www/$rpicamdir/uconfig ]; then
-          sudo chown www-data:www-data /var/www/$rpicamdir/uconfig
+        if [ -e $wwwroot/$rpicamdir/uconfig ]; then
+          sudo chown www-data:www-data $wwwroot/$rpicamdir/uconfig
         fi
         
         if [ ! "$rpicamdir" == "" ]; then
-          sudo sed -i "s/www\//www\/$rpicamdir\//g" /var/www/$rpicamdir/schedule.php
+          sudo sed -i "s/www\//www\/$rpicamdir\//g" $wwwroot/$rpicamdir/schedule.php
         fi
 	sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
@@ -736,11 +749,11 @@ do
                 fi
                 sudo cp -r bin/raspimjpeg /opt/vc/bin/
                 sudo chmod 755 /opt/vc/bin/raspimjpeg
-                sudo cp -r www/* /var/www/$rpicamdir/
-                if [ ! -e /var/www/$rpicamdir/raspimjpeg ]; then
-                  sudo ln -s /etc/raspimjpeg /var/www/$rpicamdir/raspimjpeg
+                sudo cp -r www/* $wwwroot/$rpicamdir/
+                if [ ! -e $wwwroot/$rpicamdir/raspimjpeg ]; then
+                  sudo ln -s /etc/raspimjpeg $wwwroot/$rpicamdir/raspimjpeg
                 fi
-                sudo chmod 755 /var/www/$rpicamdir/raspizip.sh
+                sudo chmod 755 $wwwroot/$rpicamdir/raspizip.sh
                 dialog --title 'Upgrade message' --infobox 'Upgrade finished.' 4 20 ; sleep 2
                 fn_configure_menu
                 ;;
@@ -768,9 +781,9 @@ do
                   sudo cp /etc/motion/motion.conf ./Backup/$BACKUPDIR
                   sudo cp /etc/raspimjpeg ./Backup/$BACKUPDIR				
                   if [ ! "$rpicamdir" == "" ]; then
-                    sudo cp /var/www/$rpicamdir/uconfig ./Backup/$BACKUPDIR
+                    sudo cp $wwwroot/$rpicamdir/uconfig ./Backup/$BACKUPDIR
                   else
-                    sudo cp /var/www/uconfig ./Backup/$BACKUPDIR
+                    sudo cp $wwwroot/uconfig ./Backup/$BACKUPDIR
                   fi
                 }
 				
@@ -780,9 +793,9 @@ do
                   sudo cp $ANSW/motion.conf /etc/motion/motion.conf
                   sudo cp $ANSW/raspimjpeg /etc/raspimjpeg
                   if [ ! "$rpicamdir" == "" ]; then
-                    sudo cp $ANSW/uconfig /var/www/$rpicamdir/uconfig
+                    sudo cp $ANSW/uconfig $wwwroot/$rpicamdir/uconfig
                   else
-                    sudo cp $ANSW/uconfig /var/www/uconfig
+                    sudo cp $ANSW/uconfig $wwwroot/uconfig
                   fi
                 }
 				
@@ -868,9 +881,9 @@ do
                 sudo chmod 777 /dev/shm/mjpeg
                 sleep 1;sudo su -c 'raspimjpeg &' www-data
                 if [ -e /etc/debian_version ]; then
-                  sleep 1;sudo sudo su -c "php /var/www/$rpicamdir/schedule.php &" www-data
+                  sleep 1;sudo sudo su -c "php $wwwroot/$rpicamdir/schedule.php &" www-data
                 else
-                  sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php &" www-data
+                  sleep 1;sudo su -c '/bin/bash' -c "php $wwwroot/$rpicamdir/schedule.php &" www-data
                 fi        
                 $color_red; echo "Started with debug"; $color_reset
                 ;;
@@ -890,9 +903,9 @@ do
         sudo chmod 777 /dev/shm/mjpeg
         sleep 1;sudo su -c 'raspimjpeg > /dev/null &' www-data
         if [ -e /etc/debian_version ]; then
-          sleep 1;sudo su -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+          sleep 1;sudo su -c "php $wwwroot/$rpicamdir/schedule.php > /dev/null &" www-data
         else
-          sleep 1;sudo su -c '/bin/bash' -c "php /var/www/$rpicamdir/schedule.php > /dev/null &" www-data
+          sleep 1;sudo su -c '/bin/bash' -c "php $wwwroot/$rpicamdir/schedule.php > /dev/null &" www-data
         fi
         
         dialog --title 'Start message' --infobox 'Started.' 4 16 ; sleep 2
@@ -930,16 +943,16 @@ do
 	sudo cp /etc/motion/motion.conf ./removed-$BACKUPDIR
 	sudo cp /etc/raspimjpeg ./Backup/removed-$BACKUPDIR				
 	if [ ! "$rpicamdir" == "" ]; then
-	  sudo cp /var/www/$rpicamdir/uconfig ./Backup/removed-$BACKUPDIR
+	  sudo cp $wwwroot/$rpicamdir/uconfig ./Backup/removed-$BACKUPDIR
 	else
-	  sudo cp /var/www/uconfig ./Backup/removed-$BACKUPDIR
+	  sudo cp $wwwroot/uconfig ./Backup/removed-$BACKUPDIR
 	fi
 
 	if [ ! "$rpicamdir" == "" ]; then
-	  sudo rm -r /var/www/$rpicamdir
+	  sudo rm -r $wwwroot/$rpicamdir
 	else
 	  # Here needed think. If rpicamdir not set then removed all webserver content!
-	  sudo rm -r /var/www/*
+	  sudo rm -r $wwwroot/*
 	fi
 	sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
 	sudo rm /usr/bin/raspimjpeg
