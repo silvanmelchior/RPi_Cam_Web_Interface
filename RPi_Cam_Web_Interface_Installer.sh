@@ -339,10 +339,19 @@ EOF
   sudo chmod 755 /etc/rc.local
 fi
 
-if [ ! "$rpicamdir" == "" ]; then
-  sudo sed -i "s/\/var\/www\/schedule.php/\/var\/www\/$rpicamdir\/schedule.php/" /etc/rc.local
-else
-  sudo sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
+if [ "$wwwroot" == "/var/www" ]; then
+  if [ ! "$rpicamdir" == "" ]; then
+    sudo sed -i "s/\/var\/www\/schedule.php/\/var\/www\/$rpicamdir\/schedule.php/" /etc/rc.local
+  else
+    sudo sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
+  fi
+fi
+if [ "$wwwroot" == "/var/www/html" ]; then
+  if [ ! "$rpicamdir" == "" ]; then
+    sudo sed -i "s/\/var\/www\/schedule.php/\/var\/www\/html\/$rpicamdir\/schedule.php/" /etc/rc.local
+  else
+    sudo sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/html\/schedule.php/" /etc/rc.local
+  fi
 fi
 
 sudo sed -i "s/^autostart.*/autostart=\"yes\"/g" ./config.txt
