@@ -51,6 +51,7 @@
    define('SCHEDULE_PURGESPACEMODE', 'PurgeSpace_ModeEx');
    define('SCHEDULE_PURGESPACELEVEL', 'PurgeSpace_Level');
    define('SCHEDULE_AUTOCAPTUREINTERVAL', 'AutoCapture_Interval');
+   define('SCHEDULE_AUTOCAMERAINTERVAL', 'AutoCamera_Interval');
    define('SCHEDULE_COMMANDSON', 'Commands_On');
    define('SCHEDULE_COMMANDSOFF', 'Commands_Off');
    define('SCHEDULE_MODES', 'Modes');
@@ -191,6 +192,7 @@
          SCHEDULE_MAXCAPTURE => '0',
          SCHEDULE_DAYMODE => '1',
          SCHEDULE_AUTOCAPTUREINTERVAL => '0',
+         SCHEDULE_AUTOCAMERAINTERVAL => '0',
          SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","14:00"),
          SCHEDULE_COMMANDSON => array("ca 1","","","ca 1","","","","","","",""),
          SCHEDULE_COMMANDSOFF => array("ca 0","","","ca 0","","","","","","",""),
@@ -645,6 +647,7 @@ function cmdHelp() {
          $pollTime = $schedulePars[SCHEDULE_CMDPOLL];
          $slowPoll = 0;
          $managechecktime = time();
+         $autocameratime =$managechecktime;
          $modechecktime = $managechecktime;
          if ($schedulePars[SCHEDULE_AUTOCAPTUREINTERVAL] > $schedulePars[SCHEDULE_MAXCAPTURE] ) {
             $autocapturetime = $managechecktime;
@@ -653,7 +656,7 @@ function cmdHelp() {
             $autocapturetime = 0;
             $autocapture = 0;
          }
-
+         $lastStatusTime = filemtime(BASE_DIR . "/status_mjpeg.txt");
          while($timeoutMax == 0 || $timeout < $timeoutMax) {
             usleep($pollTime * 1000000);
             //Check for incoming motion capture requests
@@ -744,6 +747,27 @@ function cmdHelp() {
                   $autocapturetime = $timenow + $schedulePars[SCHEDULE_AUTOCAPTUREINTERVAL];
                   writeLog("Autocapture request.");
                   $autocapture = 1;
+               }
+               //Check for auto camera on/off based on status update timing (active browser)
+               if (($schedulePars[SCHEDULE_AUTOCAMERAINTERVAL] > 0) && $timenow > $autocameratime) {
+                  // 2 seconds between tests to allow time for commands to take effect
+                  $autocameratime = $timenow + 2;
+                  clearstatcache();
+                  $modTime = filemtime(BASE_DIR . "/status_mjpeg.txt");
+                  if (file_get_contents(BASE_DIR . "/status_mjpeg.txt") == 'halted') {
+                     if ($modTime > $lastStatusTime) {
+                        writeLog("autocamera startup");
+                        sendCmds('ru 1');
+                     }
+                  } else {
+                     if (($timenow - $modTime) > $schedulePars[SCHEDULE_AUTOCAMERAINTERVAL]) {
+                        writeLog("autocamera shutdown");
+                        sendCmds('md 0;ru 0');
+                        $lastStatusTime = $timenow + $schedulePars[SCHEDULE_AUTOCAMERAINTERVAL];
+                     } else {
+                        $lastStatusTime = $timenow;
+                     }
+                  }
                }
             }
          }

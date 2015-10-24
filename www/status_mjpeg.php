@@ -7,6 +7,7 @@
     if($file_content != $_GET["last"]) break;
     usleep(100000);
   }
+  touch("status_mjpeg.txt");
   echo $file_content;
 
 ?>
