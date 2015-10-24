@@ -512,8 +512,12 @@ do
   install)
         dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
-        sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip
+        sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools
 
+		if [ "$wwwroot" == "/var/www/html" ]; then
+		  sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
+		fi
+		
         fn_rpicamdir
         sudo mkdir -p $wwwroot/$rpicamdir/media
         sudo cp -r www/* $wwwroot/$rpicamdir/
@@ -559,7 +563,7 @@ do
           sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
         fi
         if [ -e /etc/raspimjpeg ]; then
-          $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
+          $color_green; echo "Your custom raspimjpeg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         fi
         sudo cp -r etc/raspimjpeg/raspimjpeg /etc/
@@ -594,8 +598,12 @@ do
   install_nginx)
         dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
-        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip
+        sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip libav-tools
 
+		if [ "$wwwroot" == "/var/www/html" ]; then
+		  sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
+		fi
+		
         fn_rpicamdir
         sudo mkdir -p $wwwroot/$rpicamdir/media
         sudo cp -r www/* $wwwroot/$rpicamdir/
@@ -663,7 +671,7 @@ do
           sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
         fi
         if [ -e /etc/raspimjpeg ]; then
-          $color_green; echo "Your custom raspimjpg backed up at /etc/raspimjpeg.bak"; $color_reset
+          $color_green; echo "Your custom raspimjpeg backed up at /etc/raspimjpeg.bak"; $color_reset
           sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
         fi
         sudo cp -r /etc/raspimjpeg /etc/raspimjpeg.bak
