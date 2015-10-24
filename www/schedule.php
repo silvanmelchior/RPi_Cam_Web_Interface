@@ -763,7 +763,8 @@ function cmdHelp() {
                      if (($timenow - $modTime) > $schedulePars[SCHEDULE_AUTOCAMERAINTERVAL]) {
                         writeLog("autocamera shutdown");
                         sendCmds('md 0;ru 0');
-                        $lastStatusTime = $timenow + $schedulePars[SCHEDULE_AUTOCAMERAINTERVAL];
+                        //allow a bit of time to ensure it doesn't switch straight back on
+                        $lastStatusTime = $timenow + 5;
                      } else {
                         $lastStatusTime = $timenow;
                      }
