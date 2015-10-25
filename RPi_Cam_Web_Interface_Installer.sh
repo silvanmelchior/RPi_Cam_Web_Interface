@@ -514,9 +514,9 @@ do
         sudo killall raspimjpeg
         sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools
 
-		if [ "$wwwroot" == "/var/www/html" ]; then
-		  sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
-		fi
+        if [ "$wwwroot" == "/var/www/html" ]; then
+          sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
+        fi
 		
         fn_rpicamdir
         sudo mkdir -p $wwwroot/$rpicamdir/media
@@ -554,11 +554,20 @@ do
           sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
         fi
 
-        if [ "$rpicamdir" == "" ]; then
-          cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
-        else
-          sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+        if [ "$wwwroot" == "/var/www" ]; then
+          if [ "$rpicamdir" == "" ]; then
+            cat etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+          else
+            sed -e "s/www/www\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+          fi
+        elif [ "$wwwroot" == "/var/www/html" ]; then
+          if [ "$rpicamdir" == "" ]; then
+            sed -e "s/www/www\/html/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+          else
+            sed -e "s/www/www\/html\/$rpicamdir/" etc/raspimjpeg/raspimjpeg.1 > etc/raspimjpeg/raspimjpeg
+          fi		
         fi
+		
         if [ `cat /proc/cmdline |awk -v RS=' ' -F= '/boardrev/ { print $2 }'` == "0x11" ]; then
           sed -i "s/^camera_num 0/camera_num 1/g" etc/raspimjpeg/raspimjpeg
         fi
@@ -572,12 +581,22 @@ do
           sudo ln -s /etc/raspimjpeg $wwwroot/$rpicamdir/raspimjpeg
         fi
 
-        if [ "$rpicamdir" == "" ]; then
-          cat etc/motion/motion.conf.1 > etc/motion/motion.conf
-        else
-          sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
-          sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf		
+        if [ "$wwwroot" == "/var/www" ]; then
+          if [ "$rpicamdir" == "" ]; then
+            cat etc/motion/motion.conf.1 > etc/motion/motion.conf
+          else
+            sed -e "s/www/www\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+            sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf		
+          fi
+        elif [ "$wwwroot" == "/var/www/html" ]; then
+          if [ "$rpicamdir" == "" ]; then
+            sed -e "s/www/www\/html/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          else
+            sed -e "s/www/www\/html\/$rpicamdir/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+            sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$rpicamdir\/cam_pic.php/g" etc/motion/motion.conf		
+          fi		
         fi
+		
         sudo cp -r etc/motion/motion.conf /etc/motion/
         sudo usermod -a -G video www-data
         if [ -e $wwwroot/$rpicamdir/uconfig ]; then
@@ -600,9 +619,9 @@ do
         sudo killall raspimjpeg
         sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip libav-tools
 
-		if [ "$wwwroot" == "/var/www/html" ]; then
-		  sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
-		fi
+        if [ "$wwwroot" == "/var/www/html" ]; then
+          sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
+        fi
 		
         fn_rpicamdir
         sudo mkdir -p $wwwroot/$rpicamdir/media
@@ -941,7 +960,7 @@ do
 	response=$?
 	  case $response in
 	    0) 
-	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion'); 
+	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion' 'libav-tools'); 
 	      for i in "${package[@]}"
 	      do
 		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
@@ -954,7 +973,7 @@ do
 	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
 	  esac
 	
-	BACKUPDIR="$(date '+%d-%b-%Y-%H-%M')"
+	BACKUPDIR="$(date '+%d-%B-%Y-%H-%M')"
 	sudo mkdir -p ./Backup/removed-$BACKUPDIR
 	sudo cp ./config.txt ./Backup/removed-$BACKUPDIR
 	sudo cp /etc/motion/motion.conf ./removed-$BACKUPDIR
@@ -964,7 +983,7 @@ do
 	else
 	  sudo cp $wwwroot/uconfig ./Backup/removed-$BACKUPDIR
 	fi
-
+	
 	if [ ! "$rpicamdir" == "" ]; then
 	  sudo rm -r $wwwroot/$rpicamdir
 	else
