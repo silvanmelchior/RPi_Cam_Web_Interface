@@ -1,15 +1,11 @@
 <VirtualHost *:80>
 	ServerAdmin webmaster@localhost
-	DocumentRoot /var/www/html
-	<Directory />
-		Options FollowSymLinks
-		AllowOverride None
-	</Directory>
+	DocumentRoot /var/www
 	<Directory /var/www/>
 		Options Indexes FollowSymLinks MultiViews
 		AllowOverride None
 		Order allow,deny
-		allow from all
+		Allow from all
 	</Directory>
 	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 	<Directory "/usr/lib/cgi-bin">
@@ -25,3 +21,5 @@
 	SetEnvIf Request_URI "/cam_pic.php$|/status_mjpeg.php$" dontlog
 	CustomLog ${APACHE_LOG_DIR}/access.log common env=!dontlog
 </VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
