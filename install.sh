@@ -66,6 +66,11 @@ if [ ! -e ./config.txt ]; then
 fi
 
 source ./config.txt
+rpicamdirold=$rpicamdir
+if [ ! "${rpicamold:0:1}" == "" ]; then
+   rpicamdirold=/$rpicamdirold
+fi
+
 
 #Allow for a quiet install
 if [ $# -eq 0 ] || [ "$1" != "q" ]; then
@@ -262,6 +267,13 @@ sudo chmod 755 /etc/rc.local
 fn_stop
 
 sudo mkdir -p /var/www$rpicamdir/media
+#move old material if changing from a different install folder
+if [ ! "$rpicamdir" == "$rpicamdirold" ]; then
+   if [ -e /var/www$rpicamdirold/index.php ]; then
+      sudo mv /var/www$rpicamdirold/* /var/www$rpicamdir
+   fi
+fi
+
 sudo cp -r www/* /var/www$rpicamdir/
 if [ -e /var/www$rpicamdir/index.html ]; then
    sudo rm /var/www$rpicamdir/index.html
