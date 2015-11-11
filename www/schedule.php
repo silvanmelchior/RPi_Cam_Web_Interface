@@ -122,16 +122,14 @@
        } 
        return false;
    }
-   
+
    function getSchedulePID() {
       $pids = array();
-      exec("pgrep -f -l schedule.php", $pids);
+      exec("ps -ef | awk '$9==\"schedule.php\" {print $2}'", $pids);
       $pidId = 0;
-      foreach($pids as $pid) {
-         if (strpos($pid, 'php ') !== false) {
-            $pidId = strpos($pid, ' ');
-            $pidId = substr($pid, 0, $pidId);
-            break;
+      if (count($pids) > 0) {
+         if (is_numeric($pids[0])) {
+            $pidId = $pids[0];
          }
       }
       return $pidId;
@@ -637,13 +635,12 @@ function cmdHelp() {
       writeLog("RaspiCam support started");
       $captureStart = 0;
       $pipeIn = openPipe($schedulePars[SCHEDULE_FIFOIN]);
-      $lastDayPeriod = -1;
-      $cmdPeriod = -1;
       $lastOnCommand = -1;
       $timeout = 0;
       $timeoutMax = 0; //Loop test will terminate after this (seconds) (used in test), set to 0 forever
       while($timeoutMax == 0 || $timeout < $timeoutMax) {
          writeLog("Scheduler loop is started");
+         $lastDayPeriod = -1;
          $pollTime = $schedulePars[SCHEDULE_CMDPOLL];
          $slowPoll = 0;
          $managechecktime = time();
