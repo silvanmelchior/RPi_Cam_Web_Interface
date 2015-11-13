@@ -125,7 +125,7 @@
 
    function getSchedulePID() {
       $pids = array();
-      exec("ps -ef | awk '$9==\"schedule.php\" {print $2}'", $pids);
+      exec("ps -ef | awk '$9==\"/var/www/schedule.php\" {print $2}'", $pids);
       $pidId = 0;
       if (count($pids) > 0) {
          if (is_numeric($pids[0])) {
