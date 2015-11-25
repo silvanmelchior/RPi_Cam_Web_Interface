@@ -278,7 +278,6 @@ sudo cp -r www/* /var/www$rpicamdir/
 if [ -e /var/www$rpicamdir/index.html ]; then
    sudo rm /var/www$rpicamdir/index.html
 fi
-sudo chown -R www-data:www-data /var/www$rpicamdir
 
 if [ "$webserver" == "apache" ]; then
    sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools
@@ -305,6 +304,13 @@ sudo chmod 755 /var/www$rpicamdir/raspizip.sh
 if [ ! -e /var/www$rpicamdir/cam.jpg ]; then
    sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www$rpicamdir/cam.jpg
 fi
+
+if [ -e /var/www$rpicamdir/status_mjpeg.txt ]; then
+   sudo rm /var/www$rpicamdir/status_mjpeg.txt
+fi
+sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt /var/www$rpicamdir/status_mjpeg.txt
+
+sudo chown -R www-data:www-data /var/www$rpicamdir
 
 sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
 sudo chmod 440 /etc/sudoers.d/RPI_Cam_Web_Interface

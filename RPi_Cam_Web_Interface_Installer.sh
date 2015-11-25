@@ -540,8 +540,12 @@ do
         if [ ! -e $wwwroot/$rpicamdir/cam.jpg ]; then
           sudo ln -sf /run/shm/mjpeg/cam.jpg $wwwroot/$rpicamdir/cam.jpg
         fi
+        if [ -e /var/www/$rpicamdir/status_mjpeg.txt ]; then
+          sudo rm /var/www/$rpicamdir/status_mjpeg.txt
+        fi
+        sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt /var/www/$rpicamdir/status_mjpeg.txt
 
-	fn_apache_default_install
+        fn_apache_default_install
         sudo cp etc/apache2/conf.d/other-vhosts-access-log /etc/apache2/conf.d/other-vhosts-access-log
         sudo chmod 644 /etc/apache2/conf.d/other-vhosts-access-log
 
@@ -607,8 +611,9 @@ do
           sudo sed -i "s/www\//www\/$rpicamdir\//g" $wwwroot/$rpicamdir/schedule.php
         fi
 
-	sudo chown motion:www-data /etc/motion/motion.conf
+        sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
+        sudo chown -R www-data:www-data $wwwroot/$rpicamdir
 
         dialog --title 'Install message' --infobox 'Installer finished.' 4 25 ; sleep 2
         fn_reboot
@@ -645,6 +650,10 @@ do
         if [ ! -e $wwwroot/$rpicamdir/cam.jpg ]; then
           sudo ln -sf /run/shm/mjpeg/cam.jpg $wwwroot/$rpicamdir/cam.jpg
         fi
+        if [ -e /var/www/$rpicamdir/status_mjpeg.txt ]; then
+           sudo rm /var/www/$rpicamdir/status_mjpeg.txt
+        fi
+        sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt /var/www/$rpicamdir/status_mjpeg.txt
 
         if [ "$rpicamdir" == "" ]; then
           sudo cat etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
@@ -700,7 +709,7 @@ do
           sudo ln -s /etc/raspimjpeg $wwwroot/$rpicamdir/raspimjpeg
         fi
 
-	fn_autostart
+	     fn_autostart
 
         if [ "$rpicamdir" == "" ]; then
           sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
@@ -717,8 +726,9 @@ do
         if [ ! "$rpicamdir" == "" ]; then
           sudo sed -i "s/www\//www\/$rpicamdir\//g" $wwwroot/$rpicamdir/schedule.php
         fi
-	sudo chown motion:www-data /etc/motion/motion.conf
+        sudo chown motion:www-data /etc/motion/motion.conf
         sudo chmod 664 /etc/motion/motion.conf
+        sudo chown -R www-data:www-data $wwwroot/$rpicamdir
 
         dialog --title 'Install message' --infobox 'Installer finished.' 4 25 ; sleep 2
         fn_reboot
