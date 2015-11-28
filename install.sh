@@ -256,6 +256,11 @@ fi
 
 exit 0
 EOF
+   else
+      tmpfile=$(mktemp)
+      sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+      # Remove to growing plank lines.
+      sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
    fi
 
 fi
@@ -311,7 +316,6 @@ fi
 sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt /var/www$rpicamdir/status_mjpeg.txt
 
 sudo chown -R www-data:www-data /var/www$rpicamdir
-
 sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
 sudo chmod 440 /etc/sudoers.d/RPI_Cam_Web_Interface
 

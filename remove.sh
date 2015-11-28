@@ -54,6 +54,20 @@ fn_stop ()
         dialog --title 'Stop message' --infobox 'Stopped.' 4 16 ; sleep 2
 }
 
+fn_autostart_disable ()
+{
+  tmpfile=$(mktemp)
+  sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+  # Remove to growing plank lines.
+  sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+			  
+  # Finally we set owners and permissions all files what we changed.
+  sudo chown root:root /etc/rc.local
+  sudo chmod 755 /etc/rc.local
+  sudo chmod 664 ./config.txt
+}
+
+
 fn_apache_default ()
 {
 if [ -e /etc/apache2/sites-available/000-default.conf ]; then
@@ -106,5 +120,4 @@ fn_autostart_disable
 if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
    fn_apache_default
 fi
-fn_reboot
 
