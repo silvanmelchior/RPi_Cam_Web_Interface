@@ -116,6 +116,9 @@ sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
 sudo rm /usr/bin/raspimjpeg
 sudo rm /etc/raspimjpeg
 fn_autostart_disable
+
+sudo mv etc/nginx/sites-available/*default* /etc/nginx/sites-available >/dev/null 2>&1
+sudo mv etc/apache2/sites-available/*default* /etc/apache2/sites-available >/dev/null 2>&1
      
 if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
    fn_apache_default

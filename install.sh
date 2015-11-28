@@ -180,9 +180,11 @@ sudo service apache2 restart
 
 fn_nginx ()
 {
-sudo sed -e "s:root /var/www;:root /var/www$rpicamdirEsc;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
+#uncomment next line if wishing to always access by http://ip as the root
+#sudo sed -e "s:root /var/www;:root /var/www$rpicamdirEsc;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
 sudo cp -r etc/nginx/sites-available/rpicam /etc/nginx/sites-available/rpicam
 sudo chmod 644 /etc/nginx/sites-available/rpicam
+sudo mv /etc/nginx/sites-available/*default* etc/nginx/sites-available/ >/dev/null 2>&1
 
 
 if [ ! -e /etc/nginx/sites-enabled/rpicam ]; then
