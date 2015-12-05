@@ -51,6 +51,8 @@ fn_stop ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
+        sudo service apache2 stop >dev/null 2>&1
+        sudo service nginx stop >dev/null 2>&1
         dialog --title 'Stop message' --infobox 'Stopped.' 4 16 ; sleep 2
 }
 
@@ -95,7 +97,7 @@ fn_stop
 dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
 response=$?
 case $response in
-   0) package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion' 'libav-tools');; 
+   0) package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'apache2-utils' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion' 'libav-tools');; 
    1) package=('zip' 'gpac motion' 'libav-tools');; 
    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
 esac
@@ -108,8 +110,10 @@ for i in "${package[@]}"
 sudo apt-get autoremove -y	  
 
 if [ ! "$rpicamdir" == "" ]; then
+   sudo mv -r /var/www/$rpicamdir/media ~/media
    sudo rm -r /var/www/$rpicamdir
 else
+   sudo mv -r /var/www/media ~/media
    sudo rm -r /var/www/*
 fi
 sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface

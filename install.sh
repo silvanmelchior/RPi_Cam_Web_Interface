@@ -140,6 +140,7 @@ fn_reboot ()
     esac
 }
 
+
 fn_apache ()
 {
 aconf="etc/apache2/sites-available/raspicam.conf"
@@ -158,10 +159,10 @@ sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}
 awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' $aconf > "$tmpfile" && sudo mv "$tmpfile" $aconf
 sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www$rpicamdirEsc>/g" $aconf
 if [ "$user" == "" ]; then
-	sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' $aconf > "$tmpfile" && sudo mv "$tmpfile" $aconf
+	sudo sed -i "/AllowOverride\ .*/AllowOverride None/g" $aconf
 else
-   sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' $aconf > "$tmpfile" && sudo mv "$tmpfile" $aconf
    sudo htpasswd -b -c /usr/local/.htpasswd $user $webpasswd
+	sudo sed -i "/AllowOverride\ .*/AllowOverride All/g" $aconf
    if [ ! -e /var/www$rpicamdir/.htaccess ]; then
       sudo bash -c "cat > /var/www$rpicamdir/.htaccess" << EOF
 AuthName "RPi Cam Web Interface Restricted Area"
@@ -180,27 +181,35 @@ sudo service apache2 restart
 
 fn_nginx ()
 {
+aconf="etc/nginx/sites-available/rpicam"
+cp $aconf.1 $aconf
+if [ -e "\/$aconf" ]; then
+   sudo rm "\/$aconf"
+fi
 #uncomment next line if wishing to always access by http://ip as the root
-#sudo sed -e "s:root /var/www;:root /var/www$rpicamdirEsc;:g" etc/nginx/sites-available/rpicam.1 > etc/nginx/sites-available/rpicam
-sudo cp -r etc/nginx/sites-available/rpicam.1 /etc/nginx/sites-available/rpicam
-sudo chmod 644 /etc/nginx/sites-available/rpicam
+#sudo sed -i "s:root /var/www;:root /var/www$rpicamdirEsc;:g" $aconf 
 sudo mv /etc/nginx/sites-available/*default* etc/nginx/sites-available/ >/dev/null 2>&1
 
-
-if [ ! -e /etc/nginx/sites-enabled/rpicam ]; then
-   sudo ln -s /etc/nginx/sites-available/rpicam /etc/nginx/sites-enabled/rpicam
+if [ "$user" == "" ]; then
+   sed -i "s/auth_basic\ .*/auth_basic \"Off\";/g" $aconf
+else
+   sudo htpasswd -b -c /usr/local/.htpasswd $user $webpasswd
+   sed -i "s/auth_basic\ .*/auth_basic \"Restricted\";/g" $aconf
 fi
+sudo mv $aconf /$aconf
+sudo chmod 644 /$aconf
 
 # Update nginx main config file
 sudo sed -i "s/worker_processes 4;/worker_processes 2;/g" /etc/nginx/nginx.conf
 sudo sed -i "s/worker_connections 768;/worker_connections 128;/g" /etc/nginx/nginx.conf
 sudo sed -i "s/gzip on;/gzip off;/g" /etc/nginx/nginx.conf
-if ["$NGINX_DISABLE_LOGGING"]; then
+if [ "$NGINX_DISABLE_LOGGING" != "" ]; then
    sudo sed -i "s:access_log /var/log/nginx/nginx/access.log;:access_log /dev/null;:g" /etc/nginx/nginx.conf
 fi
 
 # Configure php-apc
 sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> /etc/php5/fpm/php.ini"
+sudo mkdir /etc/php5/conf.d >/dev/null 2>&1
 sudo cp etc/php5/apc.ini /etc/php5/conf.d/20-apc.ini
 sudo chmod 644 /etc/php5/conf.d/20-apc.ini
 }
@@ -290,7 +299,7 @@ if [ "$webserver" == "apache" ]; then
    sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools
    fn_apache
 else
-   sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip libav-tools
+   sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc apache2-utils gpac motion zip libav-tools
    fn_nginx
 fi
 
