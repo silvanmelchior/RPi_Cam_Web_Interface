@@ -43,15 +43,6 @@ color_red="tput setaf 1"
 color_green="tput setaf 2"
 color_reset="tput sgr0"
 
-# Config options located in ./config.txt. In first run script makes that file for you.
-if [ ! -e ./config.txt ]; then
-      sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
-      sudo echo "" >> ./config.txt
-      sudo chmod 664 ./config.txt
-fi
-
-source ./config.txt
-
 
 fn_abort()
 {
