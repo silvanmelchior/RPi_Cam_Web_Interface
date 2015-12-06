@@ -192,12 +192,17 @@ sudo mv /etc/nginx/sites-available/*default* etc/nginx/sites-available/ >/dev/nu
 
 if [ "$user" == "" ]; then
    sed -i "s/auth_basic\ .*/auth_basic \"Off\";/g" $aconf
+   sed -i "s/\ auth_basic_user_file/#auth_basic_user_file/g" $aconf
 else
    sudo htpasswd -b -c /usr/local/.htpasswd $user $webpasswd
    sed -i "s/auth_basic\ .*/auth_basic \"Restricted\";/g" $aconf
+   sed -i "s/#auth_basic_user_file/\ auth_basic_user_file/g" $aconf
 fi
 sudo mv $aconf /$aconf
 sudo chmod 644 /$aconf
+if [ ! -e /etc/nginx/sites-enabled/rpicam ]; then
+   sudo ln -sf /$aconf /etc/nginx/sites-enabled/rpicam
+fi
 
 # Update nginx main config file
 sudo sed -i "s/worker_processes 4;/worker_processes 2;/g" /etc/nginx/nginx.conf

@@ -18,7 +18,7 @@ server {
             include fastcgi_params;
             fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
             auth_basic "Off";
-            auth_basic_user_file /usr/local/.htpasswd;
+            #auth_basic_user_file /usr/local/.htpasswd;
             }
 	location ~ /\.ht {
 		deny all;
