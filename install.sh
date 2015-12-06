@@ -131,7 +131,7 @@ fn_stop ()
 
 fn_reboot ()
 { # This is function reboot system
-  dialog --title "You must reboot your system!" --backtitle "$backtitle" --yesno "Do you want to reboot now?" 5 33
+  dialog --title "You may need to reboot your system" --backtitle "$backtitle" --yesno "Do you want to reboot now?" 5 33
   response=$?
     case $response in
       0) sudo reboot;;
@@ -217,6 +217,7 @@ sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> /etc/php5/fpm/php.ini"
 sudo mkdir /etc/php5/conf.d >/dev/null 2>&1
 sudo cp etc/php5/apc.ini /etc/php5/conf.d/20-apc.ini
 sudo chmod 644 /etc/php5/conf.d/20-apc.ini
+sudo service nginx restart
 }
 
 fn_motion ()
