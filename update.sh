@@ -64,7 +64,6 @@ fn_abort()
     exit 1
 }
 
-update)
    trap 'fn_abort' 0
    set -e
    remote=$(
