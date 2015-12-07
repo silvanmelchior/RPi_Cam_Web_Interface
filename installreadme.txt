@@ -1,11 +1,9 @@
-The normal way of installing is to run ./RPi_Cam_Web_Interface_Installer.sh
-This remains the case.
+There are 2 ways of installing the software ./RPi_Cam_Web_Interface_Installer.sh and a set of dedicated scripts.
 
-There are now some experimental scripts, which have not been fully proven and are still being developed,
-but you are welcome to try out.
-The main install seems to work for me on Jessie. Not tried on Wheezy yet but in principle it should work.
+The ./RPi_Cam_Web_Interface_Installer.sh is the original scheme largely developed under Wheezy.
 
-The scripts are a re-factoring of the install scripts to simplify the process.
+The dedicated scripts are a re-factoring to simplify the process and these work under Wheezy and Jessie.
+Future changes will be made to these.
 
 5 scripts are used instead of combining all together.
 This avoids the overhead of a separate selection and makes it easier to run a particular function automatically.
@@ -27,4 +25,4 @@ doesn't exist and is then changed just once after the initial user dialog.
 The installation always tries to upgrade the main software components and then functionally goes through
 the configuration steps for each area like apache, motion start up.
 
-Debug is turned on for th emoment so it logs its activity to a file called install.txt
+Debug is turned on for the moment so it logs its activity to a file called install.txt
