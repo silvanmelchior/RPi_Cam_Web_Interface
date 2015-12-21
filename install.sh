@@ -159,10 +159,10 @@ sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}
 awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' $aconf > "$tmpfile" && sudo mv "$tmpfile" $aconf
 sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www$rpicamdirEsc>/g" $aconf
 if [ "$user" == "" ]; then
-	sudo sed -i "/AllowOverride\ .*/AllowOverride None/g" $aconf
+	sudo sed -i "s/AllowOverride\ .*/AllowOverride None/g" $aconf
 else
    sudo htpasswd -b -c /usr/local/.htpasswd $user $webpasswd
-	sudo sed -i "/AllowOverride\ .*/AllowOverride All/g" $aconf
+	sudo sed -i "s/AllowOverride\ .*/AllowOverride All/g" $aconf
    if [ ! -e /var/www$rpicamdir/.htaccess ]; then
       sudo bash -c "cat > /var/www$rpicamdir/.htaccess" << EOF
 AuthName "RPi Cam Web Interface Restricted Area"
@@ -175,7 +175,11 @@ EOF
    fi
 fi
 sudo mv $aconf /$aconf
+if [ ! -e /etc/apache2/sites-enabled/raspicam.conf ]; then
+   sudo ln -sf /$aconf /etc/apache2/sites-enabled/raspicam.conf
+fi
 sudo sed -i 's/^CustomLog/#CustomLog/g' $aotherlog
+sudo a2dissite 000-default.conf >/dev/null 2>&1
 sudo service apache2 restart
 }
 

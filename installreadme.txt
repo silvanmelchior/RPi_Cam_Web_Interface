@@ -11,7 +11,7 @@ So start and stop can just be run as separate activities.
 
 The scripts are
 install.sh main installation
-upgrade.sh check for updates and then run main installation
+update.sh check for updates and then run main installation
 start.sh starts the software
 stop.sh stops the software
 remove.sh removes the software
