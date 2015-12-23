@@ -67,12 +67,13 @@ fi
 
 source ./config.txt
 rpicamdirold=$rpicamdir
-if [ ! "${rpicamold:0:1}" == "" ]; then
+if [ ! "${rpicamdirold:0:1}" == "" ]; then
    rpicamdirold=/$rpicamdirold
 fi
 
 
 #Allow for a quiet install
+rm exitfile.txt >/dev/null 2>&1
 if [ $# -eq 0 ] || [ "$1" != "q" ]; then
    exec 3>&1
    dialog                                         \
@@ -103,12 +104,14 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
       sudo echo "webpasswd=\"$webpasswd\"" >> ./config.txt
       sudo echo "autostart=\"$autostart\"" >> ./config.txt
       sudo echo "" >> ./config.txt
+   else
+      echo "exit" > ./exitfile.txt
    fi
    }
-   returncode=$?
    exec 3>&-
 
-   if [ ! "$returncode" == "0" ]; then
+   if [ -e exitfile.txt ]; then
+      rm exitfile.txt
       exit
    fi
 
