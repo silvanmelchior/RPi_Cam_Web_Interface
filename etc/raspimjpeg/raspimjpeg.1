@@ -111,6 +111,7 @@ status_file /dev/shm/mjpeg/status_mjpeg.txt
 control_file /var/www/FIFO
 media_path /var/www/media
 macros_path /var/www/macros
+user_annotate /dev/shm/mjpeg/user_annotate.txt
 boxing_path
 subdir_char @
 
@@ -121,6 +122,7 @@ end_img &end_img.sh
 start_vid &start_vid.sh
 end_vid end_vid.sh
 end_box &end_box.sh
+do_cmd &do_cmd.sh
 
 # thumb generator control
 # Set v, i, or t in string to enable thumbs for images, videos, or lapse
