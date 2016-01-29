@@ -332,13 +332,13 @@
                            </td>
                         </tr>
                         <tr>
-                           <td>Image quality (0...100), default 85:</td>
+                           <td>Image quality (0...100), default 10:</td>
                            <td>
                               <?php makeInput('image_quality', 4); ?><input type="button" value="OK" onclick="send_cmd('qu ' + document.getElementById('image_quality').value)">
                            </td>
                         </tr>
                         <tr>
-                           <td>Preview quality (0...100) Default 25:<br>Width (128...1024) Default 512:<br>Divider (1-16) Default 1:</td>
+                           <td>Preview quality (1...100) Default 10:<br>Width (128...1024) Default 512:<br>Divider (1-16) Default 1:</td>
                            <td>
                               Qu: <?php makeInput('quality', 4); ?>
                               Wi: <?php makeInput('width', 4); ?>
