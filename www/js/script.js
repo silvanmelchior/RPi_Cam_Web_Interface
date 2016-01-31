@@ -149,25 +149,28 @@ function error_img () {
 
 function updatePreview(cycle)
 {
-	if (mjpegmode && cycle !== undefined && cycle == true)
-	{
-		mjpeg_img.src = "/updating.jpg";
-		setTimeout("mjpeg_img.src = \"cam_pic_new.php?time=\" + new Date().getTime()  + \"&pDelay=\" + preview_delay;", 1000);
-		return;
-	}
-	
-	if (previous_halted != halted)
-	{
-		if(!halted)
-		{
-			mjpeg_img.src = "cam_pic_new.php?time=" + new Date().getTime() + "&pDelay=" + preview_delay;			
-		}
-		else
-		{
-			mjpeg_img.src = "/unavailable.jpg";
-		}
-	}
+   if (mjpegmode)
+   {
+      if (cycle !== undefined && cycle == true)
+      {
+         mjpeg_img.src = "/updating.jpg";
+         setTimeout("mjpeg_img.src = \"cam_pic_new.php?time=\" + new Date().getTime()  + \"&pDelay=\" + preview_delay;", 1000);
+         return;
+      }
+      
+      if (previous_halted != halted)
+      {
+         if(!halted)
+         {
+            mjpeg_img.src = "cam_pic_new.php?time=" + new Date().getTime() + "&pDelay=" + preview_delay;			
+         }
+         else
+         {
+            mjpeg_img.src = "/unavailable.jpg";
+         }
+      }
 	previous_halted = halted;
+   }
 }
 
 //
