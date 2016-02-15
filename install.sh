@@ -171,7 +171,6 @@ else
 AuthName "RPi Cam Web Interface Restricted Area"
 AuthType Basic
 AuthUserFile /usr/local/.htpasswd
-AuthGroupFile /dev/null
 Require valid-user
 EOF
       sudo chown -R www-data:www-data /var/www$rpicamdir/.htaccess
