@@ -109,12 +109,15 @@ for i in "${package[@]}"
    done
 sudo apt-get autoremove -y	  
 
+if [ ! -d ~/media ]; then
+  mkdir ~/media
+fi
 if [ ! "$rpicamdir" == "" ]; then
-   sudo mv -r /var/www/$rpicamdir/media ~/media
+   sudo mv  /var/www/$rpicamdir/media ~/media
    sudo rm -r /var/www/$rpicamdir
 else
-   sudo mv -r /var/www/media ~/media
-   sudo rm -r /var/www/*
+   sudo mv /var/www/media ~/media
+   sudo rm /var/www/*
 fi
 sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
 sudo rm /usr/bin/raspimjpeg
