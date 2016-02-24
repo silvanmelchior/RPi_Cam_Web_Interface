@@ -11,19 +11,23 @@
    define('BTN_SELECTALL', 'Select All');
    define('BTN_SELECTNONE', 'Select None');
    define('BTN_GETZIP', 'Get Zip');
-   define('BTN_UPDATESIZEORDER', 'Update Settings');
+   define('BTN_UPDATESIZEORDER', 'Update');
    define('TXT_PREVIEW', 'Preview');
    define('TXT_THUMB', 'Thumb');
    define('TXT_FILES', 'Files');
    
    define('CONVERT_CMD', 'convertCmd.txt');
    
+   //Set to top or bottom to position controls
+   define('CONTROLS_POS', 'top');
    
    //Set size defaults and try to get from cookies
    $previewSize = 640;
    $thumbSize = 96;
    $sortOrder = 1;
    $showTypes = 1;
+   $timeFilter = 1;
+   $timeFilterMax = 8;
    if(isset($_COOKIE["previewSize"])) {
       $previewSize = $_COOKIE["previewSize"];
    }
@@ -35,6 +39,9 @@
    }
    if(isset($_COOKIE["showTypes"])) {
       $showTypes = $_COOKIE["showTypes"];
+   }
+   if(isset($_COOKIE["timeFilter"])) {
+      $timeFilter = $_COOKIE["timeFilter"];
    }
    $dSelect = "";
    $pFile = "";
@@ -131,6 +138,10 @@
             if(!empty($_POST['showTypes'])) {
                $showTypes = $_POST['showTypes'];
                setcookie("showTypes", $showTypes, time() + (86400 * 365), "/");
+            }        
+            if(!empty($_POST['timeFilter'])) {
+               $timeFilter = $_POST['timeFilter'];
+               setcookie("timeFilter", $timeFilter, time() + (86400 * 365), "/");
             }        
             break;
          case 'zipSel':
@@ -247,8 +258,7 @@
       $fWidth = max($ts + 4, 140);
       echo "<fieldset class='fileicon' style='width:" . $fWidth . "px;'>";
       echo "<legend class='fileicon'>";
-      echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' style='background-image:url(delete.png);
-'></button>";
+      echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' style='background-image:url(delete.png);'></button>";
       echo "&nbsp;&nbsp;$fNumber&nbsp;";
       echo "<img src='$fIcon' style='width:24px'/>";
       echo "<input type='checkbox' name='check_list[]' $sel value='$f' style='float:right;'/>";
@@ -264,19 +274,33 @@
    function getThumbnails() {
       global $sortOrder;
       global $showTypes;
+      global $timeFilter, $timeFilterMax;
       $files = scandir(MEDIA_PATH, $sortOrder - 1);
       $thumbnails = array();
+      $nowTime = time();
       foreach($files as $file) {
          if($file != '.' && $file != '..' && isThumbnail($file)) {
-            $fType = getFileType($file);
-            if($showTypes == '1') {
-               $thumbnails[] = $file;
+            if ($timeFilter == 1) {
+               $include = true;
+            } else {
+               $timeD = $nowTime - filemtime(MEDIA_PATH . "/$file");
+               if ($timeFilter == $timeFilterMax) {
+                  $include = ($timeD >= 86400 * ($timeFilter-1));
+               } else {
+                  $include = ($timeD >= (86400 * ($timeFilter - 2))) && ($timeD < (($timeFilter - 1) * 86400));
+               }
             }
-            elseif($showTypes == '2' && ($fType == 'i' || $fType == 't')) {
-               $thumbnails[] = $file;
-           }
-            elseif($showTypes == '3' && ($fType == 'v')) {
-               $thumbnails[] = $file; 
+            if($include) {
+               $fType = getFileType($file);
+               if($showTypes == '1') {
+                  $thumbnails[] = $file;
+               }
+               elseif($showTypes == '2' && ($fType == 'i' || $fType == 't')) {
+                  $thumbnails[] = $file;
+              }
+               elseif($showTypes == '3' && ($fType == 'v')) {
+                  $thumbnails[] = $file; 
+               }
             }
          }
       }
@@ -298,6 +322,41 @@
          echo "<span>Used:$percentUsed%  Total:$totalSize(MB)</span>";
          echo "<div style='z-index:-1;position:absolute;top:0px;width:$percentUsed%;background-color:$colour;'>&nbsp;</div>";
       echo '</div>';
+   }
+   
+   function settingsControls() {
+      global $previewSize,$thumbSize,$sortOrder, $showTypes;
+      global $timeFilter, $timeFilterMax;
+      
+      echo TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
+      echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='text' size='3' name='thumbSize' value='$thumbSize'>";
+      echo '&nbsp;Sort&nbsp;<select id="sortOrder" name="sortOrder">';
+      if ($sortOrder == 1) $selected = "selected"; else $selected = "";
+      echo "<option value='1' $selected>Ascending</option>";
+      if ($sortOrder == 2) $selected = "selected"; else $selected = "";
+      echo "<option value='2'  $selected>Descending</option>";
+      echo '</select>';
+      echo '&nbsp;Types&nbsp;<select id="showTypes" name="showTypes">';
+      if ($showTypes == 1) $selected = "selected"; else $selected = "";
+      echo "<option value='1' $selected>Images &amp Videos</option>";
+      if ($showTypes == 2) $selected = "selected"; else $selected = "";
+      echo "<option value='2'  $selected>Images only</option>";
+      if ($showTypes == 3) $selected = "selected"; else $selected = "";
+      echo "<option value='3'  $selected>Videos only</option>";
+      echo '</select>';
+      echo '&nbsp;Filter&nbsp;<select id="timeFilter" name="timeFilter">';
+      if ($timeFilter == 1) $selected = "selected"; else $selected = "";
+      echo "<option value='1' $selected>All</option>";
+      for($tf = 2; $tf < $timeFilterMax;$tf++) {
+         if ($timeFilter == $tf) $selected = "selected"; else $selected = "";
+         $tfStr = ($tf-2) * 24 . '-' . ($tf-1) * 24 . ' hours old';
+         echo "<option value='$tf'  $selected>$tfStr</option>";
+      }
+      if ($timeFilter >= $timeFilterMax) $selected = "selected"; else $selected = "";
+      $tfStr = $timeFilterMax * 24 . '+ hours old';
+      echo "<option value='$timeFilterMax'  $selected>$tfStr</option>";
+      echo '</select>';
+      echo "&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button><br>";
    }
    
 ?>
@@ -363,6 +422,7 @@
          echo "&nbsp;&nbsp;<button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick=\"return confirm('Are you sure?');\">" . BTN_DELETEALL . "</button>";
          echo "</h1>";
          diskUsage();
+         if(CONTROLS_POS == 'top') settingsControls();
          if ($debugString !="") echo "$debugString<br>";
          if(count($thumbnails) == 0) echo "<p>No videos/images saved</p>";
          else {
@@ -370,23 +430,7 @@
               drawFile($file, $thumbSize, $dSelect);
             }
          }
-         echo "<p><p>" . TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
-         echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='text' size='3' name='thumbSize' value='$thumbSize'>";
-         echo "&nbsp;Sort Order&nbsp;<select id='sortOrder' name='sortOrder'>";
-         if ($sortOrder == 1) $selected = "selected"; else $selected = "";
-         echo "<option value='1' $selected>Ascending</option>";
-         if ($sortOrder == 2) $selected = "selected"; else $selected = "";
-         echo "<option value='2'  $selected>Descending</option>";
-         echo '</select>';
-         echo "&nbsp;File Types&nbsp;<select id='showTypes' name='showTypes'>";
-         if ($showTypes == 1) $selected = "selected"; else $selected = "";
-         echo "<option value='1' $selected>Images and Videos</option>";
-         if ($showTypes == 2) $selected = "selected"; else $selected = "";
-         echo "<option value='2'  $selected>Images only</option>";
-         if ($showTypes == 3) $selected = "selected"; else $selected = "";
-         echo "<option value='3'  $selected>Videos only</option>";
-         echo '</select>';
-         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button>";
+         if(CONTROLS_POS == 'bottom') {echo "<br>";settingsControls();}
       ?>
       </form>
       
