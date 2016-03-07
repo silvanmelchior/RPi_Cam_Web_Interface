@@ -1,10 +1,16 @@
 /*global thumbnails,previewWidth,linksBase,mediaBase*/
+var thumbinailSuffix = '.v0000.th.jpg';
+
 function load_preview(thumbnail) {
 	var prevButton = document.getElementsByName('prev')[0];
 	var nextButton = document.getElementsByName('next')[0];
 	var mediaDiv = document.getElementById('media');
-	var imageIndex = thumbnails.indexOf(thumbnail);
+	var title = document.getElementById('media-title');
+
+	title.innerHTML = fileTitle(thumbnail);
+
 	var prev, next;
+	var imageIndex = thumbnails.indexOf(thumbnail);
 	if (imageIndex > 0) {
 		prev = thumbnails[imageIndex-1];
 	}
@@ -34,8 +40,7 @@ function load_preview(thumbnail) {
 	if (mediaURL) {
 		var media_content;
 		if (fileExtension(mediaURL) == 'jpg') {
-			var linkURL = linksBase + thumbnail;
-			media_content = '<a href="' + linkURL + '" target="_blank"><img src="' + mediaURL + '" style="width: ' + previewWidth + 'px;"></a>';
+			media_content = '<a href="' + mediaURL + '" target="_blank"><img src="' + mediaURL + '" style="width: ' + previewWidth + 'px;"></a>';
 		} else {
 			media_content = '<video style="width:' + previewWidth + '"px;" controls><source src="' + mediaURL + '" type="video/mp4">Your browser does not support the video tag.</video>';
 		}
@@ -45,10 +50,13 @@ function load_preview(thumbnail) {
 }
 
 function imageFromThumbnail(thumbnailName) {
-	var suffix = '.v0000.th.jpg';
-	return thumbnailName.substr(0, thumbnailName.length - suffix.length);
+	return thumbnailName.substr(0, thumbnailName.length - thumbinailSuffix.length);
 }
 
 function fileExtension(fileName) {
 	return fileName.split('.').pop();
+}
+
+function fileTitle(thumbnailName) {
+	return thumbnailName.substr(thumbnailName.length - thumbinailSuffix.length + 1).substr(0, thumbinailSuffix.length - 8);
 }

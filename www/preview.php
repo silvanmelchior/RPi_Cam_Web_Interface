@@ -385,28 +385,11 @@
     
       <div class="container-fluid">
       <form action="preview.php" method="POST">
-      <h1><?php echo TXT_PREVIEW . ":  " . getFileType($tFile) . getFileIndex($tFile) ?>
+      <h1><?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
       <?php
          $thumbnails = getThumbnails();
          if ($pFile != "") {
-            $pIndex = array_search($tFile, $thumbnails);
-            $media_url = MEDIA_PATH . "/" . $pFile;
-            $link_url = MEDIA_PATH . "/" . $tFile;
-            $nav_links_base = 'preview.php?preview=';
-
-            if ($pIndex > 0) {
-               $prev = $thumbnails[$pIndex-1];
-            } else {
-               $prev = NULL;
-            }
-
-            if (($pIndex+1) < count($thumbnails)) {
-               $next = $thumbnails[$pIndex+1];
-            }
-            else {
-               $next = NULL;
-            }
-
+ 
             if(getFileType($tFile) == "t") {
                $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
             } else {
@@ -433,7 +416,7 @@
          <div id='media'></div>
          <script>
             var thumbnails = <?php echo json_encode($thumbnails); ?>;
-            var linksBase = "<?php echo $nav_links_base; ?>";
+            var linksBase = 'preview.php?preview=';
             var mediaBase = "<?php echo MEDIA_PATH . '/'; ?>";
             var previewWidth = <?php echo $previewSize; ?>;
 
