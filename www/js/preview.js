@@ -9,27 +9,26 @@ function load_preview(thumbnail) {
 
 	title.innerHTML = fileTitle(thumbnail);
 
-	var prev, next;
 	var imageIndex = thumbnails.indexOf(thumbnail);
-	if (imageIndex > 0) {
-		prev = thumbnails[imageIndex-1];
-	}
-	if (imageIndex >= 0 && imageIndex < thumbnails.length-1) {
-		next = thumbnails[imageIndex+1];
-	}
 
-	if (prev) {
+	// Previous 
+	if (imageIndex > 0) {
+		var prev = thumbnails[imageIndex-1];
 		prevButton.disabled = false;
 		prevButton.onclick = function() {
+			history.pushState(null, null, linksBase + prev);
 			load_preview(prev);
 		}
 	} else {
 		prevButton.disabled = true;
 	}
 
-	if (next) {
+	// Next
+	if (imageIndex >= 0 && imageIndex < thumbnails.length-1) {
+		var next = thumbnails[imageIndex+1];
 		nextButton.disabled = false;
 		nextButton.onclick = function() {
+			history.pushState(null, null, linksBase + next);
 			load_preview(next);
 		}
 	} else {
