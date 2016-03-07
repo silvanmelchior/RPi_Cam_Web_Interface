@@ -89,7 +89,7 @@
       foreach($config as $key => $value) {
          $cstring .= $key . ' ' . $value . "\n";
       }
-      if (cstring != "") {
+      if ($cstring != "") {
          $fp = fopen(LBASE_DIR . '/' . CONFIG_FILE2, 'w');
          fwrite($fp, "#User config file\n");
          fwrite($fp, $cstring);
