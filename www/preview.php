@@ -265,7 +265,7 @@
       echo "</legend>";
       if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
       echo "<br>$fDate<br>$fTime<br>";
-      if ($fsz > 0) echo "<a title='$rFile' href='javascript:load_preview(\"$f\");'>";
+      if ($fsz > 0) echo "<a title='$rFile' href='#' onclick='load_preview(\"$f\");'>";
       echo "<img src='" . MEDIA_PATH . "/$f' style='width:" . $ts . "px'/>";
       if ($fsz > 0) echo "</a>";
       echo "</fieldset> ";
