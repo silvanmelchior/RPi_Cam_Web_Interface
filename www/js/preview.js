@@ -41,10 +41,13 @@ function load_preview(thumbnail) {
 	// Previous 
 	if (imageIndex > 0) {
 		prev = thumbnails[imageIndex-1];
-		preloadImage(mediaBase + imageFromThumbnail(prev));
 		prevButton.disabled = false;
 		prevButton.onclick = function() {
 			load_preview(prev);
+		}
+
+		if (fileExtension(imageFromThumbnail(prev)) == 'jpg') {
+			preloadImage(mediaBase + imageFromThumbnail(prev));
 		}
 	} else {
 		prev = null;
@@ -54,10 +57,13 @@ function load_preview(thumbnail) {
 	// Next
 	if (imageIndex >= 0 && imageIndex < thumbnails.length-1) {
 		next = thumbnails[imageIndex+1];
-		preloadImage(mediaBase + imageFromThumbnail(next));
 		nextButton.disabled = false;
 		nextButton.onclick = function() {
 			load_preview(next);
+		}
+
+		if (fileExtension(imageFromThumbnail(next)) == 'jpg') {
+			preloadImage(mediaBase + imageFromThumbnail(next));
 		}
 	} else {
 		next = null;
