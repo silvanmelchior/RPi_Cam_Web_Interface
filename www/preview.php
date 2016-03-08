@@ -359,6 +359,8 @@
       echo "&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button><br>";
    }
    
+   $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
+   $thumbnails = getThumbnails();
 ?>
 <!DOCTYPE html>
 <html>
@@ -385,40 +387,32 @@
     
       <div class="container-fluid">
       <form action="preview.php" method="POST">
-      <h1><?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
       <?php
-         $thumbnails = getThumbnails();
          if ($pFile != "") {
- 
-            if(getFileType($tFile) == "t") {
-               $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
-            } else {
-               $convertCmd = NULL;
-            }
-
       ?>
+         <h1>
+            <?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
             <input type='button' value='&larr;' class='btn btn-primary' name='prev'>
             <input type='button' value='&rarr;' class='btn btn-primary' name='next'>
 
-            <button class='btn btn-primary' type='submit' name='download1' value='$tFile'><?php echo BTN_DOWNLOAD; ?></button>
-            <button class='btn btn-danger' type='submit' name='delete1' value='$tFile'><?php echo BTN_DELETE; ?></button>
+            <button class='btn btn-primary' type='submit' name='download1'><?php echo BTN_DOWNLOAD; ?></button>
+            <button class='btn btn-danger' type='submit' name='delete1'><?php echo BTN_DELETE; ?></button>
             
-            <br></h1>
+            <button class='btn btn-primary' type='submit' name='convert'><?php echo BTN_CONVERT ?></button>
+            <br>
+         </h1>
 
-      <?php
-            if(getFileType($tFile) == "t") {
-               $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
-               echo "<button class='btn btn-primary' type='submit' name='convert' value='$tFile'>" . BTN_CONVERT . "</button>";
-               echo "Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='$convertCmd'><br><br>";
-            }
+         <div id="convert-details">
+            Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo $convertCmd ?>'><br><br>
+         </div>
 
-      ?>
          <div id='media'></div>
          <script>
-            var thumbnails = <?php echo json_encode($thumbnails); ?>;
+            var thumbnails = <?php echo json_encode($thumbnails) ?>;
             var linksBase = 'preview.php?preview=';
-            var mediaBase = "<?php echo MEDIA_PATH . '/'; ?>";
-            var previewWidth = <?php echo $previewSize; ?>;
+            var mediaBase = "<?php echo MEDIA_PATH . '/' ?>";
+            var previewWidth = <?php echo $previewSize ?>;
+            var convertCmd = "<?php echo file_get_contents(BASE_DIR . '/' . CONVERT_CMD) ?>";
 
             load_preview("<?php echo $tFile; ?>");
          </script>

@@ -4,10 +4,17 @@ var thumbinailSuffix = '.v0000.th.jpg';
 function load_preview(thumbnail) {
 	var prevButton = document.getElementsByName('prev')[0];
 	var nextButton = document.getElementsByName('next')[0];
+	var downloadButton = document.getElementsByName('download1')[0];
+	var deleteButton = document.getElementsByName('delete1')[0];
+	var convertDetailsDiv = document.getElementById('convert-details');
+	var convertButton = document.getElementsByName('convert')[0];
 	var mediaDiv = document.getElementById('media');
 	var title = document.getElementById('media-title');
 
+
 	title.innerHTML = fileTitle(thumbnail);
+	downloadButton.value = thumbnail;
+	deleteButton.value = thumbnail;
 
 	var imageIndex = thumbnails.indexOf(thumbnail);
 
@@ -46,6 +53,16 @@ function load_preview(thumbnail) {
 
 		mediaDiv.innerHTML = media_content;
 	}
+
+	if (fileType(thumbnail) == 't') {
+		convertDetailsDiv.style.display = 'inline';
+		convertButton.style.display = 'inline';
+		convertButton.value = thumbnail;
+	} else {
+		convertDetailsDiv.style.display = 'none';
+		convertButton.style.display = 'none';
+		convertButton.value = '';
+	}
 }
 
 function imageFromThumbnail(thumbnailName) {
@@ -54,6 +71,11 @@ function imageFromThumbnail(thumbnailName) {
 
 function fileExtension(fileName) {
 	return fileName.split('.').pop();
+}
+
+function fileType(fileName) {
+	var suffix = fileName.substr(-thumbinailSuffix.length);
+	return suffix.substr(1, 1);
 }
 
 function fileTitle(thumbnailName) {
