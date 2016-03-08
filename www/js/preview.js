@@ -1,4 +1,22 @@
 var thumbinailSuffix = '.v0000.th.jpg'; // Sample suffix
+var next, prev;
+
+(function() {
+	document.onkeyup = function () {
+		switch (event.keyCode) {
+		case 39:
+		    if (next) {
+		    	load_preview(next);
+		    }
+		    break;
+		case 37:
+		    if (prev) {
+		    	load_preview(prev);
+		    }
+		    break;
+		}
+	};
+})();
 
 function load_preview(thumbnail) {
 	var previewDiv = document.getElementById('preview');
@@ -22,23 +40,25 @@ function load_preview(thumbnail) {
 
 	// Previous 
 	if (imageIndex > 0) {
-		var prev = thumbnails[imageIndex-1];
+		prev = thumbnails[imageIndex-1];
 		prevButton.disabled = false;
 		prevButton.onclick = function() {
 			load_preview(prev);
 		}
 	} else {
+		prev = null;
 		prevButton.disabled = true;
 	}
 
 	// Next
 	if (imageIndex >= 0 && imageIndex < thumbnails.length-1) {
-		var next = thumbnails[imageIndex+1];
+		next = thumbnails[imageIndex+1];
 		nextButton.disabled = false;
 		nextButton.onclick = function() {
 			load_preview(next);
 		}
 	} else {
+		next = null;
 		nextButton.disabled = true;
 	}
 
