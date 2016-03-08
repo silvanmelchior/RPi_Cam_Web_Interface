@@ -265,7 +265,7 @@
       echo "</legend>";
       if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
       echo "<br>$fDate<br>$fTime<br>";
-      if ($fsz > 0) echo "<a title='$rFile' href='preview.php?preview=$f'>";
+      if ($fsz > 0) echo "<a title='$rFile' href='javascript:load_preview(\"$f\");'>";
       echo "<img src='" . MEDIA_PATH . "/$f' style='width:" . $ts . "px'/>";
       if ($fsz > 0) echo "</a>";
       echo "</fieldset> ";
@@ -373,6 +373,14 @@
       <script src="js/style_minified.js"></script>
       <script src="js/script.js"></script>
       <script src="js/preview.js"></script>
+      <script>
+         var thumbnails = <?php echo json_encode($thumbnails) ?>;
+         var linksBase = 'preview.php?preview=';
+         var mediaBase = "<?php echo MEDIA_PATH . '/' ?>";
+         var previewWidth = <?php echo $previewSize ?>;
+         var convertCmd = "<?php echo file_get_contents(BASE_DIR . '/' . CONVERT_CMD) ?>";
+      </script>
+
    </head>
    <body>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -387,39 +395,32 @@
     
       <div class="container-fluid">
       <form action="preview.php" method="POST">
-      <?php
-         if ($pFile != "") {
-      ?>
-         <h1>
-            <?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
-            <input type='button' value='&larr;' class='btn btn-primary' name='prev'>
-            <input type='button' value='&rarr;' class='btn btn-primary' name='next'>
+         <div id='preview' style="display: none;">
+            <h1>
+               <?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
+               <input type='button' value='&larr;' class='btn btn-primary' name='prev'>
+               <input type='button' value='&rarr;' class='btn btn-primary' name='next'>
 
-            <button class='btn btn-primary' type='submit' name='download1'><?php echo BTN_DOWNLOAD; ?></button>
-            <button class='btn btn-danger' type='submit' name='delete1'><?php echo BTN_DELETE; ?></button>
-            
-            <button class='btn btn-primary' type='submit' name='convert'><?php echo BTN_CONVERT ?></button>
-            <br>
-         </h1>
+               <button class='btn btn-primary' type='submit' name='download1'><?php echo BTN_DOWNLOAD; ?></button>
+               <button class='btn btn-danger' type='submit' name='delete1'><?php echo BTN_DELETE; ?></button>
+               
+               <button class='btn btn-primary' type='submit' name='convert'><?php echo BTN_CONVERT ?></button>
+               <br>
+            </h1>
 
-         <div id="convert-details">
-            Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo $convertCmd ?>'><br><br>
+            <div id="convert-details">
+               Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo $convertCmd ?>'><br><br>
+            </div>
+
+            <div id='media'></div>
          </div>
 
-         <div id='media'></div>
          <script>
-            var thumbnails = <?php echo json_encode($thumbnails) ?>;
-            var linksBase = 'preview.php?preview=';
-            var mediaBase = "<?php echo MEDIA_PATH . '/' ?>";
-            var previewWidth = <?php echo $previewSize ?>;
-            var convertCmd = "<?php echo file_get_contents(BASE_DIR . '/' . CONVERT_CMD) ?>";
-
-            load_preview("<?php echo $tFile; ?>");
+            var thumbnail = getParameterByName('preview');
+            if (thumbnail) {
+               load_preview(thumbnail);
+            }
          </script>
-
-      <?php 
-         } 
-      ?>
 
          <h1><?php echo TXT_FILES; ?>
          <button class='btn btn-primary' type='submit' name='action' value='selectNone'><?php echo BTN_SELECTNONE; ?></button>

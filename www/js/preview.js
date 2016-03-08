@@ -1,7 +1,7 @@
-/*global thumbnails,previewWidth,linksBase,mediaBase*/
-var thumbinailSuffix = '.v0000.th.jpg';
+var thumbinailSuffix = '.v0000.th.jpg'; // Sample suffix
 
 function load_preview(thumbnail) {
+	var previewDiv = document.getElementById('preview');
 	var prevButton = document.getElementsByName('prev')[0];
 	var nextButton = document.getElementsByName('next')[0];
 	var downloadButton = document.getElementsByName('download1')[0];
@@ -11,6 +11,8 @@ function load_preview(thumbnail) {
 	var mediaDiv = document.getElementById('media');
 	var title = document.getElementById('media-title');
 
+	previewDiv.style.display = 'block';
+	history.pushState(null, null, linksBase + thumbnail);
 
 	title.innerHTML = fileTitle(thumbnail);
 	downloadButton.value = thumbnail;
@@ -23,7 +25,6 @@ function load_preview(thumbnail) {
 		var prev = thumbnails[imageIndex-1];
 		prevButton.disabled = false;
 		prevButton.onclick = function() {
-			history.pushState(null, null, linksBase + prev);
 			load_preview(prev);
 		}
 	} else {
@@ -35,7 +36,6 @@ function load_preview(thumbnail) {
 		var next = thumbnails[imageIndex+1];
 		nextButton.disabled = false;
 		nextButton.onclick = function() {
-			history.pushState(null, null, linksBase + next);
 			load_preview(next);
 		}
 	} else {
@@ -80,4 +80,14 @@ function fileType(fileName) {
 
 function fileTitle(thumbnailName) {
 	return thumbnailName.substr(thumbnailName.length - thumbinailSuffix.length + 1).substr(0, thumbinailSuffix.length - 8);
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
