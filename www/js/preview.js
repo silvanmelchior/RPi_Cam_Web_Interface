@@ -41,6 +41,7 @@ function load_preview(thumbnail) {
 	// Previous 
 	if (imageIndex > 0) {
 		prev = thumbnails[imageIndex-1];
+		preloadImage(mediaBase + imageFromThumbnail(prev));
 		prevButton.disabled = false;
 		prevButton.onclick = function() {
 			load_preview(prev);
@@ -53,6 +54,7 @@ function load_preview(thumbnail) {
 	// Next
 	if (imageIndex >= 0 && imageIndex < thumbnails.length-1) {
 		next = thumbnails[imageIndex+1];
+		preloadImage(mediaBase + imageFromThumbnail(next));
 		nextButton.disabled = false;
 		nextButton.onclick = function() {
 			load_preview(next);
@@ -100,6 +102,11 @@ function fileType(fileName) {
 
 function fileTitle(thumbnailName) {
 	return thumbnailName.substr(thumbnailName.length - thumbinailSuffix.length + 1).substr(0, thumbinailSuffix.length - 8);
+}
+
+function preloadImage(url) {
+    var _img = new Image();
+    _img.src = url;
 }
 
 function getParameterByName(name, url) {
