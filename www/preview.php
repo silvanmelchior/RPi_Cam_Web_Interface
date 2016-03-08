@@ -395,7 +395,7 @@
     
       <div class="container-fluid">
       <form action="preview.php" method="POST">
-         <div id='preview' style="display: none;">
+         <div id='preview' style="display: none; min-height: <?php echo $previewSize ?>px">
             <h1>
                <?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
                <input type='button' value='&larr;' class='btn btn-primary' name='prev'>
