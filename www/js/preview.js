@@ -76,7 +76,7 @@ function load_preview(thumbnail) {
 		if (fileExtension(mediaURL) == 'jpg') {
 			media_content = '<a href="' + mediaURL + '" target="_blank"><img src="' + mediaURL + '" style="width: ' + previewWidth + 'px;"></a>';
 		} else {
-			media_content = '<video style="width:' + previewWidth + '"px;" controls><source src="' + mediaURL + '" type="video/mp4">Your browser does not support the video tag.</video>';
+			media_content = '<video style="width:' + previewWidth + 'px;" controls><source src="' + mediaURL + '" type="video/mp4">Your browser does not support the video tag.</video>';
 		}
 
 		mediaDiv.innerHTML = media_content;
