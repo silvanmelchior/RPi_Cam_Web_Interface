@@ -68,13 +68,13 @@ sudo mkdir -p ./Backup/Preinstall
 # /etc/apache2/sites-available/000-default.conf
 if [ -f "/etc/apache2/sites-available/default" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/default ]; then
-     cp --parents /etc/apache2/sites-available/default ./Backup/Preinstall/
+     sudo cp --parents /etc/apache2/sites-available/default ./Backup/Preinstall/
    fi
    APACHEDEFAULT="/etc/apache2/sites-available/default"
    echo "File $APACHEDEFAULT exist."
 elif [ -f "/etc/apache2/sites-available/000-default.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/000-default.conf ]; then
-     cp --parents /etc/apache2/sites-available/000-default.conf ./Backup/Preinstall/
+     sudo cp --parents /etc/apache2/sites-available/000-default.conf ./Backup/Preinstall/
    fi
    APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
    echo "File $APACHEDEFAULT exist."   
@@ -85,7 +85,7 @@ fi
 #/etc/apache2/apache2.conf
 if [ -f "/etc/apache2/apache2.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/apache2.conf ]; then
-     cp --parents /etc/apache2/apache2.conf ./Backup/Preinstall/
+     sudo cp --parents /etc/apache2/apache2.conf ./Backup/Preinstall/
    fi
    echo "File /etc/apache2/apache2.conf exist." 
 else
@@ -95,7 +95,7 @@ fi
 # /etc/apache2/ports.conf
 if [ -f "/etc/apache2/ports.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/ports.conf ]; then
-     cp --parents /etc/apache2/ports.conf ./Backup/Preinstall/
+     sudo cp --parents /etc/apache2/ports.conf ./Backup/Preinstall/
    fi
    echo "File /etc/apache2/ports.conf exist." 
 else
@@ -105,7 +105,7 @@ fi
 # /etc/motion/motion.conf
 if [ -f "/etc/motion/motion.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/motion/motion.conf ]; then
-     cp --parents /etc/motion/motion.conf ./Backup/Preinstall/
+     sudo cp --parents /etc/motion/motion.conf ./Backup/Preinstall/
    fi
    echo "File /etc/motion/motion.conf exist." 
 else
@@ -115,7 +115,7 @@ fi
 # /etc/rc.local
 if [ -f "/etc/rc.local" ]; then
    if [ ! -f ./Backup/Preinstall/etc/rc.local ]; then
-     cp --parents /etc/rc.local ./Backup/Preinstall/
+     sudo cp --parents /etc/rc.local ./Backup/Preinstall/
    fi
    echo "File /etc/rc.local exist." 
 else
@@ -125,7 +125,7 @@ fi
 # /etc/passwd
 if [ -f "/etc/passwd" ]; then
    if [ ! -f ./Backup/Preinstall/etc/passwd ]; then
-     cp --parents /etc/passwd ./Backup/Preinstall/
+     sudo cp --parents /etc/passwd ./Backup/Preinstall/
    fi
    echo "File /etc/passwd exist." 
 else
@@ -147,7 +147,7 @@ fi
 
 # -------------------------------- END/File locations --------------------------------
 
-WWWROOT=$(cat $APACHEDEFAULT | grep "DocumentRoot" | cut -d " " -f2)
+WWWROOT=$(sudo cat $APACHEDEFAULT | grep "DocumentRoot" | cut -d " " -f2)
 
 # -------------------------------- START/config.txt --------------------------------
 # Config options located in ./config.txt. In first run script makes that file for you.
@@ -180,13 +180,13 @@ fi
 # WEBPORT
 #cat 000-default.conf | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1
 if ! grep -Fq "WEBPORT=" ./config.txt; then
-    WEBPORT=$(cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+    WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
     sudo echo "# Apache web server port" >> ./config.txt
     sudo echo "WEBPORT=\"$WEBPORT\"" >> ./config.txt
     sudo echo "" >> ./config.txt
 fi
 if [ "$WEBPORT" == "" ]; then
-    WEBPORT=$(cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+    WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
     sudo sed -i "s/^WEBPORT=.*/WEBPORT=\"$WEBPORT\"/g" ./config.txt
 fi
 
