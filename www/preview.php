@@ -265,7 +265,7 @@
       echo "</legend>";
       if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
       echo "<br>$fDate<br>$fTime<br>";
-      if ($fsz > 0) echo "<a title='$rFile' href='preview.php?preview=$f'>";
+      if ($fsz > 0) echo "<a title='$rFile' href='#' onclick='load_preview(\"$f\");'>";
       echo "<img src='" . MEDIA_PATH . "/$f' style='width:" . $ts . "px'/>";
       if ($fsz > 0) echo "</a>";
       echo "</fieldset> ";
@@ -359,6 +359,8 @@
       echo "&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button><br>";
    }
    
+   $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
+   $thumbnails = getThumbnails();
 ?>
 <!DOCTYPE html>
 <html>
@@ -370,6 +372,15 @@
       <link rel="stylesheet" href="<?php echo getStyle(); ?>" />
       <script src="js/style_minified.js"></script>
       <script src="js/script.js"></script>
+      <script src="js/preview.js"></script>
+      <script>
+         var thumbnails = <?php echo json_encode($thumbnails) ?>;
+         var linksBase = 'preview.php?preview=';
+         var mediaBase = "<?php echo MEDIA_PATH . '/' ?>";
+         var previewWidth = <?php echo $previewSize ?>;
+         var convertCmd = "<?php echo file_get_contents(BASE_DIR . '/' . CONVERT_CMD) ?>";
+      </script>
+
    </head>
    <body>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -384,43 +395,41 @@
     
       <div class="container-fluid">
       <form action="preview.php" method="POST">
-      <?php
-         $thumbnails = getThumbnails();
-         if ($pFile != "") {
-            $pIndex = array_search($tFile, $thumbnails);
-            echo "<h1>" . TXT_PREVIEW . ":  " . getFileType($tFile) . getFileIndex($tFile);
-            if ($pIndex > 0)
-               $attr = 'onclick="location.href=\'preview.php?preview=' . $thumbnails[$pIndex-1] . '\'"';
-            else
-               $attr = 'disabled';
-            echo "&nbsp;&nbsp;<input type='button' value='&larr;' class='btn btn-primary' name='prev' $attr >";
-            if (($pIndex+1) < count($thumbnails))
-               $attr = 'onclick="location.href=\'preview.php?preview=' . $thumbnails[$pIndex+1] . '\'"';
-            else
-               $attr = 'disabled';
-            echo "&nbsp;&nbsp;<input type='button' value='&rarr;' class='btn btn-primary' name='next' $attr>";
-            echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='download1' value='$tFile'>" . BTN_DOWNLOAD . "</button>";
-            echo "&nbsp;<button class='btn btn-danger' type='submit' name='delete1' value='$tFile'>" . BTN_DELETE . "</button>";
-            if(getFileType($tFile) == "t") {
-               $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
-               echo "&nbsp;<button class='btn btn-primary' type='submit' name='convert' value='$tFile'>" . BTN_CONVERT . "</button>";
-               echo "<br></h1>Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='$convertCmd'><br><br>";
-            } else {
-               echo "<br></h1>";
+         <div id='preview' style="display: none; min-height: <?php echo $previewSize ?>px">
+            <h1>
+               <?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
+               <input type='button' value='&larr;' class='btn btn-primary' name='prev'>
+               <input type='button' value='&rarr;' class='btn btn-primary' name='next'>
+
+               <button class='btn btn-primary' type='submit' name='download1'><?php echo BTN_DOWNLOAD; ?></button>
+               <button class='btn btn-danger' type='submit' name='delete1'><?php echo BTN_DELETE; ?></button>
+               
+               <button class='btn btn-primary' type='submit' name='convert'><?php echo BTN_CONVERT ?></button>
+               <br>
+            </h1>
+
+            <div id="convert-details">
+               Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo $convertCmd ?>'><br><br>
+            </div>
+
+            <div id='media'></div>
+         </div>
+
+         <script>
+            var thumbnail = getParameterByName('preview');
+            if (thumbnail) {
+               load_preview(thumbnail);
             }
-            if(substr($pFile, -3) == "jpg") {
-               echo "<a href='" . MEDIA_PATH . "/$tFile' target='_blank'><img src='" . MEDIA_PATH . "/$pFile' width='" . $previewSize . "px'></a>";
-            } else {
-               echo "<video width='" . $previewSize . "px' controls><source src='" . MEDIA_PATH . "/$pFile' type='video/mp4'>Your browser does not support the video tag.</video>";
-            }
-         }
-         echo "<h1>" . TXT_FILES . "&nbsp;&nbsp;";
-         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='selectNone'>" . BTN_SELECTNONE . "</button>";
-         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='selectAll'>" . BTN_SELECTALL . "</button>";
-         echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='zipSel'>" . BTN_GETZIP . "</button>";
-         echo "&nbsp;&nbsp;<button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick=\"return confirm('Are you sure?');\">" . BTN_DELETESEL . "</button>";
-         echo "&nbsp;&nbsp;<button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick=\"return confirm('Are you sure?');\">" . BTN_DELETEALL . "</button>";
-         echo "</h1>";
+         </script>
+
+         <h1><?php echo TXT_FILES; ?>
+         <button class='btn btn-primary' type='submit' name='action' value='selectNone'><?php echo BTN_SELECTNONE; ?></button>
+         <button class='btn btn-primary' type='submit' name='action' value='selectAll'><?php echo BTN_SELECTALL; ?></button>
+         <button class='btn btn-primary' type='submit' name='action' value='zipSel'><?php echo BTN_GETZIP; ?></button>
+         <button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick="return confirm('Are you sure?');"><?php echo BTN_DELETESEL; ?></button>
+         <button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick="return confirm('Are you sure?');"><?php echo BTN_DELETEALL; ?></button>
+         </h1>
+         <?php
          diskUsage();
          if(CONTROLS_POS == 'top') settingsControls();
          if ($debugString !="") echo "$debugString<br>";
