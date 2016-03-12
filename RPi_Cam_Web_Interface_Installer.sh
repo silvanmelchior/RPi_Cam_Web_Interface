@@ -68,13 +68,13 @@ sudo mkdir -p ./Backup/Preinstall
 # /etc/apache2/sites-available/000-default.conf
 if [ -f "/etc/apache2/sites-available/default" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/default ]; then
-     sudo cp --parents /etc/apache2/sites-available/default ./Backup/Preinstall/
+     sudo cp -p --parents /etc/apache2/sites-available/default ./Backup/Preinstall/
    fi
    APACHEDEFAULT="/etc/apache2/sites-available/default"
    echo "File $APACHEDEFAULT exist."
 elif [ -f "/etc/apache2/sites-available/000-default.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/000-default.conf ]; then
-     sudo cp --parents /etc/apache2/sites-available/000-default.conf ./Backup/Preinstall/
+     sudo cp -p --parents /etc/apache2/sites-available/000-default.conf ./Backup/Preinstall/
    fi
    APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
    echo "File $APACHEDEFAULT exist."   
@@ -85,7 +85,7 @@ fi
 #/etc/apache2/apache2.conf
 if [ -f "/etc/apache2/apache2.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/apache2.conf ]; then
-     sudo cp --parents /etc/apache2/apache2.conf ./Backup/Preinstall/
+     sudo cp -p --parents /etc/apache2/apache2.conf ./Backup/Preinstall/
    fi
    echo "File /etc/apache2/apache2.conf exist." 
 else
@@ -95,7 +95,7 @@ fi
 # /etc/apache2/ports.conf
 if [ -f "/etc/apache2/ports.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/apache2/ports.conf ]; then
-     sudo cp --parents /etc/apache2/ports.conf ./Backup/Preinstall/
+     sudo cp -p --parents /etc/apache2/ports.conf ./Backup/Preinstall/
    fi
    echo "File /etc/apache2/ports.conf exist." 
 else
@@ -105,7 +105,7 @@ fi
 # /etc/motion/motion.conf
 if [ -f "/etc/motion/motion.conf" ]; then
    if [ ! -f ./Backup/Preinstall/etc/motion/motion.conf ]; then
-     sudo cp --parents /etc/motion/motion.conf ./Backup/Preinstall/
+     sudo cp -p --parents /etc/motion/motion.conf ./Backup/Preinstall/
    fi
    echo "File /etc/motion/motion.conf exist." 
 else
@@ -115,7 +115,7 @@ fi
 # /etc/rc.local
 if [ -f "/etc/rc.local" ]; then
    if [ ! -f ./Backup/Preinstall/etc/rc.local ]; then
-     sudo cp --parents /etc/rc.local ./Backup/Preinstall/
+     sudo cp -p --parents /etc/rc.local ./Backup/Preinstall/
    fi
    echo "File /etc/rc.local exist." 
 else
@@ -125,7 +125,7 @@ fi
 # /etc/passwd
 if [ -f "/etc/passwd" ]; then
    if [ ! -f ./Backup/Preinstall/etc/passwd ]; then
-     sudo cp --parents /etc/passwd ./Backup/Preinstall/
+     sudo cp -p --parents /etc/passwd ./Backup/Preinstall/
    fi
    echo "File /etc/passwd exist." 
 else
@@ -339,6 +339,7 @@ FN_SECURE_APACHE_YES ()
 	if [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/default" ]; then
 	  tmpfile=$(mktemp)
 	  sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' $APACHEDEFAULT > "$tmpfile" && sudo mv "$tmpfile" $APACHEDEFAULT
+	#APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
 	elif [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/000-default.conf" ]; then
 	  tmpfile=$(mktemp)
 	  sudo awk '/AllowOverride/{c+=1}{if(c==3){sub("AllowOverride.*","AllowOverride All",$0)};print}' /etc/apache2/apache2.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/apache2.conf
@@ -539,7 +540,7 @@ fi
 # We edit $APACHEDEFAULT
 FN_APACHE_DEFAULT_INSTALL ()
 {
-if ! grep -Fq 'cam_pic.php' $APACHEDEFAULT; then
+if ! sudo grep -Fq 'cam_pic.php' $APACHEDEFAULT; then
   if [ ! "$RPICAMDIR" == "" ]; then
     sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www\/$RPICAMDIR\/>/g" $APACHEDEFAULT
   fi	
@@ -549,9 +550,10 @@ fi
 }
 FN_APACHE_DEFAULT_REMOVE ()
 {
-if grep -Fq 'cam_pic.php' $APACHEDEFAULT; then
+if sudo grep -Fq 'cam_pic.php' $APACHEDEFAULT; then
   if [ ! "$RPICAMDIR" == "" ]; then
-    sudo sed -i 's/DocumentRoot\ \/var\/www.*/DocumentRoot\ \/var\/www/g' $APACHEDEFAULT
+    # We disable next row. It was for remove old rpicam. There we changed DocumentRoot. And that was revert that changes.
+    #sudo sed -i 's/DocumentRoot\ \/var\/www.*/DocumentRoot\ \/var\/www/g' $APACHEDEFAULT
     sudo sed -i "s/<Directory\ \/var\/www\/$RPICAMDIR\/>/<Directory\ \/var\/www\/>/g" $APACHEDEFAULT
   fi
   sudo sed -i '/SetEnvIf\ Request_URI\ "\/cam_pic.php$|\/status_mjpeg.php$"\ dontlog/d' $APACHEDEFAULT
@@ -669,6 +671,7 @@ do
         sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt $WWWROOT/$RPICAMDIR/status_mjpeg.txt
 
         FN_APACHE_DEFAULT_INSTALL
+
         sudo cp etc/apache2/conf.d/other-vhosts-access-log $APACHELOG/other-vhosts-access-log
         sudo chmod 644 $APACHELOG/other-vhosts-access-log
 
@@ -832,7 +835,7 @@ do
           sudo ln -s /etc/raspimjpeg $WWWROOT/$RPICAMDIR/raspimjpeg
         fi
 
-	     FN_AUTOSTART
+	    FN_AUTOSTART
 
         if [ "$RPICAMDIR" == "" ]; then
           sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
@@ -860,7 +863,7 @@ do
   configure)
         FN_CONFIGURE_MENU ()
         {
-        WEBPORT=$(cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+        WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
 		
         if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
           AUTOSTART="\Zb\Z2(Enabled)"
@@ -869,9 +872,9 @@ do
         fi	
 
         if [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/default" ]; then
-          TMP_SECURITY=$(awk '/AllowOverride/ {i++}i==2{print $2; exit}' $APACHEDEFAULT)
+          TMP_SECURITY=$(sudo awk '/AllowOverride/ {i++}i==2{print $2; exit}' $APACHEDEFAULT)
         elif [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/000-default.conf" ]; then
-          TMP_SECURITY=$(awk '/AllowOverride/ {i++}i==3{print $2; exit}' /etc/apache2/apache2.conf)  
+          TMP_SECURITY=$(sudo awk '/AllowOverride/ {i++}i==3{print $2; exit}' /etc/apache2/apache2.conf)  
         fi
         if [ "$TMP_SECURITY" == "All" ]; then
           SECURITY="\Zb\Z2(Enabled)"
