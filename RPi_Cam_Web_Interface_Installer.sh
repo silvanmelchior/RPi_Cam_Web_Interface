@@ -537,6 +537,56 @@ if [ "$DEBUG" == "yes" ]; then
 fi
 }
 
+FN_STORAGE ()
+{
+# Do Not Change By Hand!
+CURRENT_STORAGE="$WWWROOT/$RPICAMDIR/media"
+
+if [[ -d "$CURRENT_STORAGE" && ! -L "$CURRENT_STORAGE" ]] ; then
+  # We make directory for new media
+  sudo mkdir -p $WWWROOT/$RPICAMDIR/storage
+  sudo chown -R www-data:www-data $WWWROOT/$RPICAMDIR/storage
+  # We move media to storage
+  sudo mv $WWWROOT/$RPICAMDIR/media $WWWROOT/$RPICAMDIR/storage
+  # We link it back to media
+  sudo ln -s $WWWROOT/$RPICAMDIR/storage/media $WWWROOT/$RPICAMDIR/media
+  sudo chown -R www-data:www-data $WWWROOT/$RPICAMDIR/media
+  CURRENT_STORAGE="$WWWROOT/$RPICAMDIR/storage/media"
+elif [[ -d "$CURRENT_STORAGE" && -L "$CURRENT_STORAGE" ]] ; then
+  HYPER=$(readlink -f $CURRENT_STORAGE)
+  CURRENT_STORAGE=$HYPER
+else
+  echo "$(date '+%d-%b-%Y-%H-%M') ERROR! Storage Folder or Link missing!" >> ./error.txt
+  echo "$(date '+%d-%b-%Y-%H-%M') ERROR! Storage Folder or Link missing!"
+  exit
+fi
+  
+  tmpfile=$(mktemp)
+  dialog  --backtitle "$backtitle" --title "Media Storage Path" --colors --cr-wrap --inputbox "\
+  \Zb\Zu Current storage path: \Zn \Zb\Z4 $CURRENT_STORAGE \Zn
+  \Zb\Zu Enter new storage location if you like. \Zn" 8 52 $CURRENT_STORAGE 2>$tmpfile
+			
+  sel=$?
+			
+  STORAGE=`cat $tmpfile`
+  case $sel in
+  0)
+	if [ "$STORAGE" != "$CURRENT_STORAGE" ]; then
+	  # We make directory for new storage location
+	  sudo mkdir -p $STORAGE
+	  sudo chown -R www-data:www-data $STORAGE
+	  sudo unlink $WWWROOT/$RPICAMDIR/media
+	  sudo ln -s $STORAGE $WWWROOT/$RPICAMDIR/media
+	  sudo mv $CURRENT_STORAGE/* $STORAGE
+	fi
+  ;;
+  1) source ./config.txt ;;
+  255) source ./config.txt ;;
+  esac
+
+  dialog --title 'Storage bath' --colors --infobox "\Zb\Zu Storage paht is set \Zn \Zb\Z4 $STORAGE \Zn" 4 48 ; sleep 3
+}
+
 # We edit $APACHEDEFAULT
 FN_APACHE_DEFAULT_INSTALL ()
 {
@@ -619,12 +669,12 @@ rm ./tmp_status
 	
 cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Installer" --colors --menu "Select your option:" 13 76 16)
 
-options=("1 install" "Install (Apache web server based)"
-         "2 install_nginx" "Install (Nginx web server based)"
-         "3 configure" "Configure RPi Cam (After install)"
-         "4 start" "Start RPi Cam \Zb\Z2$started_rpicam"
-         "5 stop" "Stop RPi Cam \Zb\Z1$stopped_rpicam"
-         "6 remove" "Remove RPi Cam")
+options=("1 install" "\Zb\ZuInstall\Zn (\Zb\ZuApache\Zn web server based)"
+         "2 install_nginx" "\Zb\ZuInstall\Zn (\Zb\ZuNginx\Zn web server based)"
+         "3 configure" "\Zb\Z1Configure\Zn RPi Cam (After install)"
+         "4 start" "\Zb\ZuStart\Zn RPi Cam \Zb\Z2$started_rpicam"
+         "5 stop" "\Zb\ZuStop\Zn RPi Cam \Zb\Z1$stopped_rpicam"
+         "6 remove" "\Zb\ZuRemove\Zn RPi Cam")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -644,6 +694,7 @@ do
         fi
 		
         FN_RPICAMDIR
+		
         sudo mkdir -p $WWWROOT/$RPICAMDIR/media
         sudo cp -r www/* $WWWROOT/$RPICAMDIR/
         if [ -e $WWWROOT/$RPICAMDIR/index.html ]; then
@@ -886,13 +937,14 @@ do
         	
         cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
         options=(
-            "1 update" "Update RPi Cam installer"
-            "2 upgrade" "Upgrade RPi Cam"
-            "3 apache_security" "Change Apache web server security $SECURITY" 
-            "4 apache_port" "Change Apache web server port \Zb\Z2($WEBPORT)"
-            "5 autostart" "RPi Cam Autostart Enable/Disable $AUTOSTART"
-            "6 backup_restore" "RPi Cam Backup or Restore"
-            "7 debug" "Run RPi Cam with debug mode"
+            "1 update" "\Zb\ZuUpdate\Zn RPi Cam installer"
+            "2 upgrade" "\Zb\ZuUpgrade\Zn RPi Cam"
+            "3 apache_security" "Change \Zb\ZuApache\Zn web server \Zb\Zusecurity\Zn $SECURITY" 
+            "4 apache_port" "Change \Zb\ZuApache\Zn web server \Zb\Zuport\Zn \Zb\Z2($WEBPORT)"
+            "5 autostart" "RPi Cam \Zb\ZuAutostart\Zn Enable/Disable $AUTOSTART"
+			"6 storage" "RPi Cam \Zb\ZuStorage location\Zn"
+            "7 backup_restore" "RPi Cam \Zb\ZuBackup\Zn or Restore"
+            "8 debug" "Run RPi Cam with \Zb\Zudebug\Zn mode"
             )
         choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choices" ]]; then
@@ -945,9 +997,14 @@ do
                 dialog --title 'Apache web port message' --infobox "Apache web port: $webport." 4 23 ; sleep 2
                 FN_CONFIGURE_MENU
                 ;;
-             autostart)
+			 autostart)
                 FN_AUTOSTART
                 dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
+                FN_CONFIGURE_MENU
+                ;;
+             storage)
+                FN_STORAGE
+                dialog --title 'Storage message' --infobox 'Changed storage location.' 4 23 ; sleep 2
                 FN_CONFIGURE_MENU
                 ;;
              backup_restore)
