@@ -408,6 +408,12 @@ function cmdHelp() {
              echo "<tr><td>ru</td><td>0/1</td><td>0/1 halt/restart RaspiMJPEG and release camera</td></tr>";
              echo "<tr><td>sc</td><td>1</td><td>Rescan for video and image indexes</td></tr>";
              echo "<tr><td>sy</td><td>macro</td><td>Execute macro</td></tr>";
+             echo "<tr><td>vp</td><td>0/1</td><td>Enable vector preview</td></tr>";
+             echo "<tr><td>mn</td><td>number</td><td>Set motion_noise</td></tr>";
+             echo "<tr><td>mt</td><td>number</td><td>Set motion_threshold</td></tr>";
+             echo "<tr><td>mi</td><td>filename</td><td>Set motion_image</td></tr>";
+             echo "<tr><td>mb</td><td>number</td><td>Set motion_startframes</td></tr>";
+             echo "<tr><td>me</td><td>number</td><td>Set motion_stopframes</td></tr>";
              echo "<tr><td>cn</td><td>1/2</td><td>Select camera (Compute model only)</td></tr>";
              echo "<tr><td>st</td><td>0/1</td><td>Camera statistics</td></tr>";
            echo "</table>";
