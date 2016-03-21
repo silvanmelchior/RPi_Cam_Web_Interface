@@ -59,17 +59,17 @@ do
     if [ "$WEBSERVER" == "nginx" ]; then
       WWWROOT=$(sudo cat /etc/nginx/sites-enabled/default | grep "^	root" | cut -d " " -f2 | cut -d ";" -f1)
       WEBPORT=$(sudo cat /etc/nginx/sites-available/default | grep "^	listen" | cut -d " " -f2 | head -1)
-	  INFO_NGINX="(Nginx installed)"
+      INFO_NGINX="(Nginx installed)"
     fi
     if [ "$WEBSERVER" == "apache2" ]; then
-	  if [ -f "/etc/apache2/sites-available/default" ]; then
-	    APACHEDEFAULT="/etc/apache2/sites-available/default"
-	  elif [ -f "/etc/apache2/sites-available/000-default.conf" ]; then
-	    APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
-	  fi
-	  WWWROOT=$(sudo cat $APACHEDEFAULT | grep "DocumentRoot" | cut -d " " -f2)
+      if [ -f "/etc/apache2/sites-available/default" ]; then
+        APACHEDEFAULT="/etc/apache2/sites-available/default"
+      elif [ -f "/etc/apache2/sites-available/000-default.conf" ]; then
+        APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
+      fi
+      WWWROOT=$(sudo cat $APACHEDEFAULT | grep "DocumentRoot" | cut -d " " -f2)
       WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-	  INFO_APACHE2="(Apache2 installed)"
+      INFO_APACHE2="(Apache2 installed)"
     fi
   fi
 done
@@ -193,22 +193,22 @@ FN_APACHEPORT ()
 
 FN_SECURE_APACHE_NO ()
 {
-	if [ "$DEBUG" == "yes" ]; then
-	  dialog --title 'FN_SECURE_APACHE_NO' --infobox 'FN_SECURE_APACHE_NO STARTED.' 4 25 ; sleep 2
-	fi
-	#APACHEDEFAULT="/etc/apache2/sites-available/default"
-	if [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/default" ]; then
-	  tmpfile=$(mktemp)
-	  sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' $APACHEDEFAULT > "$tmpfile" && sudo mv "$tmpfile" $APACHEDEFAULT
-	elif [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/000-default.conf" ]; then	
-	  tmpfile=$(mktemp)
-	  sudo awk '/AllowOverride/{c+=1}{if(c==3){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/apache2.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/apache2.conf
-	else
-      echo "$(date '+%d-%b-%Y-%H-%M') Disable security is not possible in apache conf!" >> ./error.txt
-	fi	
-	#sudo awk '/netcam_userpass/{c+=1}{if(c==1){sub("^netcam_userpass.*","; netcam_userpass value",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
-	sudo sed -i "s/^netcam_userpass.*/; netcam_userpass value/g" /etc/motion/motion.conf
-	sudo /etc/init.d/apache2 restart
+  if [ "$DEBUG" == "yes" ]; then
+    dialog --title 'FN_SECURE_APACHE_NO' --infobox 'FN_SECURE_APACHE_NO STARTED.' 4 25 ; sleep 2
+  fi
+  #APACHEDEFAULT="/etc/apache2/sites-available/default"
+  if [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/default" ]; then
+    tmpfile=$(mktemp)
+    sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' $APACHEDEFAULT > "$tmpfile" && sudo mv "$tmpfile" $APACHEDEFAULT
+  elif [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/000-default.conf" ]; then	
+    tmpfile=$(mktemp)
+    sudo awk '/AllowOverride/{c+=1}{if(c==3){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/apache2.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/apache2.conf
+  else
+    echo "$(date '+%d-%b-%Y-%H-%M') Disable security is not possible in apache conf!" >> ./error.txt
+  fi	
+  #sudo awk '/netcam_userpass/{c+=1}{if(c==1){sub("^netcam_userpass.*","; netcam_userpass value",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
+  sudo sed -i "s/^netcam_userpass.*/; netcam_userpass value/g" /etc/motion/motion.conf
+  sudo /etc/init.d/apache2 restart
 }
 
 FN_SECURE_APACHE ()
@@ -217,25 +217,25 @@ source ./config.txt
 
 FN_SECURE_APACHE_YES ()
 {
-	if [ "$DEBUG" == "yes" ]; then
-	  dialog --title 'FN_SECURE_APACHE_YES' --infobox 'FN_SECURE_APACHE_YES STARTED.' 4 25 ; sleep 2
-	fi
-	#APACHEDEFAULT="/etc/apache2/sites-available/default"
-	if [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/default" ]; then
-	  tmpfile=$(mktemp)
-	  sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' $APACHEDEFAULT > "$tmpfile" && sudo mv "$tmpfile" $APACHEDEFAULT
-	#APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
-	elif [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/000-default.conf" ]; then
-	  tmpfile=$(mktemp)
-	  sudo awk '/AllowOverride/{c+=1}{if(c==3){sub("AllowOverride.*","AllowOverride All",$0)};print}' /etc/apache2/apache2.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/apache2.conf
-	else
-      echo "$(date '+%d-%b-%Y-%H-%M') Enable security is not possible in apache conf!" >> ./error.txt
-	fi 
-	#sudo awk '/; netcam_userpass/{c+=1}{if(c==1){sub("; netcam_userpass.*","netcam_userpass '$user':'$passwd'",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
-	sudo sed -i "s/^; netcam_userpass.*/netcam_userpass/g" /etc/motion/motion.conf		
-	sudo sed -i "s/^netcam_userpass.*/netcam_userpass $user:$passwd/g" /etc/motion/motion.conf
-	sudo htpasswd -b -c /usr/local/.htpasswd $user $passwd
-	sudo /etc/init.d/apache2 restart
+  if [ "$DEBUG" == "yes" ]; then
+    dialog --title 'FN_SECURE_APACHE_YES' --infobox 'FN_SECURE_APACHE_YES STARTED.' 4 25 ; sleep 2
+  fi
+  #APACHEDEFAULT="/etc/apache2/sites-available/default"
+  if [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/default" ]; then
+    tmpfile=$(mktemp)
+    sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride All",$0)};print}' $APACHEDEFAULT > "$tmpfile" && sudo mv "$tmpfile" $APACHEDEFAULT
+  #APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
+  elif [ "$APACHEDEFAULT" == "/etc/apache2/sites-available/000-default.conf" ]; then
+    tmpfile=$(mktemp)
+    sudo awk '/AllowOverride/{c+=1}{if(c==3){sub("AllowOverride.*","AllowOverride All",$0)};print}' /etc/apache2/apache2.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/apache2.conf
+  else
+    echo "$(date '+%d-%b-%Y-%H-%M') Enable security is not possible in apache conf!" >> ./error.txt
+  fi 
+  #sudo awk '/; netcam_userpass/{c+=1}{if(c==1){sub("; netcam_userpass.*","netcam_userpass '$user':'$passwd'",$0)};print}' /etc/motion/motion.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/motion/motion.conf
+  sudo sed -i "s/^; netcam_userpass.*/netcam_userpass/g" /etc/motion/motion.conf		
+  sudo sed -i "s/^netcam_userpass.*/netcam_userpass $user:$passwd/g" /etc/motion/motion.conf
+  sudo htpasswd -b -c /usr/local/.htpasswd $user $passwd
+  sudo /etc/init.d/apache2 restart
 }
 
 # We make missing .htacess file
@@ -323,9 +323,6 @@ FN_AUTOSTART_DISABLE ()
   fi
 }
 
-FN_AUTOSTART ()
-{
-		
 FN_AUTOSTART_ENABLE ()
 {
 if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
@@ -375,6 +372,11 @@ if [ "$DEBUG" == "yes" ]; then
   dialog --title "FN_AUTOSTART_ENABLE ./config.txt contains" --textbox ./config.txt 22 70
 fi
 }
+
+FN_AUTOSTART ()
+{
+
+FN_AUTOSTART_ENABLE
 		
 source ./config.txt
 		
@@ -570,13 +572,13 @@ sudo chown motion:www-data /etc/motion/motion.conf
 sudo chmod 664 /etc/motion/motion.conf
 }
 
-		# -------------------------------- START/File locations --------------------------------
-		# List of files what We Back Up
-		##########################################
-		#/etc/rc.local
-		#/etc/passwd
-		##########################################
-		sudo mkdir -p ./Backup/Preinstall
+        # -------------------------------- START/File locations --------------------------------
+        # List of files what We Back Up
+        ##########################################
+        #/etc/rc.local
+        #/etc/passwd
+        ##########################################
+        sudo mkdir -p ./Backup/Preinstall
 
         #/etc/rc.local
         if [ -f "/etc/rc.local" ]; then
@@ -594,54 +596,54 @@ sudo chmod 664 /etc/motion/motion.conf
            if [ ! -f ./Backup/Preinstall/etc/passwd ]; then
              sudo cp -p --parents /etc/passwd ./Backup/Preinstall/
            fi
-           echo "File /etc/passwd ${GREEN}Exist.${NORMAL}" 
+	  echo "File /etc/passwd ${GREEN}Exist.${NORMAL}" 
         else
-           echo "$(date '+%d-%b-%Y-%H-%M') File /etc/passwd does not exist!" >> ./error.txt
-           echo "File /etc/passwd ${RED}does Not exist!${NORMAL}"
+	  echo "$(date '+%d-%b-%Y-%H-%M') File /etc/passwd does not exist!" >> ./error.txt
+	  echo "File /etc/passwd ${RED}does Not exist!${NORMAL}"
         fi
 
         # -------------------------------- END/File locations --------------------------------
 		
-		# -------------------------------- START/config.txt --------------------------------
-		# Config options located in ./config.txt. In first run script makes that file for you.
-		if [ ! -e ./config.txt ]; then
-		    sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
-		    sudo echo "" >> ./config.txt
-		fi
+	# -------------------------------- START/config.txt --------------------------------
+	# Config options located in ./config.txt. In first run script makes that file for you.
+	if [ ! -e ./config.txt ]; then
+	  sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
+	  sudo echo "" >> ./config.txt
+	fi
 
-		# We enable DEBUG installer script
-		if ! grep -Fq "DEBUG=" ./config.txt; then
-		  sudo echo "# Enable or disable DEBUG for installer script" >> ./config.txt
-		  sudo echo "DEBUG=\"no\"" >> ./config.txt
-		  sudo echo "" >> ./config.txt
-		fi
+	# We enable DEBUG installer script
+	if ! grep -Fq "DEBUG=" ./config.txt; then
+	  sudo echo "# Enable or disable DEBUG for installer script" >> ./config.txt
+	  sudo echo "DEBUG=\"no\"" >> ./config.txt
+	  sudo echo "" >> ./config.txt
+	fi
 
-		# RPICAMDIR
-		if ! grep -Fq "RPICAMDIR=" ./config.txt; then
- 		   sudo echo "# Rpicam install directory" >> ./config.txt
-		    sudo echo "RPICAMDIR=\"\"" >> ./config.txt
-		    sudo echo "" >> ./config.txt
-		fi
+	# RPICAMDIR
+	if ! grep -Fq "RPICAMDIR=" ./config.txt; then
+	  sudo echo "# Rpicam install directory" >> ./config.txt
+	  sudo echo "RPICAMDIR=\"\"" >> ./config.txt
+	  sudo echo "" >> ./config.txt
+	fi
 
-		# AUTOSTART
-		if ! grep -Fq "AUTOSTART=" ./config.txt; then
-		    sudo echo "# Enable or disable AUTOSTART" >> ./config.txt
-		    sudo echo "AUTOSTART=\"\"" >> ./config.txt
-		    sudo echo "" >> ./config.txt
-		fi
+	# AUTOSTART
+	if ! grep -Fq "AUTOSTART=" ./config.txt; then
+	  sudo echo "# Enable or disable AUTOSTART" >> ./config.txt
+	  sudo echo "AUTOSTART=\"\"" >> ./config.txt
+	  sudo echo "" >> ./config.txt
+	fi
 
-		# SECURITY
-		if ! grep -Fq "security=" ./config.txt; then
-				sudo echo "# Webserver security" >> ./config.txt
-				sudo echo "security=\"no\"" >> ./config.txt
-				sudo echo "user=\"\"" >> ./config.txt
-				sudo echo "passwd=\"\"" >> ./config.txt
-				sudo echo "" >> ./config.txt
-		fi
+	# SECURITY
+	if ! grep -Fq "security=" ./config.txt; then
+	  sudo echo "# Webserver security" >> ./config.txt
+	  sudo echo "security=\"no\"" >> ./config.txt
+	  sudo echo "user=\"\"" >> ./config.txt
+	  sudo echo "passwd=\"\"" >> ./config.txt
+	  sudo echo "" >> ./config.txt
+	fi
 
-		sudo chmod 664 ./config.txt
-		source ./config.txt  
-		# -------------------------------- END/config.txt --------------------------------
+	sudo chmod 664 ./config.txt
+	source ./config.txt  
+	# -------------------------------- END/config.txt --------------------------------
 
 # Start and Stop without GUI mode.
 case "$1" in
@@ -684,7 +686,7 @@ for i in "${process[@]}"
     else
       echo "process_$i="stopped"" >> tmp_status
     fi
-  done
+done
   
 source ./tmp_status
 
@@ -718,106 +720,110 @@ do
         dialog --title 'Basic Install message' --colors --infobox "\Zb\Z1Notice!\Zn Configure you settings after install using \Zb\Z1\"configure\"\Zn option." 5 43 ; sleep 4
         sudo killall raspimjpeg
         sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools usbmount
-		sudo a2enmod authz_groupfile
-		sudo service apache2 restart
+        sudo a2enmod authz_groupfile
+        sudo service apache2 restart
 		
-		# -------------------------------- START/File locations --------------------------------
-		# List of files what We Back Up
-		##########################################
-		#/etc/apache2/sites-available/default
-		#/etc/apache2/sites-available/000-default.conf
-		#/etc/apache2/apache2.conf
-		#/etc/apache2/ports.conf
-		#/etc/motion/motion.conf
-		# Directories
+        # -------------------------------- START/File locations --------------------------------
+        # List of files what We Back Up
+        ##########################################
+        #/etc/apache2/sites-available/default
+        #/etc/apache2/sites-available/000-default.conf
+        #/etc/apache2/apache2.conf
+        #/etc/apache2/ports.conf
+        #/etc/motion/motion.conf
+        # Directories
         #/etc/apache2/conf.d
         #/etc/apache2/conf-available
-		##########################################
-		#/etc/apache2/sites-available/default
+        ##########################################
+        #/etc/apache2/sites-available/default
         #/etc/apache2/sites-available/000-default.conf
         if [ -f "/etc/apache2/sites-available/default" ]; then
-           if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/default ]; then
-             sudo cp -p --parents /etc/apache2/sites-available/default ./Backup/Preinstall/
-           fi
-           APACHEDEFAULT="/etc/apache2/sites-available/default"
-           echo "File $APACHEDEFAULT ${GREEN}Exist.${NORMAL}"
+          if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/default ]; then
+            sudo cp -p --parents /etc/apache2/sites-available/default ./Backup/Preinstall/
+          fi
+          APACHEDEFAULT="/etc/apache2/sites-available/default"
+          echo "File $APACHEDEFAULT ${GREEN}Exist.${NORMAL}"
         elif [ -f "/etc/apache2/sites-available/000-default.conf" ]; then
-           if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/000-default.conf ]; then
-             sudo cp -p --parents /etc/apache2/sites-available/000-default.conf ./Backup/Preinstall/
-           fi
-           APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
-           echo "File $APACHEDEFAULT ${GREEN}Exist.${NORMAL}"  
+          if [ ! -f ./Backup/Preinstall/etc/apache2/sites-available/000-default.conf ]; then
+            sudo cp -p --parents /etc/apache2/sites-available/000-default.conf ./Backup/Preinstall/
+          fi
+          APACHEDEFAULT="/etc/apache2/sites-available/000-default.conf"
+          echo "File $APACHEDEFAULT ${GREEN}Exist.${NORMAL}"  
         else
-           echo "$(date '+%d-%b-%Y-%H-%M') File $APACHEDEFAULT does not exist!" >> ./error.txt
-           echo "File $APACHEDEFAULT ${RED}does Not exist!{NORMAL}"
+          echo "$(date '+%d-%b-%Y-%H-%M') File $APACHEDEFAULT does not exist!" >> ./error.txt
+          echo "File $APACHEDEFAULT ${RED}does Not exist!{NORMAL}"
         fi
         #/etc/apache2/apache2.conf
         if [ -f "/etc/apache2/apache2.conf" ]; then
-           if [ ! -f ./Backup/Preinstall/etc/apache2/apache2.conf ]; then
-             sudo cp -p --parents /etc/apache2/apache2.conf ./Backup/Preinstall/
-           fi
-           echo "File /etc/apache2/apache2.conf ${GREEN}Exist.${NORMAL}" 
+          if [ ! -f ./Backup/Preinstall/etc/apache2/apache2.conf ]; then
+            sudo cp -p --parents /etc/apache2/apache2.conf ./Backup/Preinstall/
+          fi
+          echo "File /etc/apache2/apache2.conf ${GREEN}Exist.${NORMAL}" 
         else
-           echo "$(date '+%d-%b-%Y-%H-%M') File /etc/apache2/apache2.conf does not exist!" >> ./error.txt
-           echo "File /etc/apache2/apache2.conf ${RED}does Not exist!${NORMAL}"
+          echo "$(date '+%d-%b-%Y-%H-%M') File /etc/apache2/apache2.conf does not exist!" >> ./error.txt
+          echo "File /etc/apache2/apache2.conf ${RED}does Not exist!${NORMAL}"
         fi
         #/etc/apache2/ports.conf
         if [ -f "/etc/apache2/ports.conf" ]; then
-           if [ ! -f ./Backup/Preinstall/etc/apache2/ports.conf ]; then
-             sudo cp -p --parents /etc/apache2/ports.conf ./Backup/Preinstall/
-           fi
-           echo "File /etc/apache2/ports.conf ${GREEN}Exist.${NORMAL}" 
+          if [ ! -f ./Backup/Preinstall/etc/apache2/ports.conf ]; then
+            sudo cp -p --parents /etc/apache2/ports.conf ./Backup/Preinstall/
+          fi
+          echo "File /etc/apache2/ports.conf ${GREEN}Exist.${NORMAL}" 
         else
-           echo "$(date '+%d-%b-%Y-%H-%M') File /etc/apache2/ports.conf does not exist!" >> ./error.txt
-           echo "File /etc/apache2/ports.conf ${RED}does Not exist!${NORMAL}"
+          echo "$(date '+%d-%b-%Y-%H-%M') File /etc/apache2/ports.conf does not exist!" >> ./error.txt
+          echo "File /etc/apache2/ports.conf ${RED}does Not exist!${NORMAL}"
         fi
         #/etc/motion/motion.conf
         if [ -f "/etc/motion/motion.conf" ]; then
-           if [ ! -f ./Backup/Preinstall/etc/motion/motion.conf ]; then
-             sudo cp -p --parents /etc/motion/motion.conf ./Backup/Preinstall/
-           fi
-           echo "File /etc/motion/motion.conf ${GREEN}Exist.${NORMAL}" 
+          if [ ! -f ./Backup/Preinstall/etc/motion/motion.conf ]; then
+            sudo cp -p --parents /etc/motion/motion.conf ./Backup/Preinstall/
+          fi
+          echo "File /etc/motion/motion.conf ${GREEN}Exist.${NORMAL}" 
         else
-           echo "$(date '+%d-%b-%Y-%H-%M') File /etc/motion/motion.conf does not exist!" >> ./error.txt
-           echo "File /etc/motion/motion.conf ${RED}does Not exist!${NORMAL}"
+          echo "$(date '+%d-%b-%Y-%H-%M') File /etc/motion/motion.conf does not exist!" >> ./error.txt
+          echo "File /etc/motion/motion.conf ${RED}does Not exist!${NORMAL}"
         fi
         # Directories
         #/etc/apache2/conf.d
         #/etc/apache2/conf-available
         if [ -d "/etc/apache2/conf.d" ]; then
-           APACHELOG="/etc/apache2/conf.d"
-           echo "Directory $APACHELOG ${GREEN}Exist.${NORMAL}"
+          APACHELOG="/etc/apache2/conf.d"
+          echo "Directory $APACHELOG ${GREEN}Exist.${NORMAL}"
         elif [ -d "/etc/apache2/conf-available" ]; then
-           APACHELOG="/etc/apache2/conf-available"
-           echo "Directory $APACHELOG ${GREEN}Exist.${NORMAL}"   
+          APACHELOG="/etc/apache2/conf-available"
+          echo "Directory $APACHELOG ${GREEN}Exist.${NORMAL}"   
         else
-           echo "$(date '+%d-%b-%Y-%H-%M') APACHELOG does not exist!" >> ./error.txt
-           echo "Directory APACHELOG ${RED}does Not exist!${NORMAL}"
+          echo "$(date '+%d-%b-%Y-%H-%M') APACHELOG does not exist!" >> ./error.txt
+          echo "Directory APACHELOG ${RED}does Not exist!${NORMAL}"
         fi
         # -------------------------------- END/File locations --------------------------------
         # -------------------------------- START/config.txt --------------------------------
-		# WEBPORT
-		#cat 000-default.conf | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1
-		if ! grep -Fq "WEBPORT=" ./config.txt; then
- 		   WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-		    sudo echo "# Web server port" >> ./config.txt
-		    sudo echo "WEBPORT=\"$WEBPORT\"" >> ./config.txt
-		    sudo echo "" >> ./config.txt
-		fi
-		if [ "$WEBPORT" == "" ]; then
-		    WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
-		    sudo sed -i "s/^WEBPORT=.*/WEBPORT=\"$WEBPORT\"/g" ./config.txt
-		fi
+        # WEBPORT
+        #cat 000-default.conf | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1
+        if ! grep -Fq "WEBPORT=" ./config.txt; then
+          WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+          sudo echo "# Web server port" >> ./config.txt
+          sudo echo "WEBPORT=\"$WEBPORT\"" >> ./config.txt
+          sudo echo "" >> ./config.txt
+	fi
+	if [ "$WEBPORT" == "" ]; then
+          WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
+          sudo sed -i "s/^WEBPORT=.*/WEBPORT=\"$WEBPORT\"/g" ./config.txt
+	fi
 		
-		sudo chmod 664 ./config.txt
-		source ./config.txt 
-		# -------------------------------- END/config.txt --------------------------------
-		
+	sudo chmod 664 ./config.txt
+	source ./config.txt 
+	# -------------------------------- END/config.txt --------------------------------
+	
+	# We need find wwwroot after apache2 installed
+	WWWROOT=$(sudo cat $APACHEDEFAULT | grep "DocumentRoot" | cut -d " " -f2)
         if [ "$WWWROOT" == "/var/www/html" ]; then
           sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
         fi
 		
         FN_RPICAMDIR
+		
+	FN_AUTOSTART_ENABLE
 		
         sudo mkdir -p $WWWROOT/$RPICAMDIR/media
         sudo cp -r www/* $WWWROOT/$RPICAMDIR/
@@ -887,17 +893,21 @@ do
           sudo ln -s /etc/raspimjpeg $WWWROOT/$RPICAMDIR/raspimjpeg
         fi
 
+        FN_MOTION
+        : '
+        # We commented old Whreezy way out. If we not get complaints FN_MOTION not working in Whreezy we can remove old way.
         if [ "$WWWROOT" == "/var/www" ]; then
           if [ "$RPICAMDIR" == "" ]; then
             sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
-          else
-            sudo sed -e "s/www/www\/$RPICAMDIR/" etc/motion/motion.conf.1 > etc/motion/motion.conf
-            sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$RPICAMDIR\/cam_pic.php/g" etc/motion/motion.conf
-            sudo cp -r etc/motion/motion.conf /etc/motion/			
-          fi
+        else
+          sudo sed -e "s/www/www\/$RPICAMDIR/" etc/motion/motion.conf.1 > etc/motion/motion.conf
+          sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost\/$RPICAMDIR\/cam_pic.php/g" etc/motion/motion.conf
+          sudo cp -r etc/motion/motion.conf /etc/motion/
+        fi
         elif [ "$WWWROOT" == "/var/www/html" ]; then
           FN_MOTION		
         fi
+        '
 		
         sudo usermod -a -G video www-data
         if [ -e $WWWROOT/$RPICAMDIR/uconfig ]; then
@@ -921,11 +931,11 @@ do
         sudo killall raspimjpeg
         sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc gpac motion zip libav-tools
 
-		# -------------------------------- START/File locations --------------------------------
-		# List of files what We Back Up
-		##########################################
-		#/etc/nginx/sites-available/default
-		##########################################
+	# -------------------------------- START/File locations --------------------------------
+	# List of files what We Back Up
+	##########################################
+	#/etc/nginx/sites-available/default
+	##########################################
         #/etc/nginx/sites-available/default
         if [ -f "/etc/nginx/sites-available/default" ]; then
            if [ ! -f ./Backup/Preinstall/etc/nginx/sites-available/default ]; then
@@ -937,7 +947,7 @@ do
            echo "File etc/nginx/sites-available/default ${RED}does Not exist!${NORMAL}"
         fi
 		
-		WWWROOT=$(sudo cat /etc/nginx/sites-enabled/default | grep "^	root" | cut -d " " -f2 | cut -d ";" -f1)
+	WWWROOT=$(sudo cat /etc/nginx/sites-enabled/default | grep "^	root" | cut -d " " -f2 | cut -d ";" -f1)
 		
         if [ "$WWWROOT" == "/var/www/html" ]; then
           sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
@@ -1024,7 +1034,7 @@ do
           sudo ln -s /etc/raspimjpeg $WWWROOT/$RPICAMDIR/raspimjpeg
         fi
 
-	    FN_AUTOSTART
+        FN_AUTOSTART
 
         if [ "$RPICAMDIR" == "" ]; then
           sudo cat etc/motion/motion.conf.1 > etc/motion/motion.conf
