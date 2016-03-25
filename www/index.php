@@ -139,7 +139,7 @@
    
    function getLoadClass() {
       global $config;
-      if($config['fullscreen'] == 1)
+      if(array_key_exists('fullscreen', $config) && $config['fullscreen'] == 1)
          return 'class="fullscreen" ';
       else
          return '';
