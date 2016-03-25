@@ -255,7 +255,7 @@
       }
       $fDate = @date('Y-m-d', $fModTime);
       $fTime = @date('H:i:s', $fModTime);
-      $fWidth = max($ts + 4, 140);
+      $fWidth = max($ts + 4, 150);
       echo "<fieldset class='fileicon' style='width:" . $fWidth . "px;'>";
       echo "<legend class='fileicon'>";
       echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' style='background-image:url(delete.png);'></button>";

@@ -1,4 +1,4 @@
-var thumbinailSuffix = '.v0000.th.jpg'; // Sample suffix
+var SUBDIR_CHAR = "@"
 var next, prev;
 
 (function() {
@@ -93,8 +93,13 @@ function load_preview(thumbnail) {
 	}
 }
 
+function suffixLength(thumbnail) {
+   return thumbnail.length - thumbnail.lastIndexOf(".", thumbnail.length - 8);
+}
+
 function imageFromThumbnail(thumbnailName) {
-	return thumbnailName.substr(0, thumbnailName.length - thumbinailSuffix.length);
+	var temp = thumbnailName.substr(0, thumbnailName.length - suffixLength(thumbnailName));
+   return temp.split(SUBDIR_CHAR).join("/");
 }
 
 function fileExtension(fileName) {
@@ -102,12 +107,12 @@ function fileExtension(fileName) {
 }
 
 function fileType(fileName) {
-	var suffix = fileName.substr(-thumbinailSuffix.length);
+	var suffix = fileName.substr(-suffixLength(fileName));
 	return suffix.substr(1, 1);
 }
 
 function fileTitle(thumbnailName) {
-	return thumbnailName.substr(thumbnailName.length - thumbinailSuffix.length + 1).substr(0, thumbinailSuffix.length - 8);
+	return thumbnailName.substr(thumbnailName.length - suffixLength(thumbnailName) + 1).substr(0, suffixLength(thumbnailName) - 8);
 }
 
 function preloadImage(url) {
