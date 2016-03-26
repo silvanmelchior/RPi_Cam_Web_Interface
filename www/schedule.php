@@ -375,7 +375,7 @@ function cmdHelp() {
              echo "<tr><td>md</td><td>0/1</td><td>0/1 stop/start motion detection</td></tr>";
              echo "<tr><td>ca c [t]</td><td>0/1</td><td>c=0/1 stop/start video capture; t=capture secs if present</td></tr>";
              echo "<tr><td>im</td><td></td><td>capture image</td></tr>";
-             echo "<tr><td>tl</td><td>0/1</td><td>start/stop timelapse</td></tr>";
+             echo "<tr><td>tl</td><td>0/1</td><td>stop/start timelapse</td></tr>";
              echo "<tr><td>tv</td><td>number</td><td>set timelapse interval between images n * 1/10 seconds.</td></tr>";
              echo "<tr><td>an</td><td>text</td><td>set annotation</td></tr>";
              echo "<tr><td>ab</td><td>0/1</td><td>annotation background</td></tr>";
@@ -408,14 +408,14 @@ function cmdHelp() {
              echo "<tr><td>ru</td><td>0/1</td><td>0/1 halt/restart RaspiMJPEG and release camera</td></tr>";
              echo "<tr><td>sc</td><td>1</td><td>Rescan for video and image indexes</td></tr>";
              echo "<tr><td>sy</td><td>macro</td><td>Execute macro</td></tr>";
-             echo "<tr><td>vp</td><td>0/1</td><td>Enable vector preview</td></tr>";
+             echo "<tr><td>vp</td><td>0/1</td><td>Disable/Enable vector preview</td></tr>";
              echo "<tr><td>mn</td><td>number</td><td>Set motion_noise</td></tr>";
              echo "<tr><td>mt</td><td>number</td><td>Set motion_threshold</td></tr>";
              echo "<tr><td>mi</td><td>filename</td><td>Set motion_image</td></tr>";
              echo "<tr><td>mb</td><td>number</td><td>Set motion_startframes</td></tr>";
              echo "<tr><td>me</td><td>number</td><td>Set motion_stopframes</td></tr>";
              echo "<tr><td>cn</td><td>1/2</td><td>Select camera (Compute model only)</td></tr>";
-             echo "<tr><td>st</td><td>0/1</td><td>Camera statistics</td></tr>";
+             echo "<tr><td>st</td><td>0/1</td><td>Off/On Camera statistics</td></tr>";
            echo "</table>";
          echo "</div>";
        echo "</div>";
