@@ -51,6 +51,8 @@ RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 NORMAL=$(tput sgr0)
 
+RASPICONFIG=/boot/config.txt
+
 PACKAGE=('nginx' 'apache2');
 for i in "${PACKAGE[@]}"
 do
@@ -306,17 +308,21 @@ fi
 # AUTOSTART. We edit rc.local
 FN_AUTOSTART_DISABLE ()
 {
-  tmpfile=$(mktemp)
-  sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
-  # Remove to growing plank lines.
-  sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
-  sudo sed -i "s/^AUTOSTART.*/AUTOSTART=\"no\"/g" ./config.txt
+  if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+    FN_CONFIGURE_MENU
+  elif grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+    tmpfile=$(mktemp)
+    sudo sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+    # Remove to growing plank lines.
+    sudo awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && sudo mv "$tmpfile" /etc/rc.local
+    sudo sed -i "s/^AUTOSTART.*/AUTOSTART=\"no\"/g" ./config.txt
 			  
-  # Finally we set owners and permissions all files what we changed.
-  sudo chown root:root /etc/rc.local
-  sudo chmod 755 /etc/rc.local
-  sudo chmod 664 ./config.txt
-			  
+    # Finally we set owners and permissions all files what we changed.
+    sudo chown root:root /etc/rc.local
+    sudo chmod 755 /etc/rc.local
+    sudo chmod 664 ./config.txt
+  fi	
+	
   if [ "$DEBUG" == "yes" ]; then
     dialog --title "FN_AUTOSTART_DISABLE /etc/rc.local contains" --textbox /etc/rc.local 22 70
     dialog --title "FN_AUTOSTART_DISABLE ./config.txt contains" --textbox ./config.txt 22 70
@@ -325,7 +331,9 @@ FN_AUTOSTART_DISABLE ()
 
 FN_AUTOSTART_ENABLE ()
 {
-if ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
+  FN_CONFIGURE_MENU
+elif ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
   sudo sed -i '/exit 0/d' /etc/rc.local
 sudo bash -c "cat >> /etc/rc.local" << EOF
 #START RASPIMJPEG SECTION
@@ -374,10 +382,7 @@ fi
 }
 
 FN_AUTOSTART ()
-{
-
-FN_AUTOSTART_ENABLE
-		
+{	
 source ./config.txt
 		
 if [ "$AUTOSTART" == "" ]; then
@@ -400,12 +405,17 @@ if [[ "$AUTOSTART" == "yes" && "$status" == "Disabled" ]] ; then
 elif [[ "$AUTOSTART" == "no" && "$status" == "Enabled" ]] ; then
   FN_AUTOSTART_DISABLE
 else
-  dialog --title "Curently auto start in boot time is $status" --backtitle "$backtitle" --yesno "Do you want enable auto start in boot time?" 7 60
+  dialog --title "Curently auto start in boot time is $status" \
+  --backtitle "$backtitle"                                     \
+  --extra-button --extra-label Disable                         \
+  --ok-label Enable                                            \
+  --yesno "Do you want enable auto start in boot time?" 7 60
   response=$?
     case $response in
       0) FN_AUTOSTART_ENABLE;;
-      1) FN_AUTOSTART_DISABLE;;
-      255) echo "[ESC] key pressed.";;
+      1) FN_CONFIGURE_MENU;;
+      3) FN_AUTOSTART_DISABLE;;
+      255) FN_CONFIGURE_MENU;;
 esac
 fi
 		
@@ -602,7 +612,7 @@ sudo chmod 664 /etc/motion/motion.conf
 	  echo "File /etc/passwd ${RED}does Not exist!${NORMAL}"
         fi
 
-        # -------------------------------- END/File locations --------------------------------
+	# -------------------------------- END/File locations --------------------------------
 		
 	# -------------------------------- START/config.txt --------------------------------
 	# Config options located in ./config.txt. In first run script makes that file for you.
@@ -821,7 +831,7 @@ do
           sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
         fi
 		
-        FN_RPICAMDIR
+	FN_RPICAMDIR
 		
 	FN_AUTOSTART_ENABLE
 		
@@ -1062,6 +1072,13 @@ do
   configure)
         FN_CONFIGURE_MENU ()
         {
+		CAMERA=$(sudo cat $RASPICONFIG | grep "start_x" | cut -d "=" -f2)
+		if [ $CAMERA -eq 1 ]; then
+		  CAMSTATUS="\Zb\Z2(Enabled)"
+		elif [ $CAMERA -eq 0 ]; then
+		  CAMSTATUS="\Zb\Z1(Disabled)"
+		fi
+		
         if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
           AUTOSTART="\Zb\Z2(Enabled)"
         else
@@ -1087,10 +1104,11 @@ do
             "2 upgrade" "\Zb\ZuUpgrade\Zn RPi Cam"
             "3 apache_security" "Change \Zb\ZuApache\Zn web server \Zb\Zusecurity\Zn $SECURITY" 
             "4 apache_port" "Change \Zb\ZuApache\Zn web server \Zb\Zuport\Zn \Zb\Z2($WEBPORT)"
-            "5 autostart" "RPi Cam \Zb\ZuAutostart\Zn Enable/Disable $AUTOSTART"
-			"6 storage" "RPi Cam \Zb\ZuStorage location\Zn"
-            "7 backup_restore" "RPi Cam \Zb\ZuBackup\Zn or Restore"
-            "8 debug" "Run RPi Cam with \Zb\Zudebug\Zn mode"
+            "5 autostart" "RPi Cam \Zb\ZuAutostart\Zn \Zb\ZuEnable/Disable\Zn $AUTOSTART"
+            "6 camera" "\Zb\ZuEnable/Disable\Zn Raspberry Pi \Zb\Zucamera\Zn $CAMSTATUS"
+            "7 storage" "RPi Cam \Zb\ZuStorage location\Zn"
+            "8 backup_restore" "RPi Cam \Zb\ZuBackup\Zn or Restore"
+            "9 debug" "Run RPi Cam with \Zb\Zudebug\Zn mode"
             )
         choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choices" ]]; then
@@ -1148,6 +1166,9 @@ do
                 dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
                 FN_CONFIGURE_MENU
                 ;;
+			 camera)
+                exec sudo ./cam.sh
+             ;;
              storage)
                 FN_STORAGE
                 dialog --title 'Storage message' --infobox 'Changed storage location.' 4 23 ; sleep 2
@@ -1267,7 +1288,8 @@ do
                   sleep 1;sudo su -c '/bin/bash' -c "php $WWWROOT/$RPICAMDIR/schedule.php &" www-data
                 fi        
                 $color_red; echo "Started with debug"; $color_reset
-                ;;
+             ;;
+			
             esac
             done
         else
