@@ -71,6 +71,10 @@ fn_abort()
    fi
    trap : 0
    dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
-   # We call updated install script
    
-   ./install.sh
+   # We call updated install script passing through any quiet parameter
+   if [ $# -eq 0 ]; then 
+      ./install.sh
+   else
+      ./install.sh $1
+   fi
