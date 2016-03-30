@@ -53,6 +53,8 @@ NORMAL=$(tput sgr0)
 
 RASPICONFIG=/boot/config.txt
 
+FN_WWWROOT_PORT()
+{
 PACKAGE=('nginx' 'apache2');
 for i in "${PACKAGE[@]}"
 do
@@ -75,6 +77,8 @@ do
     fi
   fi
 done
+}
+FN_WWWROOT_PORT
 
 # Tedect Debian version (we not using that right now. Historical, maby we can use)
 DEBVERSION=$(cat /etc/issue)
@@ -826,7 +830,7 @@ do
 	# -------------------------------- END/config.txt --------------------------------
 	
 	# We need find wwwroot after apache2 installed
-	WWWROOT=$(sudo cat $APACHEDEFAULT | grep "DocumentRoot" | cut -d " " -f2)
+	FN_WWWROOT_PORT
         if [ "$WWWROOT" == "/var/www/html" ]; then
           sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
         fi
@@ -957,7 +961,7 @@ do
            echo "File etc/nginx/sites-available/default ${RED}does Not exist!${NORMAL}"
         fi
 		
-	WWWROOT=$(sudo cat /etc/nginx/sites-enabled/default | grep "^	root" | cut -d " " -f2 | cut -d ";" -f1)
+	    FN_WWWROOT_PORT
 		
         if [ "$WWWROOT" == "/var/www/html" ]; then
           sudo sed -i "s/^www-data:x.*/www-data:x:33:33:www-data:\/var\/www\/html:\/bin\/sh/g" /etc/passwd
@@ -1333,6 +1337,7 @@ do
         ;;
 
   remove)
+    FN_WWWROOT_PORT
 	sudo killall raspimjpeg
         
 	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
