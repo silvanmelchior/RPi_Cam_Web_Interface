@@ -80,6 +80,16 @@ done
 }
 FN_WWWROOT_PORT
 
+FN_INSTALLDIR()
+{
+if [ "$RPICAMDIR" == "" ]; then
+  INSTALLDIR="$WWWROOT"
+else
+  INSTALLDIR="$WWWROOT/$RPICAMDIR"
+fi
+}
+FN_INSTALLDIR
+
 # Tedect Debian version (we not using that right now. Historical, maby we can use)
 DEBVERSION=$(cat /etc/issue)
 if [ "$DEBVERSION" == "Raspbian GNU/Linux 7 \n \l" ]; then
@@ -335,6 +345,7 @@ FN_AUTOSTART_DISABLE ()
 
 FN_AUTOSTART_ENABLE ()
 {
+FN_INSTALLDIR
 if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
   FN_CONFIGURE_MENU
 elif ! grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
@@ -346,30 +357,15 @@ chown www-data:www-data /dev/shm/mjpeg
 chmod 777 /dev/shm/mjpeg
 sleep 4;su -c 'raspimjpeg > /dev/null 2>&1 &' www-data
 if [ -e /etc/debian_version ]; then
-  sleep 4;su -c "php /var/www/schedule.php > /dev/null 2>&1 &" www-data
+  sleep 4;su -c "php $INSTALLDIR/schedule.php > /dev/null 2>&1 &" www-data
 else
-  sleep 4;su -s '/bin/bash' -c "php /var/www/schedule.php > /dev/null 2>&1 &" www-data
+  sleep 4;su -s '/bin/bash' -c "php $INSTALLDIR/schedule.php > /dev/null 2>&1 &" www-data
 fi
 #END RASPIMJPEG SECTION
 
 exit 0
 EOF
   sudo chmod 755 /etc/rc.local
-fi
-
-if [ "$WWWROOT" == "/var/www" ]; then
-  if [ ! "$RPICAMDIR" == "" ]; then
-    sudo sed -i "s/\/var\/www\/schedule.php/\/var\/www\/$RPICAMDIR\/schedule.php/" /etc/rc.local
-  else
-    sudo sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/schedule.php/" /etc/rc.local
-  fi
-fi
-if [ "$WWWROOT" == "/var/www/html" ]; then
-  if [ ! "$RPICAMDIR" == "" ]; then
-    sudo sed -i "s/\/var\/www\/schedule.php/\/var\/www\/html\/$RPICAMDIR\/schedule.php/" /etc/rc.local
-  else
-    sudo sed -i "s/\/var\/www\/.*.\/schedule.php/\/var\/www\/html\/schedule.php/" /etc/rc.local
-  fi
 fi
 
 sudo sed -i "s/^AUTOSTART.*/AUTOSTART=\"yes\"/g" ./config.txt
@@ -398,9 +394,9 @@ if [ "$AUTOSTART" == "" ]; then
 fi
 			
 if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
-  status="Enabled"
+  status="\Zb\Z2Enabled\Zn"
 else
-  status="Disabled"
+  status="\Zb\Z1Disabled\Zn"
 fi
 		
 # We look is AUTOSTART manually set.
@@ -411,6 +407,7 @@ elif [[ "$AUTOSTART" == "no" && "$status" == "Enabled" ]] ; then
 else
   dialog --title "Curently auto start in boot time is $status" \
   --backtitle "$backtitle"                                     \
+  --colors                                                     \
   --extra-button --extra-label Disable                         \
   --ok-label Enable                                            \
   --yesno "Do you want enable auto start in boot time?" 7 60
@@ -424,9 +421,9 @@ esac
 fi
 		
 if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
-  dialog --title 'Autostart message' --infobox 'Autostart Enabled.' 4 23 ; sleep 2
+  dialog --title 'Autostart message' --colors --infobox 'Autostart \Zb\Z2Enabled.\Zn' 4 23 ; sleep 2
 else
-  dialog --title 'Autostart message' --infobox 'Autostart Disabled.' 4 23 ; sleep 2
+  dialog --title 'Autostart message' --colors --infobox 'Autostart \Zb\Z1Disabled.\Zn' 4 23 ; sleep 2
 fi
 			
 # Finally we set owners and permissions all files what we changed.
@@ -1167,7 +1164,6 @@ do
                 ;;
 			 autostart)
                 FN_AUTOSTART
-                dialog --title 'Autostart message' --infobox 'Changed autostart.' 4 23 ; sleep 2
                 FN_CONFIGURE_MENU
                 ;;
 			 camera)
