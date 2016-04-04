@@ -82,6 +82,7 @@ FN_WWWROOT_PORT
 
 FN_INSTALLDIR()
 {
+source ./config.txt
 if [ "$RPICAMDIR" == "" ]; then
   INSTALLDIR="$WWWROOT"
 else
@@ -109,6 +110,8 @@ FN_STOP ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
+        sudo service apache2 stop >dev/null 2>&1
+        sudo service nginx stop >dev/null 2>&1
         dialog --title 'Stop message' --infobox 'Stopped.' 4 16 ; sleep 2
 }
 
@@ -816,11 +819,11 @@ do
           sudo echo "# Web server port" >> ./config.txt
           sudo echo "WEBPORT=\"$WEBPORT\"" >> ./config.txt
           sudo echo "" >> ./config.txt
-	fi
-	if [ "$WEBPORT" == "" ]; then
+	    fi
+	    if [ "$WEBPORT" == "" ]; then
           WEBPORT=$(sudo cat $APACHEDEFAULT | grep "<VirtualHost" | cut -d ":" -f2 | cut -d ">" -f1)
           sudo sed -i "s/^WEBPORT=.*/WEBPORT=\"$WEBPORT\"/g" ./config.txt
-	fi
+	    fi
 		
 	sudo chmod 664 ./config.txt
 	source ./config.txt 
@@ -1071,14 +1074,15 @@ do
         ;;
 
   configure)
+        FN_WWWROOT_PORT
         FN_CONFIGURE_MENU ()
         {
-		CAMERA=$(sudo cat $RASPICONFIG | grep "start_x" | cut -d "=" -f2)
-		if [ $CAMERA -eq 1 ]; then
-		  CAMSTATUS="\Zb\Z2(Enabled)"
-		elif [ $CAMERA -eq 0 ]; then
-		  CAMSTATUS="\Zb\Z1(Disabled)"
-		fi
+	CAMERA=$(sudo cat $RASPICONFIG | grep "start_x" | cut -d "=" -f2)
+	if [ $CAMERA -eq 1 ]; then
+	  CAMSTATUS="\Zb\Z2(Enabled)"
+	elif [ $CAMERA -eq 0 ]; then
+	  CAMSTATUS="\Zb\Z1(Disabled)"
+	fi
 		
         if grep -Fq '#START RASPIMJPEG SECTION' /etc/rc.local; then
           AUTOSTART="\Zb\Z2(Enabled)"
@@ -1095,8 +1099,8 @@ do
           SECURITY="\Zb\Z2(Enabled)"
         elif [ "$TMP_SECURITY" == "None" ]; then
           SECURITY="\Zb\Z1(Disabled)"
-		else
-		  SECURITY="\Zb\Z1(ERROR!)"
+        else
+          SECURITY="\Zb\Z1(ERROR!)"
         fi
         	
         cmd=(dialog --backtitle "$backtitle" --title "RPi Cam Web Interface Configurator" --colors --menu "Select your option:" 16 76 16)
@@ -1297,19 +1301,19 @@ do
         fi
         }
 
-		# This is trap if webserver not installed.
+	# This is trap if webserver not installed.
         TESTVAR="$WEBSERVER"
         VAR()
         {
         if [ ${TESTVAR[@]} ]; then
-		  FN_CONFIGURE_MENU
+	 FN_CONFIGURE_MENU
         else
-          dialog --title 'Install message' --colors --infobox 'Please \Zb\Z1Install\Zn Rpicam first!' 4 25 ; sleep 2
-		  FN_MENU_INSTALLER
+        dialog --title 'Install message' --colors --infobox 'Please \Zb\Z1Install\Zn Rpicam first!' 4 25 ; sleep 2
+        FN_MENU_INSTALLER
         fi
         }
-		VAR		
-		;;
+        VAR		
+        ;;
 
   start)
         FN_STOP
@@ -1333,58 +1337,128 @@ do
         ;;
 
   remove)
-    FN_WWWROOT_PORT
-	sudo killall raspimjpeg
-        
-	dialog --title "Uninstall packages!" --backtitle "$backtitle" --yesno "Do You want uninstall webserver and php packages also?" 6 35
-	response=$?
-	  case $response in
-	    0) 
-	      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion' 'libav-tools'); 
-	      for i in "${package[@]}"
+        FN_WWWROOT_PORT
+        FN_STOP
+ 
+    FN_LIGHT ()
+    {
+      FN_INSTALLDIR
+      # Trap. Security reason. If we not find installdir we abort and not start remove whole system!
+      if [ "$INSTALLDIR" == "" ]; then
+	echo "$(date '+%d-%b-%Y-%H-%M') Install directory missing! Aborted!" >> ./error.txt
+        echo "Install directory missing! ${RED}Aborted!${NORMAL}"
+        FN_MENU_INSTALLER
+      fi
+	  
+      dialog --title "Backup media?" --backtitle "$backtitle" --yesno "Do you want backup media into you home directory?" 5 33
+      response=$?
+        case $response in
+          0) # echo yes
+	    if [ ! -d ~/media ]; then
+              mkdir ~/media
+            fi
+	    sudo mv $INSTALLDIR/media ~/media
+	      ;;
+          1)
+	      ;;
+          255) 
+	        dialog --title 'Backup media' --colors --infobox "\Zb\Z1"'media Remove aborted!' 4 28 ; sleep 1
+	        FN_MENU_INSTALLER
+	      ;;
+        esac		
+	
+	  if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+	    FN_APACHE_DEFAULT_REMOVE
+	    FN_SECURE_APACHE_NO
+	  fi
+	
+	  FN_AUTOSTART_DISABLE
+	
+          BACKUPDIR="$(date '+%d-%B-%Y-%H-%M')"
+	  sudo mkdir -p ./Backup/removed-$BACKUPDIR
+	  sudo cp ./config.txt ./Backup/removed-$BACKUPDIR
+	  sudo cp /etc/motion/motion.conf ./removed-$BACKUPDIR
+	  sudo cp /etc/raspimjpeg ./Backup/removed-$BACKUPDIR				
+	  sudo cp $INSTALLDIR/uconfig ./Backup/removed-$BACKUPDIR
+	
+	  sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
+	  sudo rm /usr/bin/raspimjpeg
+	  sudo rm /etc/raspimjpeg
+	  if [ ! "$RPICAMDIR" == "" ]; then
+	    sudo rm -r $WWWROOT/$RPICAMDIR
+	  else
+	    # Here needed think. If RPICAMDIR not set then removed all webserver content!
+	    sudo rm -r $INSTALLDIR/*
+	  fi
+    }
+ 
+    FN_MEDIUM ()
+    {
+      package=('apache2' 'php5' 'libapache2-mod-php5' 'php5-cli' 'zip' 'nginx' 'php5-fpm' 'php5-common' 'php-apc' 'gpac motion' 'libav-tools'); 
+      for i in "${package[@]}"
+      do
+        if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        sudo apt-get remove -y "$i" && sudo apt-get autoremove -y
+      fi
+      done
+    }
+	
+    FN_HARD ()
+    {
+      #Put here packages where config files also removed.
+      package=('apache2' 'apache2-utils' 'nginx' 'nginx-common' 'nginx-full' 'motion' 'gpac motion'); 
+	    for i in "${package[@]}"
 	      do
-		if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-		  sudo apt-get remove -y "$i"
-		fi
-	      done
-	    sudo apt-get autoremove -y	  
-	    ;;
-	    1) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
-	    255) dialog --title 'Uninstall message' --infobox 'Webserver and php packages not uninstalled.' 4 33 ; sleep 2;;
-	  esac
-	
-	BACKUPDIR="$(date '+%d-%B-%Y-%H-%M')"
-	sudo mkdir -p ./Backup/removed-$BACKUPDIR
-	sudo cp ./config.txt ./Backup/removed-$BACKUPDIR
-	sudo cp /etc/motion/motion.conf ./removed-$BACKUPDIR
-	sudo cp /etc/raspimjpeg ./Backup/removed-$BACKUPDIR				
-	if [ ! "$RPICAMDIR" == "" ]; then
-	  sudo cp $WWWROOT/$RPICAMDIR/uconfig ./Backup/removed-$BACKUPDIR
-	else
-	  sudo cp $WWWROOT/uconfig ./Backup/removed-$BACKUPDIR
-	fi
-	
-	if [ ! "$RPICAMDIR" == "" ]; then
-	  sudo rm -r $WWWROOT/$RPICAMDIR
-	else
-	  # Here needed think. If RPICAMDIR not set then removed all webserver content!
-	  sudo rm -r $WWWROOT/*
-	fi
-	sudo rm /etc/sudoers.d/RPI_Cam_Web_Interface
-	sudo rm /usr/bin/raspimjpeg
-	sudo rm /etc/raspimjpeg
-	FN_AUTOSTART_DISABLE
-        
-	if [ $(dpkg-query -W -f='${Status}' "apache2" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-	  FN_APACHE_DEFAULT_REMOVE
-	  FN_SECURE_APACHE_NO
-	fi
-
-        dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
-        FN_REBOOT
+		   if [ $(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		    sudo apt-get remove --purge -y "$i" && sudo apt-get autoremove -y
+		   fi
+	    done
+    }
+ 
+    FN_UNINSTALL ()
+    {
+      dialog --title "Uninstall packages!"       \
+      --backtitle "$backtitle"                   \
+      --help-button --help-label "Hard" \
+      --extra-button --extra-label Medium        \
+      --ok-label Light                           \
+      --cr-wrap                                  \
+      --colors                                   \
+      --trim                                     \
+      --yesno                                    \
+"\Zb\Z4Light\Zn - Removed only files.
+\Zb\Z4Medium\Zn - Removed files and Uninstalled packages.
+\Zb\Z1Hard\Zn - Full uninstall! \Zb\Z1(Config Files also!)\Zn" 10 68
+      response=$?
+      case $response in
+        0) #echo "[Light] key pressed."
+          FN_LIGHT
+          FN_MENU_INSTALLER
         ;;
+        1) #echo "[Cansel] key pressed."
+          FN_MENU_INSTALLER
+        ;;
+        2) #echo "[Hard] key pressed."
+          FN_LIGHT
+          FN_HARD
+	  FN_MEDIUM
+        ;;
+        3) #echo "[Medium] key pressed."
+          FN_LIGHT
+          FN_MEDIUM
+        ;;
+        255) #echo "[ESC] key pressed."
+          FN_MENU_INSTALLER
+        ;;
+      esac
+    }
+    FN_UNINSTALL
 
+    dialog --title 'Remove message' --infobox 'Removed everything.' 4 23 ; sleep 2
+    FN_REBOOT
+    ;;
   esac
 done
 }
 FN_MENU_INSTALLER
+
