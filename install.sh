@@ -122,7 +122,7 @@ if [ ! "${rpicamdir:0:1}" == "" ]; then
    rpicamdirEsc="\\/$rpicamdir"
    rpicamdir=/$rpicamdir
 else
-   rpicamdirEsc = ""
+   rpicamdirEsc=""
 fi
 
 fn_stop ()
