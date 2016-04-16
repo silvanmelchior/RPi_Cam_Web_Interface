@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v6.0.37');
+   define('APP_VERSION', 'v6.0.38');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -127,7 +127,7 @@
       $lapsefiles = array();
       foreach($scanfiles as $file) {
          if (strpos($file, $batch) !== false) {
-            if (!isThumbnail($file)) {
+            if (!isThumbnail($file) && strcasecmp(fileext($file), "jpg") == 0) {
                $fDate = filemtime("$path/$file");
                if ($fDate >= $start) {
                   $files[$file] = $fDate;
@@ -201,6 +201,10 @@
 
    function dataFileext($file) {
       $f = dataFileName($file);
+      return fileext($f); 
+   }
+   
+   function fileext($f) {
       if ($f <> "") {
          $i = strrpos($f, '.');
          if ($i !== false)
