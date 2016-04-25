@@ -116,6 +116,10 @@ function set_ac() {
   send_cmd("ac " + document.getElementById("ac_en").value + " " + document.getElementById("ac_y").value + " " + document.getElementById("ac_u").value + " " + document.getElementById("ac_v").value);
 }
 
+function set_ag() {
+  send_cmd("ag " + document.getElementById("ag_r").value + " " + document.getElementById("ag_b").value);
+}
+
 //
 // Shutdown
 //

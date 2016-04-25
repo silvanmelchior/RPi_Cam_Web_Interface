@@ -306,6 +306,12 @@
                            <td><select onchange="send_cmd('wb ' + this.value)"><?php makeOptions($options_wb, 'white_balance'); ?></select></td>
                         </tr>
                         <tr>
+                           <td>White Balance Gains (x100):</td>
+                           <td> gain_r <?php makeInput('ag_r', 4, 'autowbgain_r'); ?> gain_b <?php makeInput('ag_b', 4, 'autowbgain_b'); ?>
+                              <input type="button" value="OK" onclick="set_ag();">
+                           </td>
+                        </tr>
+                        <tr>
                            <td>Image Effect, default 'none':</td>
                            <td><select onchange="send_cmd('ie ' + this.value)"><?php makeOptions($options_ie, 'image_effect'); ?></select></td>
                         </tr>

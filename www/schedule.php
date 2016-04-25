@@ -392,6 +392,7 @@ function cmdHelp() {
              echo "<tr><td>ec</td><td>number</td><td>set exposure compensation (range: [-10;10]; default: 0)</td></tr>";
              echo "<tr><td>em</td><td>keyword</td><td>set exposure mode (range: [off/auto/night/nightpreview/backlight/spotlight/sports/snow/beach/verylong/fixedfps/antishake/fireworks]; default: auto)</td></tr>";
              echo "<tr><td>wb</td><td>keyword</td><td>set white balance (range: [off/auto/sun/cloudy/shade/tungsten/fluorescent/incandescent/flash/horizon]; default: auto)</td></tr>";
+             echo "<tr><td>ag</td><td>RRRR BBBB</td><td>set white balance off red_gain blue gain (100 = 1.0; default: 150)</td></tr>";
              echo "<tr><td>mm</td><td>keyword</td><td>set metering mode (range: [average/spot/backlit/matrix]; default: average)</td></tr>";
              echo "<tr><td>ie</td><td>keyword</td><td>set image effect (range: [none/negative/solarise/posterize/whiteboard/blackboard/sketch/denoise/emboss/oilpaint/hatch/gpen/pastel/watercolour/film/blur/saturation/colourswap/washedout/posterise/colourpoint/colourbalance/cartoon]; default: none)</td></tr>";
              echo "<tr><td>ce</td><td>A BB CC</td><td>set colour effect (A BB CC; A=enable/disable, effect = B:C)</td></tr>";
