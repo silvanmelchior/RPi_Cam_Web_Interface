@@ -26,6 +26,7 @@
    $options_mf = array('Off' => '0', 'On' => '1');
    $options_cn = array('First' => '1', 'Second' => '2');
    $options_st = array('Off' => '0', 'On' => '1');
+   $options_ps = array('Video' => '0', 'Image' => '1');
    
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
@@ -257,7 +258,7 @@
                            <td>Annotation (max 127 characters):</td>
                            <td>
                               Text: <?php makeInput('annotation', 20); ?><input type="button" value="OK" onclick="send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"><input type="button" value="Default" onclick="document.getElementById('annotation').value = 'RPi Cam %Y.%M.%D_%h:%m:%s'; send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"><br>
-                              Background: ><select onchange="send_cmd('ab ' + this.value)"><?php makeOptions($options_ab, 'anno_background'); ?></select>
+                              Background: <select onchange="send_cmd('ab ' + this.value)"><?php makeOptions($options_ab, 'anno_background'); ?></select>
                            </td>
                         </tr>
                         <?php if (file_exists("pilight_on")) pilight_controls(); ?>
@@ -357,6 +358,7 @@
                               Qu: <?php makeInput('quality', 4); ?>
                               Wi: <?php makeInput('width', 4); ?>
                               Di: <?php makeInput('divider', 4); ?>
+							  Source: <select id="pv_source"><?php makeOptions($options_ps, 'source'); ?></select>
                               <input type="button" value="OK" onclick="set_preview();">
                            </td>
                         </tr>
@@ -433,6 +435,12 @@
                            <td>Threshold (1-32000):</td>
                            <td>
                               <?php makeInput('motion_threshold', 5); ?><input type="button" value="OK" onclick="send_cmd('mt ' + document.getElementById('motion_threshold').value)">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Clipping factor (2-50) default 3:</td>
+                           <td>
+                              <?php makeInput('motion_clip', 5); ?><input type="button" value="OK" onclick="send_cmd('mc ' + document.getElementById('motion_clip').value)">
                            </td>
                         </tr>
                         <tr>

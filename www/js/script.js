@@ -100,7 +100,7 @@ function set_ce() {
 }
 
 function set_preview() {
-  send_cmd("pv " + document.getElementById("quality").value + " " + document.getElementById("width").value + " " + document.getElementById("divider").value);
+  send_cmd("pv " + document.getElementById("quality").value + " " + document.getElementById("width").value + " " + document.getElementById("divider").value + " " + document.getElementById("pv_source").value);
   update_preview_delay();
 }
 
