@@ -26,7 +26,6 @@
    $options_mf = array('Off' => '0', 'On' => '1');
    $options_cn = array('First' => '1', 'Second' => '2');
    $options_st = array('Off' => '0', 'On' => '1');
-   $options_ps = array('Video' => '0', 'Image' => '1');
    
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
@@ -358,7 +357,6 @@
                               Qu: <?php makeInput('quality', 4); ?>
                               Wi: <?php makeInput('width', 4); ?>
                               Di: <?php makeInput('divider', 4); ?>
-							  Source: <select id="pv_source"><?php makeOptions($options_ps, 'source'); ?></select>
                               <input type="button" value="OK" onclick="set_preview();">
                            </td>
                         </tr>
