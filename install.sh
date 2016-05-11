@@ -134,12 +134,12 @@ fn_stop ()
 
 fn_reboot ()
 { # This is function reboot system
-  dialog --title "You may need to reboot your system" --backtitle "$backtitle" --yesno "Do you want to reboot now?" 5 33
+  dialog --title "Start camera system now" --backtitle "$backtitle" --yesno "Start now?" 5 33
   response=$?
     case $response in
-      0) sudo reboot;;
-      1) dialog --title 'Reboot message' --colors --infobox "\Zb\Z1"'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
-      255) dialog --title 'Reboot message' --colors --infobox "\Zb\Z1"'Pending system changes that require a reboot!' 4 28 ; sleep 2;;
+      0) ./start.sh;;
+      1) dialog --title 'Start or Reboot message' --colors --infobox "\Zb\Z1"'Manually run ./start.sh or reboot!' 4 28 ; sleep 2;;
+      255) dialog --title 'Start or Reboot message' --colors --infobox "\Zb\Z1"'Manually run ./start.sh or reboot!' 4 28 ; sleep 2;;
     esac
 }
 
