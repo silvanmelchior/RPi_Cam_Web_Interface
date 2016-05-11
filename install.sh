@@ -386,4 +386,6 @@ sudo sed -e "s/www/www$rpicamdirEsc/g" www/schedule.php > www/schedule.php.1
 sudo mv www/schedule.php.1 /var/www$rpicamdir/schedule.php
 sudo chown www-data:www-data /var/www$rpicamdir/schedule.php
 
-fn_reboot
+if [ $# -eq 0 ] || [ "$1" != "q" ]; then
+   fn_reboot
+fi
