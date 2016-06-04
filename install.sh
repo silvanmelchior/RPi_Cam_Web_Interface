@@ -229,7 +229,7 @@ sudo service nginx restart
 fn_motion ()
 {
 sudo sed -i "s/^; netcam_url.*/netcam_url/g" /etc/motion/motion.conf		
-sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost$rpicamdirEsc\/cam_pic.php/g" /etc/motion/motion.conf		
+sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost:$webport$rpicamdirEsc\/cam_pic.php/g" /etc/motion/motion.conf		
 if [ "$user" == "" ]; then
    sudo sed -i "s/^netcam_userpass.*/; netcam_userpass value/g" /etc/motion/motion.conf		
 else
