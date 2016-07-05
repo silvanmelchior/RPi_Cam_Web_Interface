@@ -275,15 +275,17 @@
       global $sortOrder;
       global $showTypes;
       global $timeFilter, $timeFilterMax;
-      $files = scandir(MEDIA_PATH, $sortOrder - 1);
+      //$files = scandir(MEDIA_PATH, $sortOrder - 1);
+      $files = scandir(MEDIA_PATH);
       $thumbnails = array();
       $nowTime = time();
       foreach($files as $file) {
          if($file != '.' && $file != '..' && isThumbnail($file)) {
+			 $fTime = filemtime(MEDIA_PATH . "/$file");
             if ($timeFilter == 1) {
                $include = true;
             } else {
-               $timeD = $nowTime - filemtime(MEDIA_PATH . "/$file");
+               $timeD = $nowTime - $fTime;
                if ($timeFilter == $timeFilterMax) {
                   $include = ($timeD >= 86400 * ($timeFilter-1));
                } else {
@@ -292,18 +294,18 @@
             }
             if($include) {
                $fType = getFileType($file);
-               if($showTypes == '1') {
-                  $thumbnails[] = $file;
-               }
-               elseif($showTypes == '2' && ($fType == 'i' || $fType == 't')) {
-                  $thumbnails[] = $file;
-              }
-               elseif($showTypes == '3' && ($fType == 'v')) {
-                  $thumbnails[] = $file; 
+               if(($showTypes == '1') || ($showTypes == '2' && ($fType == 'i' || $fType == 't')) || ($showTypes == '3' && ($fType == 'v'))) {
+                  $thumbnails[$file] = $fType . $fTime;
                }
             }
          }
       }
+	  if ($sortOrder == 1) {
+		  asort($thumbnails);
+	  } else {
+		  arsort($thumbnails);
+	  }
+	  $thumbnails = array_keys($thumbnails);
       return $thumbnails;   
    }
    
