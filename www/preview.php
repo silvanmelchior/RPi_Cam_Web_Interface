@@ -67,6 +67,18 @@
 
    $zipname = false;
    //Process any POST data
+   if (isset($_POST['timeFilter'])){
+	   $timeFilter = $_POST['timeFilter'];
+	   setcookie("timeFilter", $timeFilter, time() + (86400 * 365), "/");
+   }
+   if (isset($_POST['sortOrder'])){
+	   $sortOrder = $_POST['sortOrder'];
+	   setcookie("sortOrder", $sortOrder, time() + (86400 * 365), "/");
+   }
+   if (isset($_POST['showTypes'])){
+	   $showTypes = $_POST['showTypes'];
+	   setcookie("showTypes", $showTypes, time() + (86400 * 365), "/");
+   }
    // 1 file based commands
    if (isset($_POST['zipdownload'])) {
       $zipname = $_POST['zipdownload'];
@@ -130,18 +142,6 @@
                $thumbSize = $_POST['thumbSize'];
                if ($thumbSize < 32 || $thumbSize > 320) $thumbSize = 96;
                setcookie("thumbSize", $thumbSize, time() + (86400 * 365), "/");
-            }        
-            if(!empty($_POST['sortOrder'])) {
-               $sortOrder = $_POST['sortOrder'];
-               setcookie("sortOrder", $sortOrder, time() + (86400 * 365), "/");
-            }        
-            if(!empty($_POST['showTypes'])) {
-               $showTypes = $_POST['showTypes'];
-               setcookie("showTypes", $showTypes, time() + (86400 * 365), "/");
-            }        
-            if(!empty($_POST['timeFilter'])) {
-               $timeFilter = $_POST['timeFilter'];
-               setcookie("timeFilter", $timeFilter, time() + (86400 * 365), "/");
             }        
             break;
          case 'zipSel':
@@ -332,13 +332,14 @@
       
       echo TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
       echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='text' size='3' name='thumbSize' value='$thumbSize'>";
-      echo '&nbsp;Sort&nbsp;<select id="sortOrder" name="sortOrder">';
+      echo "&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button>";
+      echo '&nbsp;Sort&nbsp;<select id="sortOrder" name="sortOrder" onchange="this.form.submit()">';
       if ($sortOrder == 1) $selected = "selected"; else $selected = "";
       echo "<option value='1' $selected>Ascending</option>";
       if ($sortOrder == 2) $selected = "selected"; else $selected = "";
       echo "<option value='2'  $selected>Descending</option>";
       echo '</select>';
-      echo '&nbsp;Types&nbsp;<select id="showTypes" name="showTypes">';
+      echo '&nbsp;Types&nbsp;<select id="showTypes" name="showTypes" onchange="this.form.submit()">';
       if ($showTypes == 1) $selected = "selected"; else $selected = "";
       echo "<option value='1' $selected>Images &amp Videos</option>";
       if ($showTypes == 2) $selected = "selected"; else $selected = "";
@@ -346,7 +347,7 @@
       if ($showTypes == 3) $selected = "selected"; else $selected = "";
       echo "<option value='3'  $selected>Videos only</option>";
       echo '</select>';
-      echo '&nbsp;Filter&nbsp;<select id="timeFilter" name="timeFilter">';
+      echo '&nbsp;Filter&nbsp;<select id="timeFilter" name="timeFilter" onchange="this.form.submit()">';
       if ($timeFilter == 1) $selected = "selected"; else $selected = "";
       echo "<option value='1' $selected>All</option>";
       for($tf = 2; $tf < $timeFilterMax;$tf++) {
@@ -358,7 +359,7 @@
       $tfStr = $timeFilterMax * 24 . '+ hours old';
       echo "<option value='$timeFilterMax'  $selected>$tfStr</option>";
       echo '</select>';
-      echo "&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button><br>";
+	  echo '<br>';
    }
    
    $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
