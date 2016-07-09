@@ -237,9 +237,9 @@ else
    sudo sed -i "s/^netcam_userpass.*/netcam_userpass $user:$webpasswd/g" /etc/motion/motion.conf		
 fi
 sudo sed -i "s/^; on_event_start.*/on_event_start/g" /etc/motion/motion.conf		
-sudo sed -i "s/^on_event_start.*/on_event_start echo -n \'1\' >\/var\/www\/FIFO1/g" /etc/motion/motion.conf		
+sudo sed -i "s/^on_event_start.*/on_event_start echo -n \'1\' >\/var\/www$rpicamdirEsc\/FIFO1/g" /etc/motion/motion.conf		
 sudo sed -i "s/^; on_event_end.*/on_event_end/g" /etc/motion/motion.conf		
-sudo sed -i "s/^on_event_end.*/on_event_end echo -n \'0\' >\/var\/www\/FIFO1/g" /etc/motion/motion.conf		
+sudo sed -i "s/^on_event_end.*/on_event_end echo -n \'0\' >\/var\/www$rpicamdirEsc\/FIFO1/g" /etc/motion/motion.conf		
 sudo sed -i "s/control_port.*/control_port 6642/g" /etc/motion/motion.conf		
 sudo sed -i "s/control_html_output.*/control_html_output off/g" /etc/motion/motion.conf		
 sudo sed -i "s/^output_pictures.*/output_pictures off/g" /etc/motion/motion.conf		
