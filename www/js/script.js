@@ -420,19 +420,19 @@ function get_zip_progress(zipname) {
 
 function process_zip_progress(str) {
    var arr = str.split("/");
+   if (str.indexOf("Done") != -1) {
+	   return false;
+   }
    if (arr.length == 2) {
      var count = parseInt(arr[0]);
      var total = parseInt(arr[1]);
      var progress = document.getElementById("progress");
-     //progress.style.display = "block";
      var caption = " ";
      if (count > 0) caption = str;
      progress.innerHTML=caption + "<div style=\"width:" + (count/total)*100 + "%;background-color:#0f0;\">&nbsp;</div>";
-     return true;
+
    }
-   else {
-      return false;
-   }
+   return true;
 }
 //
 // Ajax Commands

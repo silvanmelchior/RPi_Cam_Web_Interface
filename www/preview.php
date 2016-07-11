@@ -88,6 +88,10 @@
       if(file_exists($zipname)){
           unlink($zipname);
       }                  
+      if(file_exists($zipname . ".count")){
+          unlink($zipname . ".count");
+      }                  
+      writeLog("Downloaded $zipname");
       return;
    }
    else if (isset($_POST['delete1'])) {

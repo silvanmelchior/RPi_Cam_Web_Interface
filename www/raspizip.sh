@@ -5,12 +5,12 @@ COUNTFILE=$1.count
 COUNTER=0
 TOTAL=`awk 'END{print NR}' $FILELIST`
 
-while read line           
+while read line         
 do  
-    COUNTER=$((COUNTER + 1))   
-    echo $COUNTER "/" $TOTAL > $COUNTFILE 
-    zip -0 -q $ZIPNAME $line 
+    COUNTER=$((COUNTER + 1))
+    echo $COUNTER "/" $TOTAL > $COUNTFILE
+    zip -0 -g -q $ZIPNAME $line
 done <$FILELIST
 
-rm -f $COUNTFILE
+echo "Done" > $COUNTFILE
 rm -f $FILELIST
