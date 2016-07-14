@@ -4,6 +4,6 @@
 
    
    $pipe = fopen("FIFO","w");
-   fwrite($pipe, $_GET["cmd"]);
+   fwrite($pipe, $_GET["cmd"] . "\n");
    fclose($pipe);
 ?>

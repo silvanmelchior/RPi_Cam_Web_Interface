@@ -323,6 +323,11 @@ if [ ! -e /var/www$rpicamdir/FIFO ]; then
 fi
 sudo chmod 666 /var/www$rpicamdir/FIFO
 
+if [ ! -e /var/www$rpicamdir/FIFO11 ]; then
+   sudo mknod /var/www$rpicamdir/FIFO11 p
+fi
+sudo chmod 666 /var/www$rpicamdir/FIFO11
+
 if [ ! -e /var/www$rpicamdir/FIFO1 ]; then
    sudo mknod /var/www$rpicamdir/FIFO1 p
 fi

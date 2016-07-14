@@ -442,7 +442,7 @@ function cmdHelp() {
          if ($cmd != "") {
             writeLog("Send $cmd");
             $fifo = fopen($schedulePars[SCHEDULE_FIFOOUT], "w");
-            fwrite($fifo, $cmd);
+            fwrite($fifo, $cmd . "\n");
             fclose($fifo);
             sleep(2);
          }

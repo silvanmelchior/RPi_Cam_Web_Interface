@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v6.2.7');
+   define('APP_VERSION', 'v6.2.8');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -130,7 +130,7 @@
             if (!isThumbnail($file) && strcasecmp(fileext($file), "jpg") == 0) {
                $fDate = filemtime("$path/$file");
                if ($fDate >= $start) {
-                  $files[$file] = $fDate;
+                  $files[$file] = $fDate . $file;
                }
             }
          }
