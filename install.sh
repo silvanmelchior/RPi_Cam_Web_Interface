@@ -308,10 +308,10 @@ if [ -e /var/www$rpicamdir/index.html ]; then
 fi
 
 if [ "$webserver" == "apache" ]; then
-   sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools
+   sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools gstreamer1.0-tools
    fn_apache
 else
-   sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc apache2-utils gpac motion zip libav-tools
+   sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
    fn_nginx
 fi
 

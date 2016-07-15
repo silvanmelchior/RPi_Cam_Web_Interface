@@ -192,7 +192,7 @@
       if (!file_exists($tmp)) {
          mkdir($tmp, 0777, true);
       }
-      $i= 1;
+      $i= 0;
       foreach($tFiles as $tFile) {
          copy($tFile, $tmp . '/' . sprintf('i_%05d', $i) . '.jpg');
          $i++;
@@ -202,7 +202,7 @@
       $fp = fopen(BASE_DIR . '/' . CONVERT_CMD, 'w');
       fwrite($fp, $cmd);
       fclose($fp);
-      $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . ' ' . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
+      $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
       writeLog("start lapse convert:$cmd");
       system($cmd);
       copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . $vFile . '.v' . getFileIndex($bFile) .THUMBNAIL_EXT);
@@ -365,8 +365,9 @@
       echo '</select>';
 	  echo '<br>';
    }
-   
-   $convertCmd = file_get_contents(BASE_DIR . '/' . CONVERT_CMD);
+   $f = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');
+   $convertCmd = trim(fgets($f));
+   fclose($f);
    $thumbnails = getThumbnails();
 ?>
 <!DOCTYPE html>
@@ -385,7 +386,7 @@
          var linksBase = 'preview.php?preview=';
          var mediaBase = "<?php echo MEDIA_PATH . '/' ?>";
          var previewWidth = <?php echo $previewSize ?>;
-         var convertCmd = "<?php echo file_get_contents(BASE_DIR . '/' . CONVERT_CMD) ?>";
+         var convertCmd = "<?php $f = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');echo trim(fgets($f));fclose($f); ?>";
       </script>
 
    </head>
@@ -416,7 +417,7 @@
             </h1>
 
             <div id="convert-details">
-               Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo $convertCmd ?>'><br><br>
+               Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo htmlentities($convertCmd) ?>'><br><br>
             </div>
 
             <div id='media'></div>
