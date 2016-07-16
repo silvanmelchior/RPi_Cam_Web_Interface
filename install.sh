@@ -250,7 +250,6 @@ sudo sed -i "s/^webcam_port.*/webcam_port 0/g" /etc/motion/motion.conf
 sudo sed -i "s/^process_id_file/; process_id_file/g" /etc/motion/motion.conf
 sudo sed -i "s/^videodevice/; videodevice/g" /etc/motion/motion.conf
 sudo sed -i "s/^event_gap 60/event_gap 3/g" /etc/motion/motion.conf
-sudo sed -i "s/www/www$rpicamdirEsc/" /etc/motion/motion.conf
 sudo chown motion:www-data /etc/motion/motion.conf
 sudo chmod 664 /etc/motion/motion.conf
 }
