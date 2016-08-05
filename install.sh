@@ -84,7 +84,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
    0 0 0                                          \
    "Cam subfolder:"        1 1   "$rpicamdir"   1 32 15 0  \
    "Autostart:(yes/no)"    2 1   "$autostart"   2 32 15 0  \
-   "Server:(apache/nginx)" 3 1   "$webserver"   3 32 15 0  \
+   "Server:(apache/nginx/lighttpd)" 3 1   "$webserver"   3 32 15 0  \
    "Webport:"              4 1   "$webport"     4 32 15 0  \
    "User:(blank=nologin)"  5 1   "$user"        5 32 15 0  \
    "Password:"             6 1   "$webpasswd"   6 32 15 0  \
@@ -226,6 +226,15 @@ sudo chmod 644 /etc/php5/conf.d/20-apc.ini
 sudo service nginx restart
 }
 
+fn_lighttpd ()
+{
+sudo lighty-enable-mod fastcgi-php
+sudo sed -i "s/server.document-root.*/server.document-root  = \"\/var\/www$rpicamdirEsc>/g" /etc/lighttpd/lighttpd.conf
+sudo sed -i "s/server.port.*/server.port  = $webport/g" /etc/lighttpd/lighttpd.conf
+#sudo service lighttpd restart  
+sudo /etc/init.d/lighttpd force-reload
+ }
+
 fn_motion ()
 {
 sudo sed -i "s/^; netcam_url.*/netcam_url/g" /etc/motion/motion.conf		
@@ -309,9 +318,12 @@ fi
 if [ "$webserver" == "apache" ]; then
    sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools gstreamer1.0-tools
    fn_apache
-else
+elif [ "$webserver" == "nginx" ]; then
    sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
    fn_nginx
+elif [ "$webserver" == "lighttpd" ]; then
+   sudo apt-get install -y  lighttpd php5-cli php5-common php5-cgi php5 gpac motion zip libav-tools gstreamer1.0-tools
+   fn_lighttpd
 fi
 
 #Make sure user www-data has bash shell
@@ -330,8 +342,13 @@ sudo chmod 666 /var/www$rpicamdir/FIFO11
 if [ ! -e /var/www$rpicamdir/FIFO1 ]; then
    sudo mknod /var/www$rpicamdir/FIFO1 p
 fi
+
 sudo chmod 666 /var/www$rpicamdir/FIFO1
 sudo chmod 755 /var/www$rpicamdir/raspizip.sh
+
+if [ ! -d /dev/shm/mjpeg ]; then
+   mkdir /dev/shm/mjpeg
+fi
 
 if [ ! -e /var/www$rpicamdir/cam.jpg ]; then
    sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www$rpicamdir/cam.jpg
