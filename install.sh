@@ -229,8 +229,8 @@ sudo service nginx restart
 fn_lighttpd ()
 {
 sudo lighty-enable-mod fastcgi-php
-sudo sed -i "s/server.document-root.*/server.document-root  = \"\/var\/www$rpicamdirEsc>/g" /etc/lighttpd/lighttpd.conf
-sudo sed -i "s/server.port.*/server.port  = $webport/g" /etc/lighttpd/lighttpd.conf
+sudo sed -i "s/^server.document-root.*/server.document-root  = \"\/var\/www$rpicamdirEsc>\"/g" /etc/lighttpd/lighttpd.conf
+sudo sed -i "s/^server.port.*/server.port  = $webport/g" /etc/lighttpd/lighttpd.conf
 #sudo service lighttpd restart  
 sudo /etc/init.d/lighttpd force-reload
  }
