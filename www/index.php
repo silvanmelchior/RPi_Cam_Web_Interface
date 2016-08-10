@@ -406,6 +406,12 @@
                            <td>Motion detect mode :</td>
                            <td><select onchange="send_cmd('mx ' + this.value);setTimeout(function(){location.reload(true);}, 1000);"><?php makeOptions($options_mx, 'motion_external'); ?></select></td>
                         </tr>
+                        <tr>
+                           <td>Log size lines (default 5000):</td>
+                           <td>
+                              <?php makeInput('log_size', 6); ?><input type="button" value="OK" onclick="send_cmd('ls ' + document.getElementById('log_size').value)">
+                           </td>
+                        </tr>
                      </table>
                   </div>
                </div>

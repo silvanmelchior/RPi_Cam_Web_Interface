@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v6.2.13');
+   define('APP_VERSION', 'v6.2.14');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -54,13 +54,24 @@
 
    // schedule log function
    function writeLog($msg) {
-      $log = fopen(getLogFile(), 'a');
-      $time = date('[Y/m/d H:i:s]');
-      fwrite($log, "$time $msg" . PHP_EOL);
-      fclose($log);
+	  global $logSize;
+	  if ($logSize > 0) {
+		  $log = fopen(getLogFile(), 'a');
+		  $time = date('[Y/m/d H:i:s]');
+		  fwrite($log, "$time $msg" . PHP_EOL);
+		  fclose($log);
+	  }
    }
 
    // functions to read and save config data
+   function readConfigs() {
+	   global $config, $logFile, $logSize;
+	   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE1);
+	   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE2);
+	   $logFile = $config['log_file'];
+	   $logSize = $config['log_size'];
+   }
+
    function readConfig($config, $configFile) {
       if (file_exists($configFile)) {
          $lines = array();
@@ -241,13 +252,18 @@
          return LBASE_DIR . '/' . LOGFILE_SCHEDULE;
    }
    
+   function getLogSize() {
+	   global $logSize;
+	   readConfigs();
+	   return $logSize;
+   }
+   
    function getStyle() {
       return 'css/' . file_get_contents(BASE_DIR . '/css/extrastyle.txt');
    }
-
+   
    $config = array();
-   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE1);
-   $config = readConfig($config, LBASE_DIR . '/' . CONFIG_FILE2);
-   $logFile = $config['log_file'];
-
+   $logFile = "";
+   $logSize = 1;
+   readConfigs();
 ?>

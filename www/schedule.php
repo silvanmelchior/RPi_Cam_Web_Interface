@@ -334,8 +334,6 @@
                echo '<form action="schedule.php" method="POST">';
                   if ($debugString) echo $debugString . "<br>";
                   if ($showLog) {
-                     echo "&nbsp&nbsp;<button class='btn btn-primary' type='submit' name='action' value='downloadlog'>" . BTN_DOWNLOADLOG . "</button>";
-                     echo "&nbsp&nbsp;<button class='btn btn-primary' type='submit' name='action' value='clearlog'>" . BTN_CLEARLOG . "</button><br><br>";
                      displayLog();
                   } else {
                      echo '<div class="container-fluid text-center">';
@@ -343,6 +341,8 @@
                      echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='backup'>" . BTN_BACKUP . "</button>";
                      echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='restore'>" . BTN_RESTORE . "</button>";
                      echo "&nbsp;&nbsp;<button class='btn btn-primary' type='submit' name='action' value='showlog'>" . BTN_SHOWLOG . "</button>";
+                     echo "&nbsp&nbsp;<button class='btn btn-primary' type='submit' name='action' value='downloadlog'>" . BTN_DOWNLOADLOG . "</button>";
+                     echo "&nbsp&nbsp;<button class='btn btn-primary' type='submit' name='action' value='clearlog'>" . BTN_CLEARLOG . "</button>";
                      echo '&nbsp;&nbsp;&nbsp;&nbsp;';
                      if ($schedulePID != 0) {
                         echo "<button class='btn btn-danger' type='submit' name='action' value='stop'>" . BTN_STOP . "</button>";
@@ -564,6 +564,17 @@ function cmdHelp() {
       return $ret;
    }
 
+   function purgeLog() {
+	  $logSize = getLogSize();
+      if (file_exists(getLogFile()) && $logSize > 0) {
+	     $logLines = file(getLogFile());
+		 $logCount = count($logLines);
+		 if($logCount > $logSize) {
+			 file_put_contents(getLogFile(), implode('', array_slice($logLines, -$logSize)));
+		 }
+	  }
+   }
+
    function purgeFiles() {
       global $schedulePars;
       $videoHours = $schedulePars[SCHEDULE_PURGEVIDEOHOURS];
@@ -743,11 +754,12 @@ function cmdHelp() {
                   $managechecktime = $timenow + $schedulePars[SCHEDULE_MANAGEMENTINTERVAL];
                   writeLog("Scheduled management tasks. Next at $managechecktime");
                   purgeFiles();
-                  $cmd = $schedulePars[SCHEDULE_MANAGEMENTCOMMAND];
+			      $cmd = $schedulePars[SCHEDULE_MANAGEMENTCOMMAND];
                   if ($cmd != '') {
                      writeLog("exec_macro: $cmd");
                      sendCmds("sy $cmd");
                   }
+            	  purgeLog();
                }
                if ($autocapturetime > 0 && $timenow > $autocapturetime) {
                   // Request autocapture and set next interval
