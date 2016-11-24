@@ -194,7 +194,7 @@
       }
       $i= 0;
       foreach($tFiles as $tFile) {
-         copy($tFile, $tmp . '/' . sprintf('i_%05d', $i) . '.jpg');
+         symlink($tFile, $tmp . '/' . sprintf('i_%05d', $i) . '.jpg');
          $i++;
       }
       $vFile = substr(dataFilename($bFile), 0, -3) . 'mp4';
