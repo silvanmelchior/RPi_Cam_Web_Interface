@@ -361,7 +361,7 @@ if [ ! -e /run/shm/mjpeg/status_mjpeg.txt ]; then
    echo -n 'halted' > /run/shm/mjpeg/status_mjpeg.txt
 fi
 sudo chown www-data:www-data /run/shm/mjpeg/status_mjpeg.txt
-sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt /var/www$rpicamdir/status_mjpeg.txt
+sudo ln -sf /dev/shm/mjpeg/status_mjpeg.txt /var/www$rpicamdir/status_mjpeg.txt
 
 sudo chown -R www-data:www-data /var/www$rpicamdir
 sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
