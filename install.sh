@@ -127,9 +127,9 @@ fi
 
 fn_stop ()
 { # This is function stop
-        sudo killall raspimjpeg
-        sudo killall php
-        sudo killall motion
+        sudo killall raspimjpeg >2 /dev/null
+        sudo killall php >2 /dev/null
+        sudo killall motion >2 /dev/null
 }
 
 fn_reboot ()
@@ -351,17 +351,17 @@ if [ ! -d /dev/shm/mjpeg ]; then
 fi
 
 if [ ! -e /var/www$rpicamdir/cam.jpg ]; then
-   sudo ln -sf /run/shm/mjpeg/cam.jpg /var/www$rpicamdir/cam.jpg
+   sudo ln -sf /dev/shm/mjpeg/cam.jpg /var/www$rpicamdir/cam.jpg
 fi
 
 if [ -e /var/www$rpicamdir/status_mjpeg.txt ]; then
    sudo rm /var/www$rpicamdir/status_mjpeg.txt
 fi
-if [ ! -e /run/shm/mjpeg/status_mjpeg.txt ]; then
-   echo -n 'halted' > /run/shm/mjpeg/status_mjpeg.txt
+if [ ! -e /dev/shm/mjpeg/status_mjpeg.txt ]; then
+   echo -n 'halted' > /dev/shm/mjpeg/status_mjpeg.txt
 fi
-sudo chown www-data:www-data /run/shm/mjpeg/status_mjpeg.txt
-sudo ln -sf /run/shm/mjpeg/status_mjpeg.txt /var/www$rpicamdir/status_mjpeg.txt
+sudo chown www-data:www-data /dev/shm/mjpeg/status_mjpeg.txt
+sudo ln -sf /dev/shm/mjpeg/status_mjpeg.txt /var/www$rpicamdir/status_mjpeg.txt
 
 sudo chown -R www-data:www-data /var/www$rpicamdir
 sudo cp etc/sudoers.d/RPI_Cam_Web_Interface /etc/sudoers.d/
