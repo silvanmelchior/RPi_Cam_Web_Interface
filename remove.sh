@@ -48,9 +48,9 @@ source ./config.txt
 
 fn_stop ()
 { # This is function stop
-        sudo killall raspimjpeg >2 /dev/null
-        sudo killall php >2 /dev/null
-        sudo killall motion >2 /dev/null
+        sudo killall raspimjpeg 2>/dev/null
+        sudo killall php 2>/dev/null
+        sudo killall motion 2>/dev/null
         sudo service apache2 stop >dev/null 2>&1
         sudo service nginx stop >dev/null 2>&1
         sudo service lighttpd stop >dev/null 2>&1
