@@ -51,6 +51,8 @@ camera_num 0
 
 #MMAL settings
 minimise_frag 0
+#mmal_logfile used for debugging callbacks (set to /dev/shm/mjpeg/mmallogfile for short periods only)
+mmal_logfile
 
 #
 # Preview Options
@@ -69,6 +71,8 @@ video_height 1080
 video_fps 25
 video_bitrate 17000000
 video_buffer 0
+#h264_buffer_size 0 sets to default (65536) Higher gives smoother set of callbacks
+h264_buffer_size 131072
 h264_buffers 0
 
 #MP4Box Off=leave as raw h264, background=box in background
