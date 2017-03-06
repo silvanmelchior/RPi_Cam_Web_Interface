@@ -256,6 +256,10 @@
                            <td><?php makeInput('tl_interval', 4); ?>s <input type="button" value="OK" onclick="send_cmd('tv ' + 10 * document.getElementById('tl_interval').value)"></td>
                         </tr>
                         <tr>
+                           <td>Video Split (seconds, default 0=off):</td>
+                           <td><?php makeInput('video_split', 6); ?>s <input type="button" value="OK" onclick="send_cmd('vi ' + document.getElementById('video_split').value)"></td>
+                        </tr>
+                        <tr>
                            <td>Annotation (max 127 characters):</td>
                            <td>
                               Text: <?php makeInput('annotation', 20); ?><input type="button" value="OK" onclick="send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"><input type="button" value="Default" onclick="document.getElementById('annotation').value = 'RPi Cam %Y.%M.%D_%h:%m:%s'; send_cmd('an ' + encodeURI(document.getElementById('annotation').value))"><br>
