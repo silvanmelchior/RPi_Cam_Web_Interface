@@ -11,7 +11,7 @@
    define('BTN_DOWNLOADLOG', 'Download Log');
    define('BTN_CLEARLOG', 'Clear Log');
    define('LBL_PERIODS', 'AllDay;Night;Dawn;Day;Dusk');
-   define('LBL_COLUMNS', 'Period;Motion Start;Motion Stop;Period Start');
+   define('LBL_COLUMNS', 'Period;Days Su-Sa;Motion Start;Motion Stop;Period Start');
    define('LBL_PARAMETERS', 'Parameter;Value');
    define('LBL_DAYMODES', 'Sun based;All Day;Fixed Times');
    define('LBL_PURGESPACEMODES', 'Off;Min Space %;Max Usage %;Min Space GB;Max Usage GB');
@@ -25,6 +25,8 @@
    define('SCHEDULE_START', '1');
    define('SCHEDULE_STOP', '0');
    define('SCHEDULE_RESET', '9');
+   
+   define('SCHEDULE_TIMES_MAX', '12');
    
    define('SCHEDULE_ZENITH', '90.8');
  
@@ -56,6 +58,7 @@
    define('SCHEDULE_COMMANDSOFF', 'Commands_Off');
    define('SCHEDULE_MODES', 'Modes');
    define('SCHEDULE_TIMES', 'Times');
+   define('SCHEDULE_DAYS', 'Days');
    
    $debugString = "";
    $schedulePars = array();
@@ -167,6 +170,13 @@
          } catch (Exception $e) {
          }
       }
+	  // Add in any extra SCHEDULE_TIMES and SCHEDULE_DAYS settings up to maximum count
+	  for($i = count($pars[SCHEDULE_TIMES]); $i < SCHEDULE_TIMES_MAX; $i++) {
+		  $pars[SCHEDULE_TIMES][$i] = sprintf("%02d", $i+9).":00";
+	  }
+	  for($i = count($pars[SCHEDULE_DAYS]); $i < (SCHEDULE_TIMES_MAX + 5); $i++) {
+		  $pars[SCHEDULE_DAYS][$i] = array(0,1,2,3,4,5,6);
+	  }
       return $pars;
    }
 
@@ -194,14 +204,17 @@
          SCHEDULE_DAYMODE => '1',
          SCHEDULE_AUTOCAPTUREINTERVAL => '0',
          SCHEDULE_AUTOCAMERAINTERVAL => '0',
-         SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","14:00"),
+//         SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"),
+         SCHEDULE_TIMES => array("09:00"),
+         SCHEDULE_DAYS => array(array(0,1,2,3,4,5,6)),
+//         SCHEDULE_DAYS => array(array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6)),
          SCHEDULE_COMMANDSON => array("ca 1","","","ca 1","","","","","","",""),
          SCHEDULE_COMMANDSOFF => array("ca 0","","","ca 0","","","","","","",""),
          SCHEDULE_MODES => array("","em night","md 1;em night","em auto","md 0;em night","","","","","","")
       );
       return $pars;
    }
-
+   
    //Support functions for HTML
    function showScheduleSettings($pars) {
       global $schedulePars;
@@ -264,6 +277,7 @@
       }
       echo '</tr>';
       $times = $pars[SCHEDULE_TIMES];
+	  $days = $pars[SCHEDULE_DAYS];
       $cmdsOn = $pars[SCHEDULE_COMMANDSON];
       $cmdsOff = $pars[SCHEDULE_COMMANDSOFF];
       $modes = $pars[SCHEDULE_MODES];
@@ -287,6 +301,11 @@
          } else {
             echo "<input type='text' autocomplete='off' size='10' name='" . SCHEDULE_TIMES . "[]' value='" . htmlspecialchars($times[$row -5], ENT_QUOTES) . "'/> &nbsp;&nbsp;</td>";
          }
+		 echo '<td>';
+		 for($dy = 0;$dy <7;$dy++) {
+			echo "<input type='checkbox' name='" . SCHEDULE_DAYS . "[$row][]' value=$dy" . (in_array($dy, $days[$row]) ? " checked" : "") . "/>"; 
+		 }
+		 echo '</td>';
          echo "<td><input type='text' autocomplete='off' size='24' name='" . SCHEDULE_COMMANDSON . "[]' value='" . htmlspecialchars($cmdsOn[$row], ENT_QUOTES) . "'/>&nbsp;&nbsp;</td>";
          echo "<td><input type='text' autocomplete='off' size='24' name='" . SCHEDULE_COMMANDSOFF . "[]' value='" . htmlspecialchars($cmdsOff[$row], ENT_QUOTES) . "'/>&nbsp;&nbsp;</td>";
          echo "<td><input type='text' autocomplete='off' size='24' name='" . SCHEDULE_MODES . "[]' value='" . htmlspecialchars($modes[$row], ENT_QUOTES) . "'/>&nbsp;&nbsp;</td>";
@@ -436,18 +455,18 @@ function cmdHelp() {
       sleep(1);
    }
    
-   function sendCmds($cmdString) {
+   function sendCmds($cmdString, $period = false) {
       global $schedulePars;
-
+	  if($period === false || isDayActive($period))
       $cmds = explode(';', $cmdString);
-      foreach ($cmds as $cmd) {
-         if ($cmd != "") {
-            writeLog("Send $cmd");
-            $fifo = fopen($schedulePars[SCHEDULE_FIFOOUT], "w");
-            fwrite($fifo, $cmd . "\n");
-            fclose($fifo);
-            sleep(2);
-         }
+	  foreach ($cmds as $cmd) {
+		if ($cmd != "") {
+			writeLog("Send $cmd");
+			$fifo = fopen($schedulePars[SCHEDULE_FIFOOUT], "w");
+			fwrite($fifo, $cmd . "\n");
+			fclose($fifo);
+			sleep(2);
+		}
       }
    }
    
@@ -483,20 +502,26 @@ function cmdHelp() {
    function findFixedTimePeriod($cMins) {
       global $schedulePars;
       $times = $schedulePars[SCHEDULE_TIMES];
-      $maxLessI = count($times) - 1;$maxLessV = -1;
+      $period = count($times) - 1;$maxLessV = -1;
       for ($i=0; $i < count($times); $i++) {
          $fMins = $times[$i];
          $j = strpos($fMins, ':');
          $fMins = substr($fMins, 0, $j) * 60 + substr($fMins, $j+1);
-         writeLog("ix $i c $cMins f $fMins");
          if ($fMins < $cMins) {
             if ($fMins > $maxLessV) {
-               $maxLessV = $fMins;
-               $maxLessI = $i;
+              $maxLessV = $fMins;
+              $period = $i;
             }
          }
       }
-      return $maxLessI + 4;
+      return $period + 5;
+   }
+   
+   function isDayActive($period) {
+      global $schedulePars;
+	  $days = $schedulePars[SCHEDULE_DAYS];
+	  $day = strftime("%w");
+	  return in_array($day,$days[$period]);
    }
    
    //Return period of day 0=Night,1=Dawn,2=Day,3=Dusk
@@ -523,22 +548,7 @@ function cmdHelp() {
             $period = 0;
             break;
          case 2:
-            $times = $schedulePars[SCHEDULE_TIMES];
-            $period = count($times) - 1;$maxLessV = -1;
-            for ($i=0; $i < count($times); $i++) {
-               $fMins = $times[$i];
-               $j = strpos($fMins, ':');
-               if ($j > 0) {
-                  $fMins = substr($fMins, 0, $j) * 60 + substr($fMins, $j+1);
-                  if ($fMins <= $t) {
-                     if ($fMins > $maxLessV) {
-                        $maxLessV = $fMins;
-                        $period = $i;
-                     }
-                  }
-               }
-            }
-            $period += 5;
+			$period = findFixedTimePeriod($t);
             break;
       }
       return $period;
@@ -664,6 +674,7 @@ function cmdHelp() {
          writeLog("Scheduler loop is started");
 		 $lastOnCommand = -1;
          $lastDayPeriod = -1;
+		 $lastDay = -1;
          $pollTime = $schedulePars[SCHEDULE_CMDPOLL];
          $slowPoll = 0;
          $managechecktime = time();
@@ -687,7 +698,7 @@ function cmdHelp() {
                   writeLog('Stop capture requested');
                   $send = $schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand];
                   if ($send) {
-                     sendCmds($send);
+                     sendCmds($send, $lastDayPeriod);
                      $lastOnCommand = -1;
                   }
                } else {
@@ -704,7 +715,7 @@ function cmdHelp() {
                   }
                   $send = $schedulePars[SCHEDULE_COMMANDSON][$lastDayPeriod];
                   if ($send) {
-                     sendCmds($send);
+                     sendCmds($send, $lastDayPeriod);
                      $lastOnCommand = $lastDayPeriod;
                      $captureStart = time();
                   }
@@ -732,10 +743,12 @@ function cmdHelp() {
                   if ($lastOnCommand < 0) {
                      //No capture in progress, Check if day period changing
                      $newDayPeriod = dayPeriod();
-                     if ($newDayPeriod != $lastDayPeriod) {
+					 $newDay = strftime("%w");
+                     if ($newDayPeriod != $lastDayPeriod || $newDay != $lastDay) {
                         writeLog("New period detected $newDayPeriod");
-                        sendCmds($schedulePars[SCHEDULE_MODES][$newDayPeriod]);
+                        sendCmds($schedulePars[SCHEDULE_MODES][$newDayPeriod], $newDayPeriod);
                         $lastDayPeriod = $newDayPeriod;
+						$lastDay = $newDay;
                      }
                   }
                }
