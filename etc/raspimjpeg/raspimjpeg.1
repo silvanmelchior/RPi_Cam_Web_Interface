@@ -136,6 +136,7 @@ start_vid &start_vid.sh
 end_vid end_vid.sh
 end_box &end_box.sh
 do_cmd &do_cmd.sh
+motion_event motion_event.sh
 
 # thumb generator control
 # Set v, i, or t in string to enable thumbs for images, videos, or lapse
@@ -163,3 +164,4 @@ user_config /var/www/uconfig
 #logfile for raspimjpeg, default to merge with scheduler log
 log_file /var/www/scheduleLog.txt
 log_size 5000
+motion_logfile /var/www/motionLog.txt

@@ -22,7 +22,7 @@
    $options_vs = array('Off' => '0', 'On' => '1');
    $options_rl = array('Off' => '0', 'On' => '1');
    $options_vp = array('Off' => '0', 'On' => '1');
-   $options_mx = array('Internal' => '0', 'External' => '1');
+   $options_mx = array('Internal' => '0', 'External' => '1', 'Monitor' => '2');
    $options_mf = array('Off' => '0', 'On' => '1');
    $options_cn = array('First' => '1', 'Second' => '2');
    $options_st = array('Off' => '0', 'On' => '1');
@@ -209,7 +209,7 @@
          <?php pan_controls(); ?>
          <a href="preview.php" class="btn btn-default">Download Videos and Images</a>
          &nbsp;&nbsp;
-         <?php  if($config['motion_external']): ?><a href="motion.php" class="btn btn-default">Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
+         <?php  if($config['motion_external'] == '1'): ?><a href="motion.php" class="btn btn-default">Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
          <a href="schedule.php" class="btn btn-default">Edit schedule settings</a>
       </div>
     
@@ -420,7 +420,7 @@
                   </div>
                </div>
             </div>
-            <div class="panel panel-default" <?php  if($config['motion_external']) echo "style ='display:none;'"; ?>>
+            <div class="panel panel-default" <?php  if($config['motion_external'] == '1') echo "style ='display:none;'"; ?>>
                <div class="panel-heading">
                   <h2 class="panel-title">
                      <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Motion Settings</a>
