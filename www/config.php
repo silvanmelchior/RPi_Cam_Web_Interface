@@ -3,7 +3,7 @@
    define('LBASE_DIR',dirname(__FILE__));
    //Global defines and utility functions
    // version string
-   define('APP_VERSION', 'v6.3.4');
+   define('APP_VERSION', 'v6.3.5');
 
    // name of this application
    define('APP_NAME', 'RPi Cam Control');
@@ -194,6 +194,10 @@
          if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
             $size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
             if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+         }
+         if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264")) {
+            $size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264");
+            if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264");
          }
       }
       $size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$d");

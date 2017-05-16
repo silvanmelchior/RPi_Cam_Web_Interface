@@ -615,10 +615,18 @@ function cmdHelp() {
                      $purgeCount++;
                   }
                }
-            } 
+            } else if ($videoHours > 0) {
+				if(pathinfo(BASE_DIR . '/' . MEDIA_PATH . "/$file", PATHINFO_EXTENSION) == 'zip') {
+					$fModHours = filemtime(BASE_DIR . '/' . MEDIA_PATH . "/$file") / 3600;
+					if ($fModHours > 0 && ($currentHours - $fModHours) > $videoHours) {
+						unlink(BASE_DIR . '/' . MEDIA_PATH . "/$file");
+						writeLog("Purged orphan zip $file");
+					}
+				}
+			}
          }
-         
       }
+	  
       if ($schedulePars[SCHEDULE_PURGESPACEMODE] > 0) {
          $totalSize = disk_total_space(BASE_DIR . '/' . MEDIA_PATH) / 1024; //KB
          $level =  str_replace(array('%','G','B', 'g','b'), '', $schedulePars[SCHEDULE_PURGESPACELEVEL]);
