@@ -53,6 +53,8 @@ camera_num 0
 minimise_frag 0
 #mmal_logfile used for debugging callbacks (set to /dev/shm/mjpeg/mmallogfile for short periods only)
 mmal_logfile
+#sleep after stopping uSec
+stop_pause 100000
 
 #
 # Preview Options
@@ -137,6 +139,7 @@ end_vid end_vid.sh
 end_box &end_box.sh
 do_cmd &do_cmd.sh
 motion_event motion_event.sh
+startstop startstop.sh
 
 # thumb generator control
 # Set v, i, or t in string to enable thumbs for images, videos, or lapse
