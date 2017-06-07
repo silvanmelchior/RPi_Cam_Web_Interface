@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RPi Cam Multiview</title>
+    <script language="javascript">
+		var mjpeg_img0,mjpeg_img1,mjpeg_img2;
+ 
+		function load_img0() {mjpeg_img0.src = "multiview.php?time=" + new Date().getTime() + "&pHost=0";}
+		function load_img1() {mjpeg_img1.src = "multiview.php?time=" + new Date().getTime() + "&pHost=1";}
+		function load_img2() {mjpeg_img2.src = "multiview.php?time=" + new Date().getTime() + "&pHost=2";}
+		function load_img3() {mjpeg_img3.src = "multiview.php?time=" + new Date().getTime() + "&pHost=3";}
+		function init() {
+			mjpeg_img0 = document.getElementById("mjpeg_dest0");
+			if(mjpeg_img0) mjpeg_img0.onload = load_img0();
+			mjpeg_img1 = document.getElementById("mjpeg_dest1");
+			if(mjpeg_img1) mjpeg_img1.onload = load_img1();
+			mjpeg_img2 = document.getElementById("mjpeg_dest2");
+			if(mjpeg_img2) mjpeg_img2.onload = load_img2();
+			mjpeg_img3 = document.getElementById("mjpeg_dest3");
+			if(mjpeg_img3) mjpeg_img3.onload = load_img3();
+		}
+	</script>
+  </head>
+  <body onload="setTimeout('init();', 100);">
+      <img id="mjpeg_dest0" />
+      <img id="mjpeg_dest1" />
+      <img id="mjpeg_dest2" />
+      <img id="mjpeg_dest3" />
+ </body>
+</html>
