@@ -4,7 +4,6 @@
    require_once(BASE_DIR.'/config.php');
    $config = array();
    $debugString = "";
-   
    $options_mm = array('Average' => 'average', 'Spot' => 'spot', 'Backlit' => 'backlit', 'Matrix' => 'matrix');
    $options_em = array('Off' => 'off', 'Auto' => 'auto', 'Night' => 'night', 'Nightpreview' => 'nightpreview', 'Backlight' => 'backlight', 'Spotlight' => 'spotlight', 'Sports' => 'sports', 'Snow' => 'snow', 'Beach' => 'beach', 'Verylong' => 'verylong', 'Fixedfps' => 'fixedfps');
    $options_wb = array('Off' => 'off', 'Auto' => 'auto', 'Sun' => 'sun', 'Cloudy' => 'cloudy', 'Shade' => 'shade', 'Tungsten' => 'tungsten', 'Fluorescent' => 'fluorescent', 'Incandescent' => 'incandescent', 'Flash' => 'flash', 'Horizon' => 'horizon');
@@ -152,15 +151,32 @@
          fclose($fp);
       }
    }
+
+   function getDisplayStyle($context, $userLevel) {
+		switch($context) {
+			case 'navbar':
+				if ($userLevel == USERLEVEL_MIN)
+					echo 'style="display:none;"';
+				break;
+			case 'actions':
+				if ($userLevel == USERLEVEL_MIN)
+					echo 'style="display:none;"';
+				break;
+			case 'settings':
+				if ((int)$userLevel != USERLEVEL_MAX)
+					echo 'style="display:none;"';
+				break;
+		}
+   }
    
-   $toggleButton = "Simple";
+/*   $toggleButton = "Simple";
    $displayStyle = 'style="display:block;"';
    if(isset($_COOKIE["display_mode"])) {
       if($_COOKIE["display_mode"] == "Simple") {
          $toggleButton = "Full";
          $displayStyle = 'style="display:none;"';
       }
-   }
+   }*/
    
    $streamButton = "MJPEG-Stream";
    $mjpegmode = 0;
@@ -174,6 +190,10 @@
    $config = readConfig($config, CONFIG_FILE2);
    $video_fps = $config['video_fps'];
    $divider = $config['divider'];
+   $user = apache_getenv("REMOTE_USER");
+   writeLog("Logged in user:" . $user . ":");
+   $userLevel =  getUserLevel($user);
+   writeLog("UserLevel " . $userLevel);
   ?>
 
 <html>
@@ -187,34 +207,35 @@
       <script src="js/pipan.js"></script>
    </head>
    <body onload="setTimeout('init(<?php echo "$mjpegmode, $video_fps, $divider" ?>);', 100);">
-      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" <?php echo $displayStyle; ?>>
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" <?php getdisplayStyle('navbar', $userLevel); ?>>
          <div class="container">
             <div class="navbar-header">
                <a class="navbar-brand" href="#"><?php echo CAM_STRING; ?></a>
             </div>
          </div>
       </div>
-      <input id="toggle_display" type="button" class="btn btn-primary" value="<?php echo $toggleButton; ?>" style="position:absolute;top:60px;right:10px;" onclick="set_display(this.value);">
+      <!--- <input id="toggle_display" type="button" class="btn btn-primary" value="<?php echo $toggleButton; ?>" style="position:absolute;top:60px;right:10px;" onclick="set_display(this.value);"> --->
       <div class="container-fluid text-center liveimage">
-         <div><img id="mjpeg_dest" <?php echo getLoadClass() . getImgWidth();?> <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="./loading.jpg"></div>
-         <div id="main-buttons" <?php echo $displayStyle; ?> >
-            <input id="video_button" type="button" class="btn btn-primary">
-            <input id="image_button" type="button" class="btn btn-primary">
-            <input id="timelapse_button" type="button" class="btn btn-primary">
-            <input id="md_button" type="button" class="btn btn-primary">
-            <input id="halt_button" type="button" class="btn btn-danger">
+         <div><img id="mjpeg_dest" <?php echo getLoadClass() . getImgWidth();?>
+		 <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="./loading.jpg"></div>
+         <div id="main-buttons">
+            <input id="video_button" type="button" class="btn btn-primary" <?php getdisplayStyle('actions', $userLevel); ?>>
+            <input id="image_button" type="button" class="btn btn-primary" <?php getdisplayStyle('actions', $userLevel); ?>>
+            <input id="timelapse_button" type="button" class="btn btn-primary" <?php getdisplayStyle('actions', $userLevel); ?>>
+            <input id="md_button" type="button" class="btn btn-primary" <?php getdisplayStyle('settings', $userLevel); ?>>
+            <input id="halt_button" type="button" class="btn btn-danger" <?php getdisplayStyle('settings', $userLevel); ?>>
          </div>
       </div>
-      <div id="secondary-buttons" class="container-fluid text-center" <?php echo $displayStyle; ?> >
+      <div id="secondary-buttons" class="container-fluid text-center">
          <?php pan_controls(); ?>
-         <a href="preview.php" class="btn btn-default">Download Videos and Images</a>
+         <a href="preview.php" class="btn btn-default" <?php getdisplayStyle('actions', $userLevel); ?>>Download Videos and Images</a>
          &nbsp;&nbsp;
-         <?php  if($config['motion_external'] == '1'): ?><a href="motion.php" class="btn btn-default">Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
-         <a href="schedule.php" class="btn btn-default">Edit schedule settings</a>
+         <?php  if($config['motion_external'] == '1'): ?><a href="motion.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
+         <a href="schedule.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit schedule settings</a>
       </div>
     
       <div class="container-fluid text-center">
-         <div class="panel-group" id="accordion" <?php echo $displayStyle; ?> >
+         <div class="panel-group" id="accordion" <?php getdisplayStyle('settings', $userLevel); ?> >
             <div class="panel panel-default">
                <div class="panel-heading">
                   <h2 class="panel-title">
