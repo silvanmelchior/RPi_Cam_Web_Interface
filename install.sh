@@ -51,6 +51,7 @@ color_reset="tput sgr0"
 versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2015, Bob Tidey. RPi Cam $version"
+jpglink="no"
 
 # Config options located in ./config.txt. In first run script makes that file for you.
 if [ ! -e ./config.txt ]; then
@@ -61,6 +62,7 @@ if [ ! -e ./config.txt ]; then
       sudo echo "user=\"\"" >> ./config.txt
       sudo echo "webpasswd=\"\"" >> ./config.txt
       sudo echo "autostart=\"yes\"" >> ./config.txt
+      sudo echo "jpglink=\"no\"" >> ./config.txt
       sudo echo "" >> ./config.txt
       sudo chmod 664 ./config.txt
 fi
@@ -88,6 +90,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
    "Webport:"              4 1   "$webport"     4 32 15 0  \
    "User:(blank=nologin)"  5 1   "$user"        5 32 15 0  \
    "Password:"             6 1   "$webpasswd"   6 32 15 0  \
+   "jpglink:(yes/no)"      7 1   "$jpglink"     7 32 15 0  \
    2>&1 1>&3 | {
       read -r rpicamdir
       read -r autostart
@@ -95,6 +98,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
       read -r webport
       read -r user
       read -r webpasswd
+	  read -r jpglink
    if [ -n "$webport" ]; then
       sudo echo "#This is edited config file for main installer. Put any extra options in here." > ./config.txt
       sudo echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
@@ -103,6 +107,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
       sudo echo "user=\"$user\"" >> ./config.txt
       sudo echo "webpasswd=\"$webpasswd\"" >> ./config.txt
       sudo echo "autostart=\"$autostart\"" >> ./config.txt
+      sudo echo "jpglink=\"$jpglink\"" >> ./config.txt
       sudo echo "" >> ./config.txt
    else
       echo "exit" > ./exitfile.txt
@@ -350,8 +355,10 @@ if [ ! -d /dev/shm/mjpeg ]; then
    mkdir /dev/shm/mjpeg
 fi
 
-if [ ! -e /var/www$rpicamdir/cam.jpg ]; then
-   sudo ln -sf /dev/shm/mjpeg/cam.jpg /var/www$rpicamdir/cam.jpg
+if [ "$jpglink" == "yes" ]; then
+	if [ ! -e /var/www$rpicamdir/cam.jpg ]; then
+	   sudo ln -sf /dev/shm/mjpeg/cam.jpg /var/www$rpicamdir/cam.jpg
+	fi
 fi
 
 if [ -e /var/www$rpicamdir/status_mjpeg.txt ]; then
