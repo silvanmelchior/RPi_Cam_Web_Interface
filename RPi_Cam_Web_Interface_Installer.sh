@@ -487,7 +487,7 @@ fi
   255) source ./config.txt ;;
   esac
 
-  dialog --title 'Storage bath' --colors --infobox "\Zb\Zu Storage paht is set \Zn \Zb\Z4 $STORAGE \Zn" 4 48 ; sleep 3
+  dialog --title 'Storage path' --colors --infobox "\Zb\Zu Storage path is set \Zn \Zb\Z4 $STORAGE \Zn" 4 48 ; sleep 3
 }
 
 # We edit $APACHEDEFAULT
