@@ -190,7 +190,12 @@
    $config = readConfig($config, CONFIG_FILE2);
    $video_fps = $config['video_fps'];
    $divider = $config['divider'];
-   $user = apache_getenv("REMOTE_USER");
+   $serverSoftware = $_SERVER['SERVER_SOFTWARE'];
+   if(stripos($serverSoftware, 'apache') !== false) {
+	   $user = apache_getenv("REMOTE_USER");
+   } else {
+	   $user = '';
+   }
    writeLog("Logged in user:" . $user . ":");
    $userLevel =  getUserLevel($user);
    writeLog("UserLevel " . $userLevel);
