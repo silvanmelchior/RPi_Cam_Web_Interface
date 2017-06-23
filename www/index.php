@@ -193,6 +193,12 @@
    $serverSoftware = $_SERVER['SERVER_SOFTWARE'];
    if(stripos($serverSoftware, 'apache') !== false) {
 	   $user = apache_getenv("REMOTE_USER"); 
+   } else if(stripos($serverSoftware, 'nginx') !== false) {
+	   try {
+		   $user = $remote_user;
+	   } catch  (Exception $e) {
+		$user = '';
+	   }
    } else {
 	   $user = '';
    }
