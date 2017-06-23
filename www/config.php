@@ -2,7 +2,7 @@
 	//Local define of base diretory for routines here
 	define('LBASE_DIR',dirname(__FILE__));
 	//Global defines and utility functions
-	// version string
+	// version string 
 	define('APP_VERSION', 'v6.3.11');
 
 	// name of this application

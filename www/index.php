@@ -192,7 +192,7 @@
    $divider = $config['divider'];
    $serverSoftware = $_SERVER['SERVER_SOFTWARE'];
    if(stripos($serverSoftware, 'apache') !== false) {
-	   $user = apache_getenv("REMOTE_USER");
+	   $user = apache_getenv("REMOTE_USER"); 
    } else {
 	   $user = '';
    }
