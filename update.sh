@@ -67,8 +67,9 @@ fn_abort()
       dialog --title 'Update message' --infobox 'Commits match. Nothing update.' 4 35 ; sleep 2
    else
       dialog --title 'Update message' --infobox "Commits don't match. We update." 4 35 ; sleep 2
-      #git fetch origin master
-      git pull
+      git fetch origin master
+      git reset --hard origin/master
+      chmod u+x *.sh
    fi
    trap : 0
    dialog --title 'Update message' --infobox 'Update finished.' 4 20 ; sleep 2
