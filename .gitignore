@@ -1,0 +1,15 @@
+.*.swp      # Vim Files
+*~          # backup files
+
+# Generated text files
+install.txt
+config.txt
+install.txt
+start.txt
+update.txt
+
+# website config
+etc/nginx/sites-available/default
+
+# settings
+etc/raspimjpeg/raspimjpeg
