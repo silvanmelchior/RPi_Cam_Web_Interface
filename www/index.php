@@ -169,15 +169,7 @@
 		}
    }
    
-/*   $toggleButton = "Simple";
-   $displayStyle = 'style="display:block;"';
-   if(isset($_COOKIE["display_mode"])) {
-      if($_COOKIE["display_mode"] == "Simple") {
-         $toggleButton = "Full";
-         $displayStyle = 'style="display:none;"';
-      }
-   }*/
-   
+  
    $streamButton = "MJPEG-Stream";
    $mjpegmode = 0;
    if(isset($_COOKIE["stream_mode"])) {
@@ -225,7 +217,6 @@
             </div>
          </div>
       </div>
-      <!--- <input id="toggle_display" type="button" class="btn btn-primary" value="<?php echo $toggleButton; ?>" style="position:absolute;top:60px;right:10px;" onclick="set_display(this.value);"> --->
       <div class="container-fluid text-center liveimage">
          <div><img id="mjpeg_dest" <?php echo getLoadClass() . getImgWidth();?>
 		 <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="./loading.jpg"></div>
