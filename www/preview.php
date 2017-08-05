@@ -53,18 +53,6 @@
       $pFile = dataFilename($tFile);
    }
 
-   if (isset($_GET['zipprogress'])) {
-      $zipname = $_GET['zipprogress'];
-      $ret = @file_get_contents("$zipname.count");
-      if ($ret) {
-         echo $ret;
-      }
-      else {
-         echo "complete";
-      }
-      return;
-   }
-
    $zipname = false;
    //Process any POST data
    if (isset($_POST['timeFilter'])){
@@ -79,22 +67,7 @@
 	   $showTypes = $_POST['showTypes'];
 	   setcookie("showTypes", $showTypes, time() + (86400 * 365), "/");
    }
-   // 1 file based commands
-   if (isset($_POST['zipdownload'])) {
-      $zipname = $_POST['zipdownload'];
-      header("Content-Type: application/zip");
-      header("Content-Disposition: attachment; filename=\"".substr($zipname,strlen(MEDIA_PATH)+1)."\"");
-      readfile("$zipname");
-      if(file_exists($zipname)){
-          unlink($zipname);
-      }                  
-      if(file_exists($zipname . ".count")){
-          unlink($zipname . ".count");
-      }                  
-      writeLog("Downloaded $zipname");
-      return;
-   }
-   else if (isset($_POST['delete1'])) {
+   if (isset($_POST['delete1'])) {
       deleteFile($_POST['delete1']);
       maintainFolders(MEDIA_PATH, false, false);
    } else if (isset($_POST['convert'])) {
@@ -150,39 +123,52 @@
             break;
          case 'zipSel':
             if (!empty($_POST['check_list'])) {
-               $zipname = getZip($_POST['check_list']);
+                getZip($_POST['check_list']);
+                return;
             }
+            echo "No files selected to zip."; 
             break;
       }
    }
   
    function getZip($files) {
-      $zipname = MEDIA_PATH . '/cam_' . date("Ymd_His") . '.zip';
-      writeLog("Making zip $zipname");
-      $zipfiles = fopen($zipname.".files", "w");
+      $zipname = 'cam_' . date("Ymd_His") . '.zip';
+      $cmd = 'zip -0 -q -'; // Don't compress!
+      $size = 1000000;
       foreach ($files as $file) {
          $t = getFileType($file);
          if ($t == 't') {
             $lapses = findLapseFiles($file);
             if (!empty($lapses)) {
                foreach($lapses as $lapse) {
-                  fprintf($zipfiles, "$lapse\n");
+                  $cmd .= " $lapse";
+                  $size += filesize($lapse);
                }
             }
          } else {
             $base = dataFilename($file);
-            if (file_exists(MEDIA_PATH . "/$base")) {
-               fprintf($zipfiles, MEDIA_PATH . "/$base\n");
+            $f = MEDIA_PATH . "/$base";
+            if (file_exists($f)) {
+               $cmd .= " $f";
+               $size += filesize($f);
             }
-            if ($t == 'v' && file_exists(MEDIA_PATH . "/$base.dat")) {
-               fprintf($zipfiles, MEDIA_PATH . "/$base.dat\n");
+            $f = MEDIA_PATH . "/$base.dat";
+            if ($t == 'v' && file_exists($f)) {
+               $cmd .= " $f";
+               $size += filesize($f);
             }
          }
       }
-      fclose($zipfiles);
-      file_put_contents("$zipname.count", "0/100");
-      exec("./raspizip.sh $zipname $zipname.files > /dev/null &");
-      return $zipname;
+      writeLog("Generating ZIP using command: $cmd ($size bytes)");
+
+      header("Content-Type: application/zip");
+      header("Content-Disposition: attachment; filename=\"".$zipname."\"");
+      //header("Content-Length: " . $size); // not working (yet)
+
+      $zipStream = popen($cmd, "r");
+      fpassthru($zipStream);
+      pclose($zipStream);
+      flush();
    }
 
    function startVideoConvert($bFile) {
@@ -399,8 +385,6 @@
          </div>
       </div>
     
-      <div id="progress" style="text-align:center;margin-left:20px;width:500px;border:1px solid #ccc;">&nbsp;</div>
-    
       <div class="container-fluid">
       <form action="preview.php" method="POST">
          <div id='preview' style="display: none; min-height: <?php echo $previewSize ?>px">
@@ -451,18 +435,6 @@
       ?>
       </form>
       
-      <form id="zipform" method="post" action="preview.php" style="display:none;">
-         <input id="zipdownload" type="hidden" name="zipdownload"/>
-      </form>
-      
       </div>
-      
-      <?php 
-      if ($zipname) {
-         echo '<script language="javascript">get_zip_progress("' . $zipname . '");</script>';
-      } else {
-         echo '<script language="javascript">document.getElementById("progress").style.display="none";</script>';
-      }
-      ?>
    </body>
 </html>
