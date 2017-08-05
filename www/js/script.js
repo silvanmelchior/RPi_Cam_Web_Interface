@@ -393,47 +393,6 @@ function reload_ajax (last) {
   ajax_status.send();
 }
 
-function get_zip_progress(zipname) {
-   var ajax_zip;
-   if(window.XMLHttpRequest) {
-      ajax_zip = new XMLHttpRequest();
-   }
-   else {
-      ajax_zip = new ActiveXObject("Microsoft.XMLHTTP");
-   }
-   
-   ajax_zip.onreadystatechange = function() {
-      if(ajax_zip.readyState == 4 && ajax_zip.status == 200) {
-         if (process_zip_progress(ajax_zip.responseText)) {
-            setTimeout(function() { get_zip_progress(zipname); }, 1000);
-         }
-         else {
-            document.getElementById("zipdownload").value=zipname;
-            document.getElementById("zipform").submit();
-            document.getElementById("progress").style.display = "none";
-         }
-      }
-   }
-   ajax_zip.open("GET","preview.php?zipprogress=" + zipname);
-   ajax_zip.send();
-}
-
-function process_zip_progress(str) {
-   var arr = str.split("/");
-   if (str.indexOf("Done") != -1) {
-	   return false;
-   }
-   if (arr.length == 2) {
-     var count = parseInt(arr[0]);
-     var total = parseInt(arr[1]);
-     var progress = document.getElementById("progress");
-     var caption = " ";
-     if (count > 0) caption = str;
-     progress.innerHTML=caption + "<div style=\"width:" + (count/total)*100 + "%;background-color:#0f0;\">&nbsp;</div>";
-
-   }
-   return true;
-}
 //
 // Ajax Commands
 //
