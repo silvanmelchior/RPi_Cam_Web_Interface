@@ -349,7 +349,6 @@ if [ ! -e /var/www$rpicamdir/FIFO1 ]; then
 fi
 
 sudo chmod 666 /var/www$rpicamdir/FIFO1
-sudo chmod 755 /var/www$rpicamdir/raspizip.sh
 
 if [ ! -d /dev/shm/mjpeg ]; then
    mkdir /dev/shm/mjpeg
