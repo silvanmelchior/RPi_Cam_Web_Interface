@@ -429,6 +429,7 @@ function cmdHelp() {
              echo "<tr><td>ru</td><td>0/1</td><td>0/1 halt/restart RaspiMJPEG and release camera</td></tr>";
              echo "<tr><td>sc</td><td>1</td><td>Rescan for video and image indexes</td></tr>";
              echo "<tr><td>sy</td><td>macro</td><td>Execute macro</td></tr>";
+             echo "<tr><td>um</td><td>number macro</td><td>Update macro</td></tr>";
              echo "<tr><td>vp</td><td>0/1</td><td>Disable/Enable vector preview</td></tr>";
              echo "<tr><td>mn</td><td>number</td><td>Set motion_noise</td></tr>";
              echo "<tr><td>mt</td><td>number</td><td>Set motion_threshold</td></tr>";
