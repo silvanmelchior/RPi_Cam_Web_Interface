@@ -120,6 +120,14 @@ function set_ag() {
   send_cmd("ag " + document.getElementById("ag_r").value + " " + document.getElementById("ag_b").value);
 }
 
+function send_macroUpdate(i, macro) {
+  var macrovalue = document.getElementById(macro).value;
+  if(!document.getElementById(macro + "_chk").checked) {
+	  macrovalue = "-" + macrovalue;
+  }
+  send_cmd("um " + i + " " + macrovalue);
+}
+
 //
 // Shutdown
 //

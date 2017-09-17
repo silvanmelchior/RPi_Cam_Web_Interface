@@ -4,6 +4,7 @@
    require_once(BASE_DIR.'/config.php');
    $config = array();
    $debugString = "";
+   $macros = array('error_soft','error_hard','start_img','end_img','start_vid','end_vid','end_box','do_cmd','motion_event','startstop');
    $options_mm = array('Average' => 'average', 'Spot' => 'spot', 'Backlit' => 'backlit', 'Matrix' => 'matrix');
    $options_em = array('Off' => 'off', 'Auto' => 'auto', 'Night' => 'night', 'Nightpreview' => 'nightpreview', 'Backlight' => 'backlight', 'Spotlight' => 'spotlight', 'Sports' => 'sports', 'Snow' => 'snow', 'Beach' => 'beach', 'Verylong' => 'verylong', 'Fixedfps' => 'fixedfps');
    $options_wb = array('Off' => 'off', 'Auto' => 'auto', 'Sun' => 'sun', 'Cloudy' => 'cloudy', 'Shade' => 'shade', 'Tungsten' => 'tungsten', 'Fluorescent' => 'fluorescent', 'Incandescent' => 'incandescent', 'Flash' => 'flash', 'Horizon' => 'horizon');
@@ -128,6 +129,26 @@
       echo "<input type='text' size=$size id='$id' value='$value'>";
    }
    
+   function macroUpdates() {
+      global $config, $debugString, $macros;
+	  $m = 0;
+	  $mTable = '';
+	  foreach($macros as $macro) {
+		  $value = $config[$macro];
+		  if(substr($value,0,1) == '-') {
+			  $checked = '';
+			  $value = substr($value,1);
+		  } else {
+			  $checked = 'checked';
+		  }
+		  $mTable .= "<TR><TD>Macro:$macro</TD><TD><input type='text' size=16 id='$macro' value='$value'>";
+		  $mTable .= "<input type='checkbox' $checked id='$macro" . "_chk'>";
+		  $mTable .= "<input type='button' value='OK' onclick=" . '"send_macroUpdate' . "($m,'$macro')" . '";></TD></TR>';
+		  $m++;
+	  }
+      echo $mTable;
+   }
+
    function getImgWidth() {
       global $config;
       if($config['vector_preview'])
@@ -521,6 +542,9 @@
                         </select>
                         &nbsp;<button type="submit" name="OK" value="OK" >OK</button>
                      </form>
+					 <table class="settingsTable">
+						<?php macroUpdates(); ?>
+					 </table>
                   </div>
                </div>
             </div>
