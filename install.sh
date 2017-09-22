@@ -214,6 +214,9 @@ else
    sed -i "s/auth_basic\ .*/auth_basic \"Restricted\";/g" $aconf
    sed -i "s/#auth_basic_user_file/\ auth_basic_user_file/g" $aconf
 fi
+if [[ "$phpversion" == "7" ]]; then
+   sed -i "s/\/var\/run\/php5-fpm\.sock;/\/run\/php\/php7.0-fpm\.sock;/g" $aconf
+fi
 sudo mv $aconf /$aconf
 sudo chmod 644 /$aconf
 if [ ! -e /etc/nginx/sites-enabled/rpicam ]; then
