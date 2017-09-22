@@ -52,6 +52,7 @@ versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2015, Bob Tidey. RPi Cam $version"
 jpglink="no"
+phpversion=7
 
 # Config options located in ./config.txt. In first run script makes that file for you.
 if [ ! -e ./config.txt ]; then
@@ -63,6 +64,7 @@ if [ ! -e ./config.txt ]; then
       sudo echo "webpasswd=\"\"" >> ./config.txt
       sudo echo "autostart=\"yes\"" >> ./config.txt
       sudo echo "jpglink=\"no\"" >> ./config.txt
+      sudo echo "phpversion=\"\"" >> ./config.txt
       sudo echo "" >> ./config.txt
       sudo chmod 664 ./config.txt
 fi
@@ -91,6 +93,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
    "User:(blank=nologin)"  5 1   "$user"        5 32 15 0  \
    "Password:"             6 1   "$webpasswd"   6 32 15 0  \
    "jpglink:(yes/no)"      7 1   "$jpglink"     7 32 15 0  \
+   "phpversion:(5/7)"      8 1   "$phpversion"  8 32 15 0  \
    2>&1 1>&3 | {
       read -r rpicamdir
       read -r autostart
@@ -99,6 +102,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
       read -r user
       read -r webpasswd
 	  read -r jpglink
+	  read -r phpversion
    if [ -n "$webport" ]; then
       sudo echo "#This is edited config file for main installer. Put any extra options in here." > ./config.txt
       sudo echo "rpicamdir=\"$rpicamdir\"" >> ./config.txt
@@ -108,6 +112,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
       sudo echo "webpasswd=\"$webpasswd\"" >> ./config.txt
       sudo echo "autostart=\"$autostart\"" >> ./config.txt
       sudo echo "jpglink=\"$jpglink\"" >> ./config.txt
+      sudo echo "phpversion=\"$phpversion\"" >> ./config.txt
       sudo echo "" >> ./config.txt
    else
       echo "exit" > ./exitfile.txt
@@ -224,10 +229,15 @@ if [ "$NGINX_DISABLE_LOGGING" != "" ]; then
 fi
 
 # Configure php-apc
-sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> /etc/php5/fpm/php.ini"
-sudo mkdir /etc/php5/conf.d >/dev/null 2>&1
-sudo cp etc/php5/apc.ini /etc/php5/conf.d/20-apc.ini
-sudo chmod 644 /etc/php5/conf.d/20-apc.ini
+if [[ "$phpversion" == "7" ]]; then
+	phpnv=/etc/php/7.0
+else
+	phpnv=/etc/php5
+fi
+sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> $phpnv/fpm/php.ini"
+sudo mkdir $phpnv/conf.d >/dev/null 2>&1
+sudo cp etc/php5/apc.ini $phpnv/conf.d/20-apc.ini
+sudo chmod 644 $phpnv/conf.d/20-apc.ini
 sudo service nginx restart
 }
 
@@ -320,14 +330,20 @@ if [ -e /var/www$rpicamdir/index.html ]; then
    sudo rm /var/www$rpicamdir/index.html
 fi
 
+if [[ "$phpversion" == "7" ]]; then
+   phpv=php7.0
+else
+   phpv=php5
+fi
+
 if [ "$webserver" == "apache" ]; then
-   sudo apt-get install -y apache2 php5 php5-cli libapache2-mod-php5 gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y apache2 $phpv $phpv-cli libapache2-mod-$phpv gpac motion zip libav-tools gstreamer1.0-tools
    fn_apache
 elif [ "$webserver" == "nginx" ]; then
-   sudo apt-get install -y nginx php5-fpm php5-cli php5-common php-apc apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common php-apcu apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
    fn_nginx
 elif [ "$webserver" == "lighttpd" ]; then
-   sudo apt-get install -y  lighttpd php5-cli php5-common php5-cgi php5 gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y  lighttpd $phpv-cli $phpv-common $phpv-cgi $phpv gpac motion zip libav-tools gstreamer1.0-tools
    fn_lighttpd
 fi
 
