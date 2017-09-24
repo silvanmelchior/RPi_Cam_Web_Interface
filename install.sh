@@ -255,6 +255,8 @@ sudo /etc/init.d/lighttpd force-reload
 
 fn_motion ()
 {
+sudo sed -i "s/^daemon.*/daemon on/g" /etc/motion/motion.conf		
+sudo sed -i "s/^logfile.*/;logfile \/tmp\/motion.log /g" /etc/motion/motion.conf		
 sudo sed -i "s/^; netcam_url.*/netcam_url/g" /etc/motion/motion.conf		
 sudo sed -i "s/^netcam_url.*/netcam_url http:\/\/localhost:$webport$rpicamdirEsc\/cam_pic.php/g" /etc/motion/motion.conf		
 if [ "$user" == "" ]; then
