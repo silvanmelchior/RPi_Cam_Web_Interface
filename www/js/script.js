@@ -23,22 +23,20 @@ function toggle_fullscreen(e) {
 }
 
 function set_display(value) {
-   var show_hide;
    var d = new Date();
+   var val;
    d.setTime(d.getTime() + (365*24*60*60*1000));
    var expires = "expires="+d.toUTCString();
-   
-   if (value == "Simple") {
-      show_hide = "none";
-      document.getElementById("toggle_display").value = "Full";
+   if (value == "SimpleOff") {
+	   val = "Off";
+   } else if (value == "SimpleOn") {
+	   val = "Full";
    } else {
-      show_hide = "block";
-      document.getElementById("toggle_display").value = "Simple";
+	   val = value
    }
-   document.getElementById("main-buttons").style.display = show_hide;
-   document.getElementById("secondary-buttons").style.display = show_hide;
-   document.getElementById("accordion").style.display = show_hide;
-   document.cookie="display_mode=" + value + "; " + expires;
+   
+   document.cookie="display_mode=" + val + "; " + expires;
+   document.location.reload(true);
 }
 
 function set_stream_mode(value) {

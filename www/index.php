@@ -165,6 +165,13 @@
          return '';
    }
 
+   function simple_button() {
+	   global $toggleButton, $userLevel;
+	   if ($toggleButton != "Off" && $userLevel > USERLEVEL_MIN) {
+		  echo '<input id="toggle_display" type="button" class="btn btn-primary" value="' . $toggleButton . '" style="position:absolute;top:60px;right:10px;" onclick="set_display(this.value);">';
+	   }
+   }
+
    if (isset($_POST['extrastyle'])) {
       if (file_exists('css/' . $_POST['extrastyle'])) {
          $fp = fopen(BASE_DIR . '/css/extrastyle.txt', "w");
@@ -174,22 +181,45 @@
    }
 
    function getDisplayStyle($context, $userLevel) {
-		switch($context) {
-			case 'navbar':
-				if ($userLevel == USERLEVEL_MIN)
-					echo 'style="display:none;"';
-				break;
-			case 'actions':
-				if ($userLevel == USERLEVEL_MIN)
-					echo 'style="display:none;"';
-				break;
-			case 'settings':
-				if ((int)$userLevel != USERLEVEL_MAX)
-					echo 'style="display:none;"';
-				break;
+	    global $Simple;
+	    if ($Simple == 1) {
+			echo 'style="display:none;"';
+		} else {
+			switch($context) {
+				case 'navbar':
+					if ($userLevel == USERLEVEL_MIN)
+						echo 'style="display:none;"';
+					break;
+				case 'actions':
+					if ($userLevel == USERLEVEL_MIN)
+						echo 'style="display:none;"';
+					break;
+				case 'settings':
+					if ((int)$userLevel != USERLEVEL_MAX)
+						echo 'style="display:none;"';
+					break;
+			}
 		}
    }
-   
+
+   $toggleButton = "Off";
+   $Simple = 0;
+   $allowSimple = "SimpleOn";
+   if(isset($_COOKIE["display_mode"])) {
+      if($_COOKIE["display_mode"] == "Full") {
+		 $allowSimple = "SimpleOff";
+         $toggleButton = "Simple";
+         $Simple = 2;
+      } else if($_COOKIE["display_mode"] == "Simple") {
+		 $allowSimple = "SimpleOff";
+         $toggleButton = "Full";
+         $Simple = 1;
+      } else {
+		 $allowSimple = "SimpleOn";
+         $toggleButton = "Off";
+         $Simple = 0;
+	  }
+   }
   
    $streamButton = "MJPEG-Stream";
    $mjpegmode = 0;
@@ -238,6 +268,7 @@
             </div>
          </div>
       </div>
+	  <?php simple_button(); ?>
       <div class="container-fluid text-center liveimage">
          <div><img id="mjpeg_dest" <?php echo getLoadClass() . getImgWidth();?>
 		 <?php if(file_exists("pipan_on")) echo "ontouchstart=\"pipan_start()\""; ?> onclick="toggle_fullscreen(this);" src="./loading.jpg"></div>
@@ -532,6 +563,7 @@
                <div id="collapseThree" class="panel-collapse collapse">
                   <div class="panel-body">
                      <input id="toggle_stream" type="button" class="btn btn-primary" value="<?php echo $streamButton; ?>" onclick="set_stream_mode(this.value);">
+                     <input id="allow_simple" type="button" class="btn btn-primary" value="<?php echo $allowSimple; ?>" onclick="set_display(this.value);">
                      <input id="shutdown_button" type="button" value="shutdown system" onclick="sys_shutdown();" class="btn btn-danger">
                      <input id="reboot_button" type="button" value="reboot system" onclick="sys_reboot();" class="btn btn-danger">
                      <input id="reset_button" type="button" value="reset settings" onclick="if(confirm('Are you sure?')) {send_cmd('rs 1');setTimeout(function(){location.reload(true);}, 1000);}" class="btn btn-danger">
