@@ -745,10 +745,24 @@ function cmdHelp() {
             if ($slowPoll < 0) {
                $slowPoll = 10;
                $timenow = time();
+			   $forcePeriodCheck = 0;
+               if ($lastOnCommand >= 0) {
+                  //Capture in progress, Check for maximum
+                  if ($schedulePars[SCHEDULE_MAXCAPTURE] > 0) {
+                     if (($timenow - $captureStart) >= $schedulePars[SCHEDULE_MAXCAPTURE]) {
+                        writeLog("Maximum Capture reached. Sending off command");
+                        sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
+                        $lastOnCommand = -1;
+                        $autocapture = 0;
+						$forcePeriodCheck = 1;
+                     }
+                  }
+               }
                //Action period time change checks at MODE_POLL intervals
-               if ($timenow > $modechecktime) {
+               if ($timenow > $modechecktime || $forcePeriodCheck == 1) {
                   //Set next period check time
                   $modechecktime = $timenow + $schedulePars[SCHEDULE_MODEPOLL];
+				  $forcePeriodCheck = 0;
                   if ($lastOnCommand < 0) {
                      //No capture in progress, Check if day period changing
                      $newDayPeriod = dayPeriod();
@@ -758,17 +772,6 @@ function cmdHelp() {
                         sendCmds($schedulePars[SCHEDULE_MODES][$newDayPeriod], $newDayPeriod);
                         $lastDayPeriod = $newDayPeriod;
 						$lastDay = $newDay;
-                     }
-                  }
-               }
-               if ($lastOnCommand >= 0) {
-                  //Capture in progress, Check for maximum
-                  if ($schedulePars[SCHEDULE_MAXCAPTURE] > 0) {
-                     if (($timenow - $captureStart) >= $schedulePars[SCHEDULE_MAXCAPTURE]) {
-                        writeLog("Maximum Capture reached. Sending off command");
-                        sendCmds($schedulePars[SCHEDULE_COMMANDSOFF][$lastOnCommand]);
-                        $lastOnCommand = -1;
-                        $autocapture = 0;
                      }
                   }
                }
