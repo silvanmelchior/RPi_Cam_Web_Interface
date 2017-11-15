@@ -130,7 +130,7 @@ fi
 
 if [ ! "${rpicamdir:0:1}" == "" ]; then
    rpicamdir=/$rpicamdir
-   rpicamdirEsc==${rpicamdir//\//\\\/}
+   rpicamdirEsc=${rpicamdir//\//\\\/}
 else
    rpicamdirEsc=""
 fi
