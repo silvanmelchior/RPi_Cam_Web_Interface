@@ -129,8 +129,8 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
 fi
 
 if [ ! "${rpicamdir:0:1}" == "" ]; then
-   rpicamdirEsc="\\/$rpicamdir"
    rpicamdir=/$rpicamdir
+   rpicamdirEsc==${rpicamdir//\//\\\/}
 else
    rpicamdirEsc=""
 fi
