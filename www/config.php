@@ -3,7 +3,7 @@
 	define('LBASE_DIR',dirname(__FILE__));
 	//Global defines and utility functions
 	// version string 
-	define('APP_VERSION', 'v6.4.07');
+	define('APP_VERSION', 'v6.4.08');
 
 	// name of this application
 	define('APP_NAME', 'RPi Cam Control');
@@ -183,6 +183,7 @@
 	//if $del = false just calculate space which would be freed
 	function deleteFile($d, $del = true) {
 		$size = 0;
+		if(!is_writeable(LBASE_DIR . '/' . MEDIA_PATH . "/$d")) return 0;
 		$t = getFileType($d); 
 		if ($t == 't') {
 			// For time lapse try to delete all from this batch
