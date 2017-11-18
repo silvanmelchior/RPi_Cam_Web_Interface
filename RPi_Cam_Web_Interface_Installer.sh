@@ -110,8 +110,8 @@ FN_STOP ()
         sudo killall raspimjpeg
         sudo killall php
         sudo killall motion
-        sudo service apache2 stop >dev/null 2>&1
-        sudo service nginx stop >dev/null 2>&1
+        sudo service apache2 stop >/dev/null 2>&1
+        sudo service nginx stop >/dev/null 2>&1
         dialog --title 'Stop message' --infobox 'Stopped.' 4 16 ; sleep 2
 }
 
