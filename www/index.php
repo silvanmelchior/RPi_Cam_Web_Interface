@@ -143,7 +143,7 @@
 		  }
 		  $mTable .= "<TR><TD>Macro:$macro</TD><TD><input type='text' size=16 id='$macro' value='$value'>";
 		  $mTable .= "<input type='checkbox' $checked id='$macro" . "_chk'>";
-		  $mTable .= "<input type='button' value='OK' onclick=" . '"send_macroUpdate' . "($m,'$macro')" . '";></TD></TR>';
+		  $mTable .= "<input type='button' value='OK' onclick=" . '"send_macroUpdate' . "($m,'$macro')" . ';></TD></TR>';
 		  $m++;
 	  }
       echo $mTable;
