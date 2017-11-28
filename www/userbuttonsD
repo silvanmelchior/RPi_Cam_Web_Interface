@@ -1,0 +1,5 @@
+#User buttons definitions
+#maximum of six buttons
+#buttonname, macro
+button1,button1.sh
+button2,button2.sh
