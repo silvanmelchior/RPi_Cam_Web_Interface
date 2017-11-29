@@ -38,6 +38,30 @@
       }
    }
 
+   function user_buttons() {
+      $buttonString = "";
+	  $buttonCount = 0;
+      if (file_exists("userbuttons")) {
+		$lines = array();
+		$data = file_get_contents("userbuttons");
+		$lines = explode("\n", $data);
+		foreach($lines as $line) {
+			if (strlen($line) && (substr($line, 0, 1) != '#') && buttonCount < 6) {
+				$index = strpos($line, ',');
+				if ($index !== false) {
+					$buttonName = substr($line, 0, $index);
+					$macroName = substr($line, $index +1);
+					$buttonString .= '<input id="' . $buttonName . '" type="button" value="' . $buttonName . '" onclick="send_cmd(' . "'sy " . $macroName . "'" . ')" class="btn btn-primary" >' . "\r\n";
+					$buttonCount += 1;
+				}
+			}
+		}
+      }
+	  if (strlen($buttonString)) {
+		  echo '<div class="container-fluid text-center">' . $buttonString . "</div>\r\n";
+	  }
+   }
+
    function pan_controls() {
       $mode = 0;
       if (file_exists("pipan_on")){
@@ -141,9 +165,9 @@
 		  } else {
 			  $checked = 'checked';
 		  }
-		  $mTable .= "<TR><TD>Macro:$macro</TD><TD><input type='text' size=16 id='$macro' value='$value'>";
-		  $mTable .= "<input type='checkbox' $checked id='$macro" . "_chk'>";
-		  $mTable .= "<input type='button' value='OK' onclick=" . '"send_macroUpdate' . "($m,'$macro')" . ';"></TD></TR>';
+		  $mTable .= "<TR><TD>Macro:$macro</TD><TD><input type='text' size=16 id='$macro' value='$value'>\r\n";
+		  $mTable .= "<input type='checkbox' $checked id='$macro" . "_chk'>\r\n";
+		  $mTable .= "<input type='button' value='OK' onclick=" . '"send_macroUpdate' . "($m,'$macro')\r\n" . ';"></TD></TR>';
 		  $m++;
 	  }
       echo $mTable;
@@ -282,6 +306,7 @@
       </div>
       <div id="secondary-buttons" class="container-fluid text-center">
          <?php pan_controls(); ?>
+         <?php user_buttons(); ?>
          <a href="preview.php" class="btn btn-default" <?php getdisplayStyle('actions', $userLevel); ?>>Download Videos and Images</a>
          &nbsp;&nbsp;
          <?php  if($config['motion_external'] == '1'): ?><a href="motion.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
