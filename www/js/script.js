@@ -332,9 +332,9 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("preview_select").disabled = false;
     }
     else if(ajax_status.responseText == "tl_md_video") {
-      document.getElementById("video_button").disabled = true;
+      document.getElementById("video_button").disabled = false;
       document.getElementById("video_button").value = "record video stop";
-      document.getElementById("video_button").onclick = function() {};
+      document.getElementById("video_button").onclick = function() {send_cmd("ca 0");};
       document.getElementById("image_button").disabled = true;
       document.getElementById("image_button").value = "record image";
       document.getElementById("image_button").onclick = function() {};
