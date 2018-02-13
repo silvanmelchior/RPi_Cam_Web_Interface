@@ -127,7 +127,7 @@ function send_macroUpdate(i, macro) {
 }
 
 //
-// Shutdown
+// System shutdow, reboot, settime
 //
 function sys_shutdown() {
   ajax_status.open("GET", "cmd_func.php?cmd=shutdown", true);
@@ -136,6 +136,11 @@ function sys_shutdown() {
 
 function sys_reboot() {
   ajax_status.open("GET", "cmd_func.php?cmd=reboot", true);
+  ajax_status.send();
+}
+
+function sys_settime() {
+  ajax_status.open("GET", "cmd_func.php?cmd=settime&timestr=" + document.getElementById("timestr").value, true);
   ajax_status.send();
 }
 
