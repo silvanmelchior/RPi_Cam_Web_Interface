@@ -561,6 +561,12 @@
                            </td>
                         </tr>
                         <tr>
+                           <td>Delay Frames to detect:</td>
+                           <td>
+                              <?php makeInput('motion_initframes', 5); ?><input type="button" value="OK" onclick="send_cmd('ms ' + document.getElementById('motion_initframes').value)">
+                           </td>
+                        </tr>
+                        <tr>
                            <td>Change Frames to start:</td>
                            <td>
                               <?php makeInput('motion_startframes', 5); ?><input type="button" value="OK" onclick="send_cmd('mb ' + document.getElementById('motion_startframes').value)">
