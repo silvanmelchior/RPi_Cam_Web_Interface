@@ -54,24 +54,43 @@ function servo_left () {
   if(pan <= 190) pan += 10;
   cmd = "left";
   ajax_pipan_start();
+  document.getElementById("arrowLeft").style.borderRight="40px solid red";
+  window.setTimeout(clear_arrow_left, 100)
 }
- 
+function clear_arrow_left() {
+	 document.getElementById("arrowLeft").style.borderRight="40px solid #428bca";
+}
 function servo_right () {
   if(pan >= 10) pan -= 10;
   cmd = "right";
   ajax_pipan_start();
+  document.getElementById("arrowRight").style.borderLeft="40px solid red";
+  window.setTimeout(clear_arrow_right,100);
 }
- 
+function clear_arrow_right() {
+	document.getElementById("arrowRight").style.borderLeft="40px solid #428bca";
+}
+
 function servo_up () {
   if(tilt >= 10) tilt -= 10;
   cmd = "up";
   ajax_pipan_start();
+  document.getElementById("arrowUp").style.borderBottom="40px solid red";
+  window.setTimeout(clear_arrow_up,100);
+}
+function clear_arrow_up() {
+	 document.getElementById("arrowUp").style.borderBottom="40px solid #428bca";
 }
  
 function servo_down () {
   if(tilt <= 190) tilt += 10;
   cmd = "down";
   ajax_pipan_start();
+  document.getElementById("arrowDown").style.borderTop="40px solid red";
+  window.setTimeout(clear_arrow_down,100);
+}
+function clear_arrow_down() {
+	 document.getElementById("arrowDown").style.borderTop="40px solid #428bca";
 }
  
 function led_switch () {
