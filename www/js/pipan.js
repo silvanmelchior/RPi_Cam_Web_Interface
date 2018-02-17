@@ -57,7 +57,7 @@ function servo_left () {
   document.getElementById("arrowLeft").style.borderRight="40px solid red";
   window.setTimeout(clear_arrow_left, 100)
 }
-function clear_arrow_right() {
+function clear_arrow_left() {
 	 document.getElementById("arrowLeft").style.borderRight="40px solid #428bca";
 }
 function servo_right () {
