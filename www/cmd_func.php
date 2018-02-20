@@ -10,7 +10,7 @@
 		} else if(strncmp($cmd, "settime", strlen("settime")) == 0) {
 			if(isset($_GET['timestr'])) {
 				$timestr=$_GET['timestr'];
-				if($timestr !== "") {
+				if($timestr !== "" && date_create($timestr) !== FALSE) {
 					shell_exec("sudo date -s \"$timestr\"");
 				}
 			}
