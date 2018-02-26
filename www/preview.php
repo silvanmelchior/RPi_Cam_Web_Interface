@@ -374,7 +374,14 @@
          var previewWidth = <?php echo $previewSize ?>;
          var convertCmd = "<?php $f = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');echo trim(fgets($f));fclose($f); ?>";
       </script>
-
+      <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.min.js"></script>
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.plugins.min.js"></script>
+      <script>
+        $(function() {
+          $('.lazy').Lazy();
+        });
+      </script>
    </head>
    <body>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
