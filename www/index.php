@@ -498,6 +498,15 @@
                            </td>
                         </tr>
                         <tr>
+                           <td>Mininimise frag (0/1) Default 0:<br>Init Quantisation Default 25:<br>Encoding qp Default 31:</td>
+                           <td>
+                              MF: <?php makeInput('minimise_frag', 4); ?>
+                              IQ: <?php makeInput('initial_quant', 4); ?>
+                              QP: <?php makeInput('encode_qp', 4); ?>
+                              <input type="button" value="OK" onclick="set_encoding();">
+                           </td>
+                        </tr>
+                        <tr>
                            <td>MP4 Boxing mode :</td>
                            <td><select onchange="send_cmd('bo ' + this.value)"><?php makeOptions($options_bo, 'MP4Box'); ?></select></td>
                         </tr>

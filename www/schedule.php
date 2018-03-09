@@ -439,6 +439,7 @@ function cmdHelp() {
              echo "<tr><td>me</td><td>number</td><td>Set motion_stopframes</td></tr>";
              echo "<tr><td>cn</td><td>1/2</td><td>Select camera (Compute model only)</td></tr>";
              echo "<tr><td>st</td><td>0/1</td><td>Off/On Camera statistics</td></tr>";
+             echo "<tr><td>qp</td><td>A BB CC</td><td>Set h264 encoding pars A=minimise_frag BB=initial_quant CC=encode_qp</td></tr>";
              echo "<tr><td>ls</td><td>number</td><td>Set Max log size. 0 disable logging</td></tr>";
            echo "</table>";
          echo "</div>";

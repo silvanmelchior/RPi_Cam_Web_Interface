@@ -102,6 +102,10 @@ function set_preview() {
   update_preview_delay();
 }
 
+function set_encoding() {
+  send_cmd("qp " + document.getElementById("minimise_frag").value + " " + document.getElementById("initial_quant").value + " " + document.getElementById("encode_qp").value);
+}
+
 function set_roi() {
   send_cmd("ri " + document.getElementById("roi_x").value + " " + document.getElementById("roi_y").value + " " + document.getElementById("roi_w").value + " " + document.getElementById("roi_h").value);
 }
