@@ -226,7 +226,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 0");};
       document.getElementById("preview_select").disabled = false;
       halted = 0;
-	    updatePreview();
     }
     else if(ajax_status.responseText == "md_ready") {
       document.getElementById("video_button").disabled = true;
@@ -246,7 +245,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").onclick = function() {};
       document.getElementById("preview_select").disabled = false;
       halted = 0;
-	    updatePreview();
     }
     else if(ajax_status.responseText == "timelapse") {
       document.getElementById("video_button").disabled = false;
@@ -284,7 +282,6 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").onclick = function() {};
       document.getElementById("preview_select").disabled = false;
       halted = 0;
-	    updatePreview();
     }
     else if(ajax_status.responseText == "video") {
       document.getElementById("video_button").disabled = false;
@@ -394,10 +391,10 @@ ajax_status.onreadystatechange = function() {
       document.getElementById("halt_button").onclick = function() {send_cmd("ru 1");};
       document.getElementById("preview_select").disabled = false;
       halted = 1;
-	    updatePreview();
     }
     else if(ajax_status.responseText.substr(0,5) == "Error") alert("Error in RaspiMJPEG: " + ajax_status.responseText.substr(7) + "\nRestart RaspiMJPEG (./RPi_Cam_Web_Interface_Installer.sh start) or the whole RPi.");
-    
+
+	updatePreview();
     reload_ajax(ajax_status.responseText);
 
   }
