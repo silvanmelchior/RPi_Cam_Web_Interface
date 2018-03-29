@@ -345,7 +345,7 @@ if [ "$webserver" == "apache" ]; then
    sudo apt-get install -y apache2 $phpv $phpv-cli libapache2-mod-$phpv gpac motion zip libav-tools gstreamer1.0-tools
    fn_apache
 elif [ "$webserver" == "nginx" ]; then
-   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common php-apcu apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common $phpv-apcu apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
    fn_nginx
 elif [ "$webserver" == "lighttpd" ]; then
    sudo apt-get install -y  lighttpd $phpv-cli $phpv-common $phpv-cgi $phpv gpac motion zip libav-tools gstreamer1.0-tools
