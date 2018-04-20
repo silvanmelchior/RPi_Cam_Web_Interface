@@ -1,1 +1,1 @@
-gst-launch-1.0  -v multifilesrc location=i_%05d.jpg caps=\"image/jpeg,framerate=\(fraction\)30/1\" ! jpegdec ! queue ! videoscale ! video/x-raw ! queue ! omxh264enc target-bitrate=15000000 control-rate=variable ! video/x-h264, profile=high ! h264parse ! mp4mux ! filesink location=
+/usr/bin/ffmpeg -f image2 -i i_%05d.jpg/usr/bin/ffmpeg -f image2 -i i_%05d.jpg 
