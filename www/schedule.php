@@ -571,6 +571,9 @@ function cmdHelp() {
    }
    
    function checkMotion($pipe) {
+      if ( is_bool( $pipe ) ) { // Fail gracefully, if pipe was not opened successfully.
+         return "";
+      }
       try {
          $ret = fread($pipe, 1);
       } catch (Exception $e) {
