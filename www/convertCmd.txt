@@ -1,1 +1,1 @@
-/usr/bin/ffmpeg -f image2 -i i_%05d.jpg/usr/bin/ffmpeg -f image2 -i i_%05d.jpg 
+/usr/bin/ffmpeg -f image2 -i i_%05d.jpg
