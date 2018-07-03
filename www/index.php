@@ -262,7 +262,7 @@
 	   $user = apache_getenv("REMOTE_USER"); 
    } else if(stripos($serverSoftware, 'nginx') !== false) {
 	   try {
-		   $user = $remote_user;
+		   $user = $_SERVER['REMOTE_USER'];
 	   } catch  (Exception $e) {
 		$user = '';
 	   }

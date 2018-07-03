@@ -18,6 +18,7 @@ server {
             fastcgi_index index.php;
             include fastcgi_params;
             fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+			fastcgi_param REMOTE_USER $remote_user;
             auth_basic "Off";
             #auth_basic_user_file /usr/local/.htpasswd;
             }
