@@ -210,7 +210,7 @@ if [ "$user" == "" ]; then
    sed -i "s/auth_basic\ .*/auth_basic \"Off\";/g" $aconf
    sed -i "s/\ auth_basic_user_file/#auth_basic_user_file/g" $aconf
 else
-   sudo htpasswd -b -B -c /usr/local/.htpasswd $user $webpasswd
+   sudo htpasswd -b -c /usr/local/.htpasswd $user $webpasswd
    sed -i "s/auth_basic\ .*/auth_basic \"Restricted\";/g" $aconf
    sed -i "s/#auth_basic_user_file/\ auth_basic_user_file/g" $aconf
 fi
