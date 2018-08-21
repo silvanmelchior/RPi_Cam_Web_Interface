@@ -54,6 +54,8 @@
    }
 
    $zipname = false;
+   $user = getUser();
+   $userLevel = getUserLevel($user);
    //Process any POST data
    if (isset($_POST['timeFilter'])){
 	   $timeFilter = $_POST['timeFilter'];
@@ -67,14 +69,14 @@
 	   $showTypes = $_POST['showTypes'];
 	   setcookie("showTypes", $showTypes, time() + (86400 * 365), "/");
    }
-   if (isset($_POST['delete1'])) {
-      deleteFile($_POST['delete1']);
-      maintainFolders(MEDIA_PATH, false, false);
+   if (isset($_POST['delete1']) && checkMediaPath($_POST['delete1'])) {
+	 deleteFile($_POST['delete1']);
+     maintainFolders(MEDIA_PATH, false, false);
    } else if (isset($_POST['convert'])) {
       $tFile = $_POST['convert'];
       startVideoConvert($tFile);
       $tFile = "";
-   } else if (isset($_POST['download1'])) {
+   } else if (isset($_POST['download1'])  && checkMediaPath($_POST['download1'])) {
       $dFile = $_POST['download1'];
       if(getFileType($dFile) != 't') {
          $dxFile = dataFilename($dFile);
@@ -130,6 +132,20 @@
             break;
       }
    }
+   
+   function pvDisplayStyle($style) {
+	 global $userLevel;
+	 if ((int)$userLevel < (int)USERLEVEL_MEDIUM)
+	   return "style='display:none;'";
+     else if(strlen($style) > 0)
+	   return "style='$style'";
+     else
+	   return '';
+   }
+   
+   function checkMediaPath($path) {
+	   return (realpath(dirname($path)) == realpath(MEDIA_PATH));
+   }
   
    function getZip($files) {
       $zipname = 'cam_' . date("Ymd_His") . '.zip';
@@ -145,7 +161,7 @@
                   $size += filesize($lapse);
                }
             }
-         } else {
+         } else if ($t == 'v' || $t = 'i') {
             $base = dataFilename($file);
             $f = MEDIA_PATH . "/$base";
             if (file_exists($f)) {
@@ -184,10 +200,9 @@
          $i++;
       }
       $vFile = substr(dataFilename($bFile), 0, -3) . 'mp4';
-      $cmd = $_POST['convertCmd'];
-      $fp = fopen(BASE_DIR . '/' . CONVERT_CMD, 'w');
-      fwrite($fp, $cmd);
-      fclose($fp);
+	  $fp = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');
+	  $cmd = trim(fgets($fp));
+	  fclose($fp);
       $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
       writeLog("start lapse convert:$cmd");
       system($cmd);
@@ -248,10 +263,10 @@
       $fWidth = max($ts + 4, 150);
       echo "<fieldset class='fileicon' style='width:" . $fWidth . "px;'>";
       echo "<legend class='fileicon'>";
-      echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' style='background-image:url(delete.png);'></button>";
+      echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' " . pvDisplayStyle("background-image:url(delete.png);") . "></button>";
       echo "&nbsp;&nbsp;<a target=\"_blank\" href=\"" . MEDIA_PATH . "/$rFile\">$fNumber</a>&nbsp;";
       echo "<img src='$fIcon' style='width:24px'/>";
-      echo "<input type='checkbox' name='check_list[]' $sel value='$f' style='float:right;'/>";
+      echo "<input type='checkbox' name='check_list[]' $sel value='$f' " . pvDisplayStyle("float:right;") . "/>";
       echo "</legend>";
       if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
       echo "<br>$fDate<br>$fTime<br>";
@@ -299,20 +314,36 @@
       return $thumbnails;   
    }
    
-   function diskUsage() {
+function diskUsage() {
       //Get disk data
-      $totalSize = round(disk_total_space(BASE_DIR . '/' . MEDIA_PATH) / 1048576); //MB
-      $currentAvailable = round(disk_free_space(BASE_DIR . '/' . MEDIA_PATH) / 1048576); //MB
-      $percentUsed = round(($totalSize - $currentAvailable)/$totalSize * 100, 1);
-      if ($percentUsed > 98)
-         $colour = 'Red';
-      else if ($percentUsed > 90)
-         $colour = 'Orange';
-      else
-         $colour = 'LightGreen';
       echo '<div style="margin-left:5px;position:relative;width:300px;border:1px solid #ccc;">';
-         echo "<span>Used:$percentUsed%  Total:$totalSize(MB)</span>";
-         echo "<div style='z-index:-1;position:absolute;top:0px;width:$percentUsed%;background-color:$colour;'>&nbsp;</div>";
+	  if (file_exists("diskUsage.txt")) {
+		$data = file_get_contents("diskUsage.txt");
+		$lines =  explode("\n", $data);
+	  } else {
+		  $lines = array("local:local");
+	  }
+	  $br = "";
+	  $px = 0;
+	  foreach($lines as $line) {
+	    $fields = explode(':', $line);
+		if(strlen($line) > 3 && count($fields) > 1) {
+		  if($fields[1] == 'local') $fields[1] = BASE_DIR . '/' . MEDIA_PATH;
+	      $totalSize = round(disk_total_space($fields[1]) / 1048576); //MB
+	      $currentAvailable = round(disk_free_space($fields[1]) / 1048576); //MB
+	      $percentUsed = round(($totalSize - $currentAvailable)/$totalSize * 100, 1);
+	      if ($percentUsed > 98)
+		    $colour = 'Red';
+	      else if ($percentUsed > 90)
+		    $colour = 'Orange';
+	      else
+		    $colour = 'LightGreen';
+	      echo $br . "<span>" . $fields[0] . ":$percentUsed%  Total:$totalSize(MB)</span>";
+	      echo "<div style='z-index:-1;position:absolute;top:" . $px . "px;width:$percentUsed%;background-color:$colour;'>&nbsp;</div>";
+		  $br = '<br>';
+		  $px = $px + 20;
+		}
+	  }
       echo '</div>';
    }
    
@@ -372,7 +403,6 @@
          var linksBase = 'preview.php?preview=';
          var mediaBase = "<?php echo MEDIA_PATH . '/' ?>";
          var previewWidth = <?php echo $previewSize ?>;
-         var convertCmd = "<?php $f = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');echo trim(fgets($f));fclose($f); ?>";
       </script>
 
    </head>
@@ -388,7 +418,7 @@
       <div class="container-fluid">
       <form action="preview.php" method="POST">
          <div id='preview' style="display: none; min-height: <?php echo $previewSize ?>px">
-            <h1>
+            <h1 <?php echo pvDisplayStyle(''); ?>>
                <?php echo TXT_PREVIEW ?>: <span id='media-title'></span>
                <input type='button' value='&larr;' class='btn btn-primary' name='prev'>
                <input type='button' value='&rarr;' class='btn btn-primary' name='next'>
@@ -400,10 +430,6 @@
                <br>
             </h1>
 
-            <div id="convert-details">
-               Convert using: <input type='text' size=72 name = 'convertCmd' id='convertCmd' value='<?php echo htmlentities($convertCmd) ?>'><br><br>
-            </div>
-
             <div id='media'></div>
          </div>
 
@@ -414,7 +440,7 @@
             }
          </script>
 
-         <h1><?php echo TXT_FILES; ?>
+         <h1 <?php echo pvDisplayStyle(''); ?>><?php echo TXT_FILES; ?>
          <button class='btn btn-primary' type='submit' name='action' value='selectNone'><?php echo BTN_SELECTNONE; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='selectAll'><?php echo BTN_SELECTALL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='zipSel'><?php echo BTN_GETZIP; ?></button>

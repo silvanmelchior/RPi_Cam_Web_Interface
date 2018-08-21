@@ -211,15 +211,19 @@
 		} else {
 			switch($context) {
 				case 'navbar':
-					if ($userLevel == USERLEVEL_MIN)
+					if ((int)$userLevel < (int)USERLEVEL_MEDIUM)
+						echo 'style="display:none;"';
+					break;
+				case 'preview':
+					if ((int)$userLevel < (int)USERLEVEL_MINP)
 						echo 'style="display:none;"';
 					break;
 				case 'actions':
-					if ($userLevel == USERLEVEL_MIN)
+					if ((int)$userLevel < (int)USERLEVEL_MEDIUM)
 						echo 'style="display:none;"';
 					break;
 				case 'settings':
-					if ((int)$userLevel != USERLEVEL_MAX)
+					if ((int)$userLevel != (int)USERLEVEL_MAX)
 						echo 'style="display:none;"';
 					break;
 			}
@@ -257,18 +261,7 @@
    $config = readConfig($config, CONFIG_FILE2);
    $video_fps = $config['video_fps'];
    $divider = $config['divider'];
-   $serverSoftware = $_SERVER['SERVER_SOFTWARE'];
-   if(stripos($serverSoftware, 'apache') !== false) {
-	   $user = apache_getenv("REMOTE_USER"); 
-   } else if(stripos($serverSoftware, 'nginx') !== false) {
-	   try {
-		   $user = $_SERVER['REMOTE_USER'];
-	   } catch  (Exception $e) {
-		$user = '';
-	   }
-   } else {
-	   $user = '';
-   }
+   $user = getUser();
    writeLog("Logged in user:" . $user . ":");
    $userLevel =  getUserLevel($user);
    writeLog("UserLevel " . $userLevel);
@@ -307,7 +300,7 @@
       <div id="secondary-buttons" class="container-fluid text-center">
          <?php pan_controls(); ?>
          <?php user_buttons(); ?>
-         <a href="preview.php" class="btn btn-default" <?php getdisplayStyle('actions', $userLevel); ?>>Download Videos and Images</a>
+         <a href="preview.php" class="btn btn-default" <?php getdisplayStyle('preview', $userLevel); ?>>Download Videos and Images</a>
          &nbsp;&nbsp;
          <?php  if($config['motion_external'] == '1'): ?><a href="motion.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
          <a href="schedule.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit schedule settings</a>

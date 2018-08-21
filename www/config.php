@@ -3,7 +3,7 @@
 	define('LBASE_DIR',dirname(__FILE__));
 	//Global defines and utility functions
 	// version string 
-	define('APP_VERSION', 'v6.4.25');
+	define('APP_VERSION', 'v6.4.26');
 
 	// name of this application
 	define('APP_NAME', 'RPi Cam Control');
@@ -47,6 +47,7 @@
 	// defines for user level
 	define('USERLEVEL_FILE', 'userLevel');
 	define('USERLEVEL_MIN', '0');
+	define('USERLEVEL_MINP', '2'); //minimum+preview
 	define('USERLEVEL_MEDIUM', '3');
 	define('USERLEVEL_MAX', '6');
   
@@ -271,6 +272,22 @@
    
 	function getStyle() {
 		return 'css/' . file_get_contents(BASE_DIR . '/css/extrastyle.txt');
+	}
+	
+	function getUser() {
+		$serverSoftware = $_SERVER['SERVER_SOFTWARE'];
+		if(stripos($serverSoftware, 'apache') !== false) {
+		   $user = apache_getenv("REMOTE_USER"); 
+		} else if(stripos($serverSoftware, 'nginx') !== false) {
+		   try {
+			   $user = $_SERVER['REMOTE_USER'];
+		   } catch  (Exception $e) {
+			$user = '';
+		   }
+		} else {
+		   $user = '';
+		}
+		return $user;
 	}
    
 	function getUserLevel($user) {
