@@ -106,7 +106,9 @@
          case 'deleteSel':
             if(!empty($_POST['check_list'])) {
                foreach($_POST['check_list'] as $check) {
-                  deleteFile($check);
+                  if (checkMediaPath($check)) {
+					  deleteFile($check);
+				  }
                }
             }        
             maintainFolders(MEDIA_PATH, false, false);
@@ -144,7 +146,7 @@
    }
    
    function checkMediaPath($path) {
-	   return (realpath(dirname($path)) == realpath(MEDIA_PATH));
+	   return (realpath(dirname(MEDIA_PATH . "/$path")) == realpath(MEDIA_PATH));
    }
   
    function getZip($files) {
@@ -189,25 +191,29 @@
 
    function startVideoConvert($bFile) {
       global $debugString;
-      $tFiles = findLapseFiles($bFile);
-      $tmp = BASE_DIR . '/' . MEDIA_PATH . '/' . getFileType($bFile) . getFileIndex($bFile);
-      if (!file_exists($tmp)) {
-         mkdir($tmp, 0777, true);
-      }
-      $i= 0;
-      foreach($tFiles as $tFile) {
-         symlink($tFile, $tmp . '/' . sprintf('i_%05d', $i) . '.jpg');
-         $i++;
-      }
-      $vFile = substr(dataFilename($bFile), 0, -3) . 'mp4';
-	  $fp = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');
-	  $cmd = trim(fgets($fp));
-	  fclose($fp);
-      $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
-      writeLog("start lapse convert:$cmd");
-      system($cmd);
-      copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . $vFile . '.v' . getFileIndex($bFile) .THUMBNAIL_EXT);
-      writeLog("Convert finished");
+	  $ft = getFileType($bFile);
+	  $fi = getFileIndex($bFile);
+	  if($ft =='t' && is_numeric($fi)) {
+		  $tFiles = findLapseFiles($bFile);
+		  $tmp = BASE_DIR . '/' . MEDIA_PATH . '/' . $ft . $fi;
+		  if (!file_exists($tmp)) {
+			 mkdir($tmp, 0777, true);
+		  }
+		  $i= 0;
+		  foreach($tFiles as $tFile) {
+			 symlink($tFile, $tmp . '/' . sprintf('i_%05d', $i) . '.jpg');
+			 $i++;
+		  }
+		  $vFile = substr(dataFilename($bFile), 0, -3) . 'mp4';
+		  $fp = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');
+		  $cmd = trim(fgets($fp));
+		  fclose($fp);
+		  $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
+		  writeLog("start lapse convert:$cmd");
+		  system($cmd);
+		  copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . $vFile . '.v' . getFileIndex($bFile) .THUMBNAIL_EXT);
+		  writeLog("Convert finished");
+	  }
    }
 
 

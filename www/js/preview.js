@@ -24,7 +24,6 @@ function load_preview(thumbnail) {
 	var nextButton = document.getElementsByName('next')[0];
 	var downloadButton = document.getElementsByName('download1')[0];
 	var deleteButton = document.getElementsByName('delete1')[0];
-	var convertDetailsDiv = document.getElementById('convert-details');
 	var convertButton = document.getElementsByName('convert')[0];
 	var mediaDiv = document.getElementById('media');
 	var title = document.getElementById('media-title');
@@ -83,11 +82,9 @@ function load_preview(thumbnail) {
 	}
 
 	if (fileType(thumbnail) == 't') {
-		convertDetailsDiv.style.display = 'inline';
 		convertButton.style.display = 'inline';
 		convertButton.value = thumbnail;
 	} else {
-		convertDetailsDiv.style.display = 'none';
 		convertButton.style.display = 'none';
 		convertButton.value = '';
 	}
