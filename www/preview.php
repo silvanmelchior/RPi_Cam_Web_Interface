@@ -154,28 +154,30 @@
       $cmd = 'zip -0 -q -'; // Don't compress!
       $size = 1000000;
       foreach ($files as $file) {
-         $t = getFileType($file);
-         if ($t == 't') {
-            $lapses = findLapseFiles($file);
-            if (!empty($lapses)) {
-               foreach($lapses as $lapse) {
+		 if(checkMediaPath($file)) {
+           $t = getFileType($file);
+           if ($t == 't') {
+              $lapses = findLapseFiles($file);
+              if (!empty($lapses)) {
+                foreach($lapses as $lapse) {
                   $cmd .= " $lapse";
                   $size += filesize($lapse);
-               }
-            }
-         } else if ($t == 'v' || $t = 'i') {
-            $base = dataFilename($file);
-            $f = MEDIA_PATH . "/$base";
-            if (file_exists($f)) {
-               $cmd .= " $f";
-               $size += filesize($f);
-            }
-            $f = MEDIA_PATH . "/$base.dat";
-            if ($t == 'v' && file_exists($f)) {
-               $cmd .= " $f";
-               $size += filesize($f);
-            }
-         }
+                }
+              }
+           } else if ($t == 'v' || $t = 'i') {
+              $base = dataFilename($file);
+              $f = MEDIA_PATH . "/$base";
+              if (file_exists($f)) {
+                $cmd .= " $f";
+                $size += filesize($f);
+              }
+              $f = MEDIA_PATH . "/$base.dat";
+              if ($t == 'v' && file_exists($f)) {
+                $cmd .= " $f";
+                $size += filesize($f);
+              }
+           }
+		 }
       }
       writeLog("Generating ZIP using command: $cmd ($size bytes)");
 
@@ -191,9 +193,10 @@
 
    function startVideoConvert($bFile) {
       global $debugString;
-	  $ft = getFileType($bFile);
-	  $fi = getFileIndex($bFile);
-	  if($ft =='t' && is_numeric($fi)) {
+	  if(checkMediaPath($bFile)) { 
+	    $ft = getFileType($bFile);
+	    $fi = getFileIndex($bFile);
+	    if($ft =='t' && is_numeric($fi)) {
 		  $tFiles = findLapseFiles($bFile);
 		  $tmp = BASE_DIR . '/' . MEDIA_PATH . '/' . $ft . $fi;
 		  if (!file_exists($tmp)) {
@@ -213,6 +216,7 @@
 		  system($cmd);
 		  copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . $vFile . '.v' . getFileIndex($bFile) .THUMBNAIL_EXT);
 		  writeLog("Convert finished");
+	    }
 	  }
    }
 
