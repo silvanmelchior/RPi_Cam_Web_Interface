@@ -146,7 +146,7 @@
    }
    
    function checkMediaPath($path) {
-	   return (realpath(dirname(MEDIA_PATH . "/$path")) == realpath(MEDIA_PATH));
+	   return ((realpath(dirname(MEDIA_PATH . "/$path")) == realpath(MEDIA_PATH)) && file_exists(MEDIA_PATH . "/$path"));
    }
   
    function getZip($files) {
