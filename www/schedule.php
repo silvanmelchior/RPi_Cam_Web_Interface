@@ -204,10 +204,8 @@
          SCHEDULE_DAYMODE => '1',
          SCHEDULE_AUTOCAPTUREINTERVAL => '0',
          SCHEDULE_AUTOCAMERAINTERVAL => '0',
-//         SCHEDULE_TIMES => array("09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"),
          SCHEDULE_TIMES => array("09:00"),
          SCHEDULE_DAYS => array(array(0,1,2,3,4,5,6)),
-//         SCHEDULE_DAYS => array(array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6),array(0,1,2,3,4,5,6)),
          SCHEDULE_COMMANDSON => array("ca 1","","","ca 1","","","","","","",""),
          SCHEDULE_COMMANDSOFF => array("ca 0","","","ca 0","","","","","","",""),
          SCHEDULE_MODES => array("","em night","md 1;em night","em auto","md 0;em night","","","","","","")
@@ -231,6 +229,11 @@
       $column = 0;
       foreach ($pars as $mKey => $mValue) {
          if ($column == 0) echo '<tr>';
+		 if ($mKey == SCHEDULE_FIFOIN || $mKey == SCHEDULE_FIFOOUT) {
+			 $disabled = "disabled";
+		 } else {
+			 $disabled = "";
+		 }
          if (!is_array($mValue)) {
             switch ($mKey) {
                case SCHEDULE_DAYMODE:
@@ -254,7 +257,7 @@
                   echo '</select></td>';
                   break;
                default:
-                  echo "<td>$mKey&nbsp;&nbsp;</td><td><input type='text' autocomplete='off' size='30' name='$mKey' value='" . htmlspecialchars($mValue, ENT_QUOTES) . "'/></td>";
+                  echo "<td>$mKey&nbsp;&nbsp;</td><td><input type='text' autocomplete='off' size='30' name='$mKey' $disabled value='" . htmlspecialchars($mValue, ENT_QUOTES) . "'/></td>";
             }
             $column++;
             if ($column == 2) {echo '</tr>';$column =0;}
