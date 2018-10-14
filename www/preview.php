@@ -211,7 +211,7 @@
 		  $fp = fopen(BASE_DIR . '/' . CONVERT_CMD, 'r');
 		  $cmd = trim(fgets($fp));
 		  fclose($fp);
-		  $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
+		  $cmd = "(" . str_replace("i_%05d", "$tmp/i_%05d", $cmd) . ' ' . BASE_DIR . '/' . MEDIA_PATH . "/$vFile ; rm -rf $tmp;) >/dev/null 2>&1 &";
 		  writeLog("start lapse convert:$cmd");
 		  system($cmd);
 		  copy(MEDIA_PATH . "/$bFile", MEDIA_PATH . '/' . $vFile . '.v' . getFileIndex($bFile) .THUMBNAIL_EXT);
