@@ -11,6 +11,8 @@
    define('BTN_SELECTALL', 'Select All');
    define('BTN_SELECTNONE', 'Select None');
    define('BTN_GETZIP', 'Get Zip');
+   define('BTN_LOCKSEL', 'Lock Sel');
+   define('BTN_UNLOCKSEL', 'Unlock Sel');
    define('BTN_UPDATESIZEORDER', 'Update');
    define('TXT_PREVIEW', 'Preview');
    define('TXT_THUMB', 'Thumb');
@@ -113,6 +115,24 @@
             }        
             maintainFolders(MEDIA_PATH, false, false);
             break;
+         case 'lockSel':
+            if(!empty($_POST['check_list'])) {
+               foreach($_POST['check_list'] as $check) {
+                  if (checkMediaPath($check)) {
+					  lockFile($check, 1);
+				  }
+               }
+            }        
+            break;
+         case 'unlockSel':
+            if(!empty($_POST['check_list'])) {
+               foreach($_POST['check_list'] as $check) {
+                  if (checkMediaPath($check)) {
+					  lockFile($check, 0);
+				  }
+               }
+            }        
+            break;
          case 'updateSizeOrder':
             if(!empty($_POST['previewSize'])) {
                $previewSize = $_POST['previewSize'];
@@ -164,7 +184,7 @@
                   $size += filesize($lapse);
                 }
               }
-           } else if ($t == 'v' || $t = 'i') {
+           } else if ($t == 'v' || $t == 'i') {
               $base = dataFilename($file);
               $f = MEDIA_PATH . "/$base";
               if (file_exists($f)) {
@@ -273,7 +293,9 @@
       $fWidth = max($ts + 4, 150);
       echo "<fieldset class='fileicon' style='width:" . $fWidth . "px;'>";
       echo "<legend class='fileicon'>";
-      echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' " . pvDisplayStyle("background-image:url(delete.png);") . "></button>";
+	  if(is_writeable(MEDIA_PATH . "/$f")) {
+		echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' " . pvDisplayStyle("background-image:url(delete.png);") . "></button>";
+	  } 
       echo "&nbsp;&nbsp;<a target=\"_blank\" href=\"" . MEDIA_PATH . "/$rFile\">$fNumber</a>&nbsp;";
       echo "<img src='$fIcon' style='width:24px'/>";
       echo "<input type='checkbox' name='check_list[]' $sel value='$f' " . pvDisplayStyle("float:right;") . "/>";
@@ -456,6 +478,8 @@ function diskUsage() {
          <button class='btn btn-primary' type='submit' name='action' value='zipSel'><?php echo BTN_GETZIP; ?></button>
          <button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick="return confirm('Are you sure?');"><?php echo BTN_DELETESEL; ?></button>
          <button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick="return confirm('Are you sure?');"><?php echo BTN_DELETEALL; ?></button>
+         <button class='btn btn-primary' type='submit' name='action' value='lockSel'><?php echo BTN_LOCKSEL; ?></button>
+         <button class='btn btn-primary' type='submit' name='action' value='unlockSel'><?php echo BTN_UNLOCKSEL; ?></button>
          </h1>
          <?php
          diskUsage();

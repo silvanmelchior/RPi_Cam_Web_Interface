@@ -3,7 +3,7 @@
 	define('LBASE_DIR',dirname(__FILE__));
 	//Global defines and utility functions
 	// version string 
-	define('APP_VERSION', 'v6.4.31');
+	define('APP_VERSION', 'v6.4.32');
 
 	// name of this application
 	define('APP_NAME', 'RPi Cam Control');
@@ -212,6 +212,32 @@
 		if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
 		return $size / 1024;
 	}
+
+	//function to lock or unlock all files associated with a thumb name
+	function lockFile($d, $lock) {
+		if($lock == 1) $attr = 0444; else $attr = 0644;
+		$t = getFileType($d); 
+		if ($t == 't') {
+			// For time lapse lock all from this batch
+			$files = findLapseFiles($d);
+			foreach($files as $file) {
+					chmod($file, $attr);
+			}
+		} else {
+			$tFile = dataFilename($d);
+			if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile")) {
+			chmod(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile", $attr);
+			}
+			if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
+				chmod(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat", $attr);
+			}
+			if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264")) {
+				chmod(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264", $attr);
+			}
+		}
+		chmod(LBASE_DIR . '/' . MEDIA_PATH . "/$d", $attr);
+	}
+
    
 	//Support naming functions
 	function dataFilename($file) {
