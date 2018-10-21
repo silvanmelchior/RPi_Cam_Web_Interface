@@ -36,7 +36,7 @@
    define('SCHEDULE_MODEPOLL', 'Mode_Poll');
    define('SCHEDULE_MAXCAPTURE', 'Max_Capture');
    define('SCHEDULE_LATITUDE', 'Latitude');
-   define('SCHEDULE_LONGTITUDE', 'Longtitude');
+   define('SCHEDULE_LONGITUDE', 'Longitude');
    define('SCHEDULE_GMTOFFSET', 'GMTOffset');
    define('SCHEDULE_DAWNSTARTMINUTES', 'DawnStart_Minutes');
    define('SCHEDULE_DAYSTARTMINUTES', 'DayStart_Minutes');
@@ -161,6 +161,7 @@
             }
             //Backwards compatibility fixes go here
             if (array_key_exists(SCHEDULE_ALLDAY,$input)) $pars[SCHEDULE_DAYMODE] = '1';
+            if (array_key_exists('Longtitude',$input)) $pars[SCHEDULE_LONGITUDE] = $input['Longtitude'];
             //Duplicate old Day to First AllDay
             if (count($pars[SCHEDULE_COMMANDSON]) < 11) {
                array_unshift($pars[SCHEDULE_COMMANDSON], $pars[SCHEDULE_COMMANDSON][2]);
@@ -199,7 +200,7 @@
          SCHEDULE_DAYENDMINUTES => '0',
          SCHEDULE_DUSKENDMINUTES => '180',
          SCHEDULE_LATITUDE => '52.00',
-         SCHEDULE_LONGTITUDE => '0.00',
+         SCHEDULE_LONGITUDE => '0.00',
          SCHEDULE_MAXCAPTURE => '0',
          SCHEDULE_DAYMODE => '1',
          SCHEDULE_AUTOCAPTUREINTERVAL => '0',
@@ -497,12 +498,12 @@ function cmdHelp() {
    
    function getSunrise($format) {
       global $schedulePars;
-      return date_sunrise(time(), $format, $schedulePars[SCHEDULE_LATITUDE], $schedulePars[SCHEDULE_LONGTITUDE], SCHEDULE_ZENITH, getTimeOffset());
+      return date_sunrise(time(), $format, $schedulePars[SCHEDULE_LATITUDE], $schedulePars[SCHEDULE_LONGITUDE], SCHEDULE_ZENITH, getTimeOffset());
    }
    
    function getSunset($format) {
       global $schedulePars; 
-      return date_sunset(time(), $format, $schedulePars[SCHEDULE_LATITUDE], $schedulePars[SCHEDULE_LONGTITUDE], SCHEDULE_ZENITH, getTimeOffset());
+      return date_sunset(time(), $format, $schedulePars[SCHEDULE_LATITUDE], $schedulePars[SCHEDULE_LONGITUDE], SCHEDULE_ZENITH, getTimeOffset());
    }
 
    function findFixedTimePeriod($cMins) {
