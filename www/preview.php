@@ -253,7 +253,7 @@
             if (!maintainFolders($file, $deleteMainFiles, $deleteSubFiles, false)) $empty=false;
          }  else {
             if (($deleteSubFiles && !$root) || ($deleteMainFiles && $root)) {
-              unlink($file);
+              if(is_writeable($file)) unlink($file);
             } else {
                $empty=false;
             }
