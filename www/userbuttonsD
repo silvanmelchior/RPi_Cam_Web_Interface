@@ -1,6 +1,6 @@
 #User buttons definitions
 #maximum of six buttons
-#Make sure no spaces between buttonname and macroname
-#buttonname,macro
-button1,button1.sh
-button2,button2.sh
+#button name,macro,button styles,other attributes
+Button One,button1.sh,btn btn-danger btn-lg,style="width:50%" autofocus
+#Warning Button,button2.sh,btn btn-warning btn-lg,style="width:50%"
+#Success Button,button3.sh,btn btn-success btn-lg,style="width:50%"
