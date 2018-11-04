@@ -47,11 +47,16 @@
 		$lines = explode("\n", $data);
 		foreach($lines as $line) {
 			if (strlen($line) && (substr($line, 0, 1) != '#') && buttonCount < 6) {
-				$index = strpos($line, ',');
+				$index = explode(",",$line);
 				if ($index !== false) {
-					$buttonName = substr($line, 0, $index);
-					$macroName = substr($line, $index +1);
-					$buttonString .= '<input id="' . $buttonName . '" type="button" value="' . $buttonName . '" onclick="send_cmd(' . "'sy " . $macroName . "'" . ')" class="btn btn-primary" >' . "\r\n";
+					$buttonName = $index[0];
+					$macroName = $index[1];
+					$className = $index[2];
+					if ($className == false) {
+						$className = "btn btn-primary";
+					}
+					$otherAtt  = $index[3];
+					$buttonString .= '<input id="' . $buttonName . '" type="button" value="' . $buttonName . '" onclick="send_cmd(' . "'sy " . $macroName . "'" . ')" class="' . $className . '" ' . $otherAtt . '>' . "\r\n";
 					$buttonCount += 1;
 				}
 			}
