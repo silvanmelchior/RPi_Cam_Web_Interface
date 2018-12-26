@@ -5,14 +5,17 @@
    //Text labels here
    define('BTN_DOWNLOAD', 'Download');
    define('BTN_DELETE', 'Delete');
+   define('BTN_DELETE_CONFIRM', 'Are you sure to delete this file?');
    define('BTN_CONVERT', 'Start Convert');
    define('BTN_DELETEALL', 'Delete All');
-   define('BTN_DELETESEL', 'Delete Sel');
+   define('BTN_DELETEALL_CONFIRM', 'Are you sure to delete all items?');
+   define('BTN_DELETESEL', 'Delete Selected');
+   define('BTN_DELETESEL_CONFIRM', 'Are you sure to delete selected items?');
    define('BTN_SELECTALL', 'Select All');
-   define('BTN_SELECTNONE', 'Select None');
+   define('BTN_SELECTNONE', 'Deselect');
    define('BTN_GETZIP', 'Get Zip');
    define('BTN_LOCKSEL', 'Lock Sel');
-   define('BTN_UNLOCKSEL', 'Unlock Sel');
+   define('BTN_UNLOCKSEL', 'Unlock Selected');
    define('BTN_UPDATESIZEORDER', 'Update');
    define('TXT_PREVIEW', 'Preview');
    define('TXT_THUMB', 'Thumb');
@@ -294,13 +297,23 @@
       echo "<fieldset class='fileicon' style='width:" . $fWidth . "px;'>";
       echo "<legend class='fileicon'>";
 	  if(is_writeable(MEDIA_PATH . "/$f")) {
-		echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' " . pvDisplayStyle("background-image:url(delete.png);") . "></button>";
+		echo "<button type='submit' name='delete1' value='$f' class='fileicondelete' " . pvDisplayStyle("background-image:url(delete.png);") . " onclick='return confirm(\"".BTN_DELETE_CONFIRM."\");'></button>";
 	  } 
       echo "&nbsp;&nbsp;<a target=\"_blank\" href=\"" . MEDIA_PATH . "/$rFile\">$fNumber</a>&nbsp;";
       echo "<img src='$fIcon' style='width:24px'/>";
       echo "<input type='checkbox' name='check_list[]' $sel value='$f' " . pvDisplayStyle("float:right;") . "/>";
       echo "</legend>";
-      if ($fsz > 0) echo "$fsz Kb $lapseCount $duration"; else echo 'Busy';
+	   
+     if ($fsz > 0) {
+	      if($fsz > 1024) {
+	    	 echo round($fsz/1024) . " MB";
+	      } else {
+	     	 echo "$fsz KB";
+	      }
+	      echo " $lapseCount $duration";
+      } else {
+	      echo 'Busy';
+      }
       echo "<br>$fDate<br>$fTime<br>";
       if ($fsz > 0) echo "<a title='$rFile' href='#' onclick='load_preview(\"$f\");'>";
       echo "<img src='" . MEDIA_PATH . "/$f' style='width:" . $ts . "px'/>";
@@ -348,7 +361,7 @@
    
 function diskUsage() {
       //Get disk data
-      echo '<div style="margin-left:5px;position:relative;width:300px;border:1px solid #ccc;">';
+      echo '<div style="margin-left:5px;position:relative;width:300px;border:1px solid #ccc;margin-bottom: 1em;">';
 	  if (file_exists("diskUsage.txt")) {
 		$data = file_get_contents("diskUsage.txt");
 		$lines =  explode("\n", $data);
@@ -370,7 +383,7 @@ function diskUsage() {
 		    $colour = 'Orange';
 	      else
 		    $colour = 'LightGreen';
-	      echo $br . "<span>" . $fields[0] . ":$percentUsed%  Total:$totalSize(MB)</span>";
+	      echo $br . "<span>" . $fields[0] . ": $percentUsed%  Total: $totalSize MB</span>";
 	      echo "<div style='z-index:-1;position:absolute;top:" . $px . "px;width:$percentUsed%;background-color:$colour;'>&nbsp;</div>";
 		  $br = '<br>';
 		  $px = $px + 20;
@@ -383,8 +396,8 @@ function diskUsage() {
       global $previewSize,$thumbSize,$sortOrder, $showTypes;
       global $timeFilter, $timeFilterMax;
       
-      echo TXT_PREVIEW . " <input type='text' size='4' name='previewSize' value='$previewSize'>";
-      echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='text' size='3' name='thumbSize' value='$thumbSize'>";
+      echo TXT_PREVIEW . " <input type='number' name='previewSize' value='$previewSize' style='width: 4em;'>";
+      echo "&nbsp;&nbsp;" . TXT_THUMB . " <input type='number' name='thumbSize' value='$thumbSize' style='width: 4em;'>";
       echo "&nbsp;<button class='btn btn-primary' type='submit' name='action' value='updateSizeOrder'>" . BTN_UPDATESIZEORDER . "</button>";
       echo '&nbsp;Sort&nbsp;<select id="sortOrder" name="sortOrder" onchange="this.form.submit()">';
       if ($sortOrder == 1) $selected = "selected"; else $selected = "";
@@ -456,7 +469,7 @@ function diskUsage() {
                <input type='button' value='&rarr;' class='btn btn-primary' name='next'>
 
                <button class='btn btn-primary' type='submit' name='download1'><?php echo BTN_DOWNLOAD; ?></button>
-               <button class='btn btn-danger' type='submit' name='delete1'><?php echo BTN_DELETE; ?></button>
+               <button class='btn btn-danger' type='submit' name='delete1' onclick='return confirm("<?php echo BTN_DELETE_CONFIRM; ?>");'><?php echo BTN_DELETE; ?></button>
                
                <button class='btn btn-primary' type='submit' name='convert'><?php echo BTN_CONVERT ?></button>
                <br>
@@ -476,8 +489,8 @@ function diskUsage() {
          <button class='btn btn-primary' type='submit' name='action' value='selectNone'><?php echo BTN_SELECTNONE; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='selectAll'><?php echo BTN_SELECTALL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='zipSel'><?php echo BTN_GETZIP; ?></button>
-         <button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick="return confirm('Are you sure to delete selected items?');"><?php echo BTN_DELETESEL; ?></button>
-         <button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick="return confirm('Are you sure to delete all items?');"><?php echo BTN_DELETEALL; ?></button>
+         <button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick="return confirm('<?php echo BTN_DELETESEL_CONFIRM; ?>')"><?php echo BTN_DELETESEL; ?></button>
+         <button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick="return confirm('<?php echo BTN_DELETEALL_CONFIRM; ?>')"><?php echo BTN_DELETEALL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='lockSel'><?php echo BTN_LOCKSEL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='unlockSel'><?php echo BTN_UNLOCKSEL; ?></button>
          </h1>
