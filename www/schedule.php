@@ -464,17 +464,18 @@ function cmdHelp() {
    
    function sendCmds($cmdString, $period = false) {
       global $schedulePars;
-	  if($period === false || isDayActive($period))
-      $cmds = explode(';', $cmdString);
-	  foreach ($cmds as $cmd) {
-		if ($cmd != "") {
+	  if(ScmdString && ($period === false || isDayActive($period))) {
+		$cmds = explode(';', $cmdString);
+	    foreach ($cmds as $cmd) {
+		  if ($cmd != "") {
 			writeLog("Send $cmd");
 			$fifo = fopen($schedulePars[SCHEDULE_FIFOOUT], "w");
 			fwrite($fifo, $cmd . "\n");
 			fclose($fifo);
 			sleep(2);
-		}
-      }
+		  }
+        }
+	  }
    }
    
    function getTimeOffset() {
