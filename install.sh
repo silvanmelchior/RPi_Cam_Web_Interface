@@ -58,7 +58,7 @@ phpversion=7
 if [ ! -e ./config.txt ]; then
       sudo echo "#This is config file for main installer. Put any extra options in here." > ./config.txt
       sudo echo "rpicamdir=\"html\"" >> ./config.txt
-      sudo echo "webserver=\"apache\"" >> ./config.txt
+      sudo echo "webserver=\"nginx\"" >> ./config.txt
       sudo echo "webport=\"80\"" >> ./config.txt
       sudo echo "user=\"\"" >> ./config.txt
       sudo echo "webpasswd=\"\"" >> ./config.txt
