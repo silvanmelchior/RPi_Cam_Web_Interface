@@ -464,7 +464,7 @@ function cmdHelp() {
    
    function sendCmds($cmdString, $period = false) {
       global $schedulePars;
-	  if(ScmdString && ($period === false || isDayActive($period))) {
+	  if($cmdString && ($period === false || isDayActive($period))) {
 		$cmds = explode(';', $cmdString);
 	    foreach ($cmds as $cmd) {
 		  if ($cmd != "") {
