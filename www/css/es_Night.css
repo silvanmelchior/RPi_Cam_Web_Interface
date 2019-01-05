@@ -6,10 +6,12 @@ body {
 
 .btn-default {
     background-color: #404040;
+	color: #C0C0C0;
 }
 
 .panel-default>.panel-heading {
     background-color: #404040;
+	color: #C0C0C0;
 }
 
 fieldset {
