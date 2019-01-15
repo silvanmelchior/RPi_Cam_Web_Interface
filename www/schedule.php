@@ -441,6 +441,8 @@ function cmdHelp() {
              echo "<tr><td>ms</td><td>number</td><td>Set motion_initframes</td></tr>";
              echo "<tr><td>mb</td><td>number</td><td>Set motion_startframes</td></tr>";
              echo "<tr><td>me</td><td>number</td><td>Set motion_stopframes</td></tr>";
+             echo "<tr><td>mf</td><td>0/1</td><td>Enable saving motion vectors</td></tr>";
+             echo "<tr><td>mz</td><td>0/1</td><td>Disable motion mask</td></tr>";
              echo "<tr><td>cn</td><td>1/2</td><td>Select camera (Compute model only)</td></tr>";
              echo "<tr><td>st</td><td>0/1</td><td>Off/On Camera statistics</td></tr>";
              echo "<tr><td>qp</td><td>A BB CC</td><td>Set h264 encoding pars A=minimise_frag BB=initial_quant CC=encode_qp</td></tr>";
