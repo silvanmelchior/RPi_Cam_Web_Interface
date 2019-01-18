@@ -546,7 +546,7 @@
                           </td>
                         </tr>
                         <tr>
-                           <td>Noise level (1-255):</td>
+                           <td>Noise level (1-255 / >1000):</td>
                            <td>
                               <?php makeInput('motion_noise', 5, null, 'number'); ?><input type="button" value="OK" onclick="send_cmd('mn ' + document.getElementById('motion_noise').value)">
                            </td>
