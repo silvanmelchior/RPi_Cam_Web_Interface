@@ -144,8 +144,11 @@ function sys_reboot() {
 }
 
 function sys_settime() {
-  ajax_status.open("GET", "cmd_func.php?cmd=settime&timestr=" + document.getElementById("timestr").value, true);
-  ajax_status.send();
+  var strDate = document.getElementById("timestr").value;
+  if(strDate.indexOf("-") < 0) {
+	  ajax_status.open("GET", "cmd_func.php?cmd=settime&timestr=" + document.getElementById("timestr").value, true);
+	  ajax_status.send();
+  }
 }
 
 //
