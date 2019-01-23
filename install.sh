@@ -174,8 +174,11 @@ sudo sed -i "s/<Directory\ \/var\/www\/.*/<Directory\ \/var\/www$rpicamdirEsc>/g
 if [ "$user" == "" ]; then
 	sudo sed -i "s/AllowOverride\ .*/AllowOverride None/g" $aconf
 else
-   sudo htpasswd -b -B -c /usr/local/.htpasswd $user $webpasswd
-	sudo sed -i "s/AllowOverride\ .*/AllowOverride All/g" $aconf
+   if [ ! -e /usr/local/.htpasswd ]; then
+      sudo htpasswd -b -B -c /usr/local/.htpasswd $user $webpasswd
+   fi
+   sudo htpasswd -b -B /usr/local/.htpasswd $user $webpasswd
+   sudo sed -i "s/AllowOverride\ .*/AllowOverride All/g" $aconf
    if [ ! -e /var/www$rpicamdir/.htaccess ]; then
       sudo bash -c "cat > /var/www$rpicamdir/.htaccess" << EOF
 AuthName "RPi Cam Web Interface Restricted Area"
