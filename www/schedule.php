@@ -174,8 +174,6 @@
 	  // Add in any extra SCHEDULE_TIMES and SCHEDULE_DAYS settings up to maximum count
 	  for($i = count($pars[SCHEDULE_TIMES]); $i < SCHEDULE_TIMES_MAX; $i++) {
 		  $pars[SCHEDULE_TIMES][$i] = sprintf("%02d", $i+9).":00";
-	  }
-	  for($i = count($pars[SCHEDULE_DAYS]); $i < (SCHEDULE_TIMES_MAX + 5); $i++) {
 		  $pars[SCHEDULE_DAYS][$i] = array(0,1,2,3,4,5,6);
 	  }
       return $pars;
@@ -306,8 +304,9 @@
             echo "<input type='text' autocomplete='off' size='10' name='" . SCHEDULE_TIMES . "[]' value='" . htmlspecialchars($times[$row -5], ENT_QUOTES) . "'/> &nbsp;&nbsp;</td>";
          }
 		 echo '<td>';
+		 $dayExists = array_key_exists($row, $days);
 		 for($dy = 0;$dy <7;$dy++) {
-			echo "<input type='checkbox' name='" . SCHEDULE_DAYS . "[$row][]' value=$dy" . (in_array($dy, $days[$row]) ? " checked" : "") . "/>"; 
+			echo "<input type='checkbox' name='" . SCHEDULE_DAYS . "[$row][]' value=$dy" . ($dayExists && in_array($dy, $days[$row]) ? " checked" : "") . "/>"; 
 		 }
 		 echo '</td>';
          echo "<td><input type='text' autocomplete='off' size='24' name='" . SCHEDULE_COMMANDSON . "[]' value='" . htmlspecialchars($cmdsOn[$row], ENT_QUOTES) . "'/>&nbsp;&nbsp;</td>";
