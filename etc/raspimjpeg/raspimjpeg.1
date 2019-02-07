@@ -171,3 +171,10 @@ user_config /var/www/uconfig
 log_file /var/www/scheduleLog.txt
 log_size 5000
 motion_logfile /var/www/motionLog.txt
+
+#enforce_lf set to 1 to only process FIFO commands when terminated with LF
+enforce_lf 0
+
+#FIFO poll interval microseconds 1000000 minimum
+fifo_interval 100000
+
