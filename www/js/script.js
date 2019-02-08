@@ -462,8 +462,12 @@ else {
   ajax_cmd = new ActiveXObject("Microsoft.XMLHTTP");
 }
 
+function encodeCmd(s) {
+   return s.replace("&","%26");
+}
+
 function send_cmd (cmd) {
-  ajax_cmd.open("GET","cmd_pipe.php?cmd=" + cmd,true);
+  ajax_cmd.open("GET","cmd_pipe.php?cmd=" + encodeCmd(cmd),true);
   ajax_cmd.send();
 }
 
