@@ -463,7 +463,7 @@ else {
 }
 
 function encodeCmd(s) {
-   return s.replace("&","%26").replace("#","%23");
+   return s.replace(/&/g,"%26").replace(/#/g,"%23");
 }
 
 function send_cmd (cmd) {
