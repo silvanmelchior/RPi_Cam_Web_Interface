@@ -489,7 +489,7 @@ function diskUsage() {
          <button class='btn btn-primary' type='submit' name='action' value='selectNone'><?php echo BTN_SELECTNONE; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='selectAll'><?php echo BTN_SELECTALL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='zipSel'><?php echo BTN_GETZIP; ?></button>
-         <button class='btn btn-danger' type='submit' name='action' value='deleteSel' onclick="return confirm('<?php echo BTN_DELETESEL_CONFIRM; ?>')"><?php echo BTN_DELETESEL; ?></button>
+         <button class='btn btn-warning' type='submit' name='action' value='deleteSel' onclick="return confirm('<?php echo BTN_DELETESEL_CONFIRM; ?>')"><?php echo BTN_DELETESEL; ?></button>
          <button class='btn btn-danger' type='submit' name='action' value='deleteAll' onclick="return confirm('<?php echo BTN_DELETEALL_CONFIRM; ?>')"><?php echo BTN_DELETEALL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='lockSel'><?php echo BTN_LOCKSEL; ?></button>
          <button class='btn btn-primary' type='submit' name='action' value='unlockSel'><?php echo BTN_UNLOCKSEL; ?></button>
