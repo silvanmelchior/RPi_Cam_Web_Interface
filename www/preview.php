@@ -100,7 +100,7 @@
       //global commands
       switch($_POST['action']) {
          case 'deleteAll':
-            maintainFolders(MEDIA_PATH, true, true);
+            maintainFolders(MEDIA_PATH, true, false);
             break;
          case 'selectAll':
             $dSelect = "checked";
