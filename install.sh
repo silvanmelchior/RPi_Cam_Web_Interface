@@ -52,7 +52,7 @@ versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2015, Bob Tidey. RPi Cam $version"
 jpglink="no"
-phpversion=7
+phpversion=7.3
 
 # Config options located in ./config.txt. In first run script makes that file for you.
 if [ ! -e ./config.txt ]; then
@@ -64,7 +64,7 @@ if [ ! -e ./config.txt ]; then
       sudo echo "webpasswd=\"\"" >> ./config.txt
       sudo echo "autostart=\"yes\"" >> ./config.txt
       sudo echo "jpglink=\"no\"" >> ./config.txt
-      sudo echo "phpversion=\"7\"" >> ./config.txt
+      sudo echo "phpversion=\"7.3\"" >> ./config.txt
       sudo echo "" >> ./config.txt
       sudo chmod 664 ./config.txt
 fi
@@ -93,7 +93,7 @@ if [ $# -eq 0 ] || [ "$1" != "q" ]; then
    "User:(blank=nologin)"  5 1   "$user"        5 32 15 0  \
    "Password:"             6 1   "$webpasswd"   6 32 15 0  \
    "jpglink:(yes/no)"      7 1   "$jpglink"     7 32 15 0  \
-   "phpversion:(5/7)"      8 1   "$phpversion"  8 32 15 0  \
+   "phpversion:"           8 1   "$phpversion"  8 32 15 0  \
    2>&1 1>&3 | {
       read -r rpicamdir
       read -r autostart
@@ -217,8 +217,8 @@ else
    sed -i "s/auth_basic\ .*/auth_basic \"Restricted\";/g" $aconf
    sed -i "s/#auth_basic_user_file/\ auth_basic_user_file/g" $aconf
 fi
-if [[ "$phpversion" == "7" ]]; then
-   sed -i "s/\/var\/run\/php5-fpm\.sock;/\/run\/php\/php7.0-fpm\.sock;/g" $aconf
+if [[ "$phpversion" == "7.3" ]]; then
+   sed -i "s/\/var\/run\/php5-fpm\.sock;/\/run\/php\/php7.3-fpm\.sock;/g" $aconf
 fi
 sudo mv $aconf /$aconf
 sudo chmod 644 /$aconf
@@ -235,10 +235,10 @@ if [ "$NGINX_DISABLE_LOGGING" != "" ]; then
 fi
 
 # Configure php-apc
-if [[ "$phpversion" == "7" ]]; then
-	phpnv=/etc/php/7.0
+if [[ "$phpversion" == "7.3" ]]; then
+	phpnv=/etc/php/7.3
 else
-	phpnv=/etc/php5
+	phpnv=/etc/php/$phpversion
 fi
 sudo sh -c "echo \"cgi.fix_pathinfo = 0;\" >> $phpnv/fpm/php.ini"
 sudo mkdir $phpnv/conf.d >/dev/null 2>&1
@@ -338,22 +338,22 @@ if [ -e /var/www$rpicamdir/index.html ]; then
    sudo rm /var/www$rpicamdir/index.html
 fi
 
-if [[ "$phpversion" == "7" ]]; then
-   phpv=php7.0
+if [[ "$phpversion" == "7.3" ]]; then
+   phpv=php7.3
 else
-   phpv=php5
+   phpv=php$phpversion
 fi
 
 if [ "$webserver" == "apache" ]; then
-   sudo apt-get install -y apache2 $phpv $phpv-cli libapache2-mod-$phpv gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y apache2 $phpv $phpv-cli libapache2-mod-$phpv gpac motion zip gstreamer1.0-tools
    if [ $? -ne 0 ]; then exit; fi
    fn_apache
 elif [ "$webserver" == "nginx" ]; then
-   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common $phpv-apcu apache2-utils gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common php-apcu apache2-utils gpac motion zip gstreamer1.0-tools
    if [ $? -ne 0 ]; then exit; fi
    fn_nginx
 elif [ "$webserver" == "lighttpd" ]; then
-   sudo apt-get install -y  lighttpd $phpv-cli $phpv-common $phpv-cgi $phpv gpac motion zip libav-tools gstreamer1.0-tools
+   sudo apt-get install -y  lighttpd $phpv-cli $phpv-common $phpv-cgi $phpv gpac motion zip gstreamer1.0-tools
    if [ $? -ne 0 ]; then exit; fi
    fn_lighttpd
 fi
