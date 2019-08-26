@@ -515,13 +515,15 @@ function cmdHelp() {
       for ($i=0; $i < count($times); $i++) {
          $fMins = $times[$i];
          $j = strpos($fMins, ':');
-         $fMins = substr($fMins, 0, $j) * 60 + substr($fMins, $j+1);
-         if ($fMins < $cMins) {
-            if ($fMins > $maxLessV) {
-              $maxLessV = $fMins;
-              $period = $i;
-            }
-         }
+         if ($j !== false) {
+		   $fMins = substr($fMins, 0, $j) * 60 + substr($fMins, $j+1);
+           if ($fMins < $cMins) {
+             if ($fMins > $maxLessV) {
+               $maxLessV = $fMins;
+               $period = $i;
+             }
+           }
+		 }
       }
       return $period + 5;
    }
