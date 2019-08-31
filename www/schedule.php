@@ -44,6 +44,9 @@
    define('SCHEDULE_DUSKENDMINUTES', 'DuskEnd_Minutes');
    define('SCHEDULE_ALLDAY', 'AllDay');
    define('SCHEDULE_DAYMODE', 'DayMode');
+   define('SCHEDULE_MODE_SUN', '0');
+   define('SCHEDULE_MODE_ALLDAY', '1');
+   define('SCHEDULE_MODE_FIXED', '2');
    define('SCHEDULE_FIXEDTIMES', 'FixedTimes');
    define('SCHEDULE_MANAGEMENTINTERVAL', 'Management_Interval');
    define('SCHEDULE_MANAGEMENTCOMMAND', 'Management_Command');
@@ -160,7 +163,7 @@
                }
             }
             //Backwards compatibility fixes go here
-            if (array_key_exists(SCHEDULE_ALLDAY,$input)) $pars[SCHEDULE_DAYMODE] = '1';
+            if (array_key_exists(SCHEDULE_ALLDAY,$input)) $pars[SCHEDULE_DAYMODE] = SCHEDULE_MODE_ALLDAY;
             if (array_key_exists('Longtitude',$input)) $pars[SCHEDULE_LONGITUDE] = $input['Longtitude'];
             //Duplicate old Day to First AllDay
             if (count($pars[SCHEDULE_COMMANDSON]) < 11) {
@@ -200,7 +203,7 @@
          SCHEDULE_LATITUDE => '52.00',
          SCHEDULE_LONGITUDE => '0.00',
          SCHEDULE_MAXCAPTURE => '0',
-         SCHEDULE_DAYMODE => '1',
+         SCHEDULE_DAYMODE => SCHEDULE_MODE_ALLDAY,
          SCHEDULE_AUTOCAPTUREINTERVAL => '0',
          SCHEDULE_AUTOCAMERAINTERVAL => '0',
          SCHEDULE_TIMES => array("09:00"),
@@ -535,12 +538,12 @@ function cmdHelp() {
 	  return in_array($day,$days[$period]);
    }
    
-   //Return period of day 0=Night,1=Dawn,2=Day,3=Dusk
+   //Return period of day 1=Night,2=Dawn,3=Day,4=Dusk
    function dayPeriod() {
       global $schedulePars;
       $t = getCurrentLocalTime(true);
       switch($schedulePars[SCHEDULE_DAYMODE]) {
-         case 0:
+         case SCHEDULE_MODE_SUN:
             $sr = 60 * getSunrise(SUNFUNCS_RET_DOUBLE);
             $ss = 60 * getSunset(SUNFUNCS_RET_DOUBLE);
             if ($t < ($sr + $schedulePars[SCHEDULE_DAWNSTARTMINUTES])) {
@@ -555,10 +558,10 @@ function cmdHelp() {
                $period = 3;
             }
             break;
-         case 1:
+         case SCHEDULE_MODE_ALLDAY:
             $period = 0;
             break;
-         case 2:
+         case SCHEDULE_MODE_FIXED:
 			$period = findFixedTimePeriod($t);
             break;
       }
@@ -780,7 +783,8 @@ function cmdHelp() {
                      //No capture in progress, Check if day period changing
                      $newDayPeriod = dayPeriod();
 					 $newDay = strftime("%w");
-                     if ($newDayPeriod != $lastDayPeriod || $newDay != $lastDay) {
+//                     if ($newDayPeriod != $lastDayPeriod || (($newDay != $lastDay) && ($schedulePars[SCHEDULE_DAYMODE] == SCHEDULE_MODE_FIXED))) {
+                     if ($newDayPeriod != $lastDayPeriod) {
                         writeLog("New period detected $newDayPeriod");
                         sendCmds($schedulePars[SCHEDULE_MODES][$newDayPeriod], $newDayPeriod);
                         $lastDayPeriod = $newDayPeriod;
