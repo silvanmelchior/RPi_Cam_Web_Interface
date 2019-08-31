@@ -84,9 +84,9 @@ tmpfile=$(mktemp)
 webport="80"
 user=""
 passwd=""
-sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
+sudo awk '/NameVirtualHost \*:/{c+=1}{if(c==1){sub("NameVirtualHost \\*:.*","NameVirtualHost *:'$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
 sudo awk '/Listen/{c+=1}{if(c==1){sub("Listen.*","Listen '$webport'",$0)};print}' /etc/apache2/ports.conf > "$tmpfile" && sudo mv "$tmpfile" /etc/apache2/ports.conf
-sudo awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \*:.*","<VirtualHost *:'$webport'>",$0)};print}' $adefault > "$tmpfile" && sudo mv "$tmpfile" $adefault
+sudo awk '/<VirtualHost \*:/{c+=1}{if(c==1){sub("<VirtualHost \\*:.*","<VirtualHost *:'$webport'>",$0)};print}' $adefault > "$tmpfile" && sudo mv "$tmpfile" $adefault
 sudo sed -i "s/DocumentRoot\ \/var\/www\/.*/DocumentRoot\ \/var\/www$subdir/g" $adefault
 sudo awk '/AllowOverride/{c+=1}{if(c==2){sub("AllowOverride.*","AllowOverride None",$0)};print}' /etc/apache2/sites-available/default > "$tmpfile" && sudo mv "$tmpfile" $adefault
 sudo service apache2 restart
