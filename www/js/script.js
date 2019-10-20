@@ -130,6 +130,23 @@ function send_macroUpdate(i, macro) {
   send_cmd("um " + i + " " + macrovalue);
 }
 
+function hashHandler() {
+  switch(window.location.hash){
+    case '#full':
+    case '#fullscreen':
+      if (mjpeg_img !== null && document.getElementsByClassName("fullscreen").length == 0) {
+        toggle_fullscreen(mjpeg_img);
+      }
+      break;
+    case '#normal':
+    case '#normalscreen':
+      if (mjpeg_img !== null && document.getElementsByClassName("fullscreen").length != 0) {
+        toggle_fullscreen(mjpeg_img);
+      }
+      break;
+  }
+}
+
 //
 // System shutdow, reboot, settime
 //
@@ -481,8 +498,9 @@ function update_preview_delay() {
 // Init
 //
 function init(mjpeg, video_fps, divider) {
-
   mjpeg_img = document.getElementById("mjpeg_dest");
+  hashHandler();
+  window.onhashchange = hashHandler;
   preview_delay = Math.floor(divider / Math.max(video_fps,1) * 1000000);
   if (mjpeg) {
     mjpegmode = 1;
