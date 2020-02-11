@@ -281,6 +281,11 @@
       <script src="js/style_minified.js"></script>
       <script src="js/script.js"></script>
       <script src="js/pipan.js"></script>
+      <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+      <script src="roomba/submit.js"></script>
    </head>
    <body onload="setTimeout('init(<?php echo "$mjpegmode, $video_fps, $divider" ?>);', 100);">
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" <?php getdisplayStyle('navbar', $userLevel); ?>>
@@ -310,7 +315,68 @@
          <?php  if($config['motion_external'] == '1'): ?><a href="motion.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit motion settings</a>&nbsp;&nbsp;<?php endif; ?>
          <a href="schedule.php" class="btn btn-default" <?php getdisplayStyle('settings', $userLevel); ?>>Edit schedule settings</a>
       </div>
-    
+      <div class="container-fluid text-center">
+         <div class="panel-group" id="accordion" <?php getdisplayStyle('settings', $userLevel); ?> >
+            <div class="panel panel-default">
+               <div class="panel-heading">
+                  <h2 class="panel-title">
+                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseZero">Roomba Control</a>
+                  </h2>
+               </div>
+               <div id="collapseZero" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <table class="settingsTable">
+                        <tr>
+                            <td>Driving control:</td>
+                            <td>
+                                <form method="post">
+                                    <div style="text-align:center">
+                                        <input type="button" value="Forward" name="forward" onclick="runCommand(event);"><br>
+						<input type="button" value="Left" name="left" onclick="runCommand(event);">
+						<input type="button" value="Stop" name="stop" onclick="runCommand(event);">
+						<input type="button" value="Right" name="right" onclick="runCommand(event);"><br>
+                                        <input type="button" value="Backward" name="backward" onclick="runCommand(event);">
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Driving mode:</td>
+                            <td>
+                                <form method="post">
+					<div style="text-align:center">
+						<input type="button" value="On" name="open" onclick="runCommand(event);">
+						<input type="button" value="Off" name="close" onclick="runCommand(event);">
+					</div>
+				</form>
+                            </td>
+                        </tr>
+			<tr>
+                            <td>Camera position:</td>
+                            <td>
+                                <form method="post">
+					<input type="button" value="0&deg" name="camera_0" onclick="runCommand(event);">
+					<input type="button" value="30&deg" name="camera_30" onclick="runCommand(event);">
+					<input type="button" value="60&deg" name="camera_60" onclick="runCommand(event);">
+					<input type="button" value="90&deg" name="camera_90" onclick="runCommand(event);">
+				</form>
+                            </td>						
+                        <tr>
+                            <td>Basic controls:</td>
+                            <td>
+                                <form method="post">
+					<input type="button" value="Wake up" name="wake_up" onclick="runCommand(event);"><br>
+					<input type="button" value="Sleep" name="go_sleep" onclick="runCommand(event);"><br>
+					<input type="button" value="Normal clean" name="clean" onclick="runCommand(event);"><br>
+					<input type="button" value="Spot clean" name="spot" onclick="runCommand(event);"><br>
+					<input type="button" value="Seek dock" name="dock" onclick="runCommand(event);">
+				</form>
+                            </td>
+                        </tr>
+                    </table>
+                  </div>				  
+               </div>
+            </div>    
       <div class="container-fluid text-center">
          <div class="panel-group" id="accordion" <?php getdisplayStyle('settings', $userLevel); ?> >
             <div class="panel panel-default">
