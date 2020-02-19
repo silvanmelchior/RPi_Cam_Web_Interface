@@ -55,7 +55,11 @@
 					if ($className == false) {
 						$className = "btn btn-primary";
 					}
-					$otherAtt  = $index[3];
+					if (count($index) > 3) {
+						$otherAtt  = $index[3];
+					} else {
+						$otherAtt  = "";
+					}
 					$buttonString .= '<input id="' . $buttonName . '" type="button" value="' . $buttonName . '" onclick="send_cmd(' . "'sy " . $macroName . "'" . ')" class="' . $className . '" ' . $otherAtt . '>' . "\r\n";
 					$buttonCount += 1;
 				}
