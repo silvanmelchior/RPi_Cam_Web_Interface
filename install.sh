@@ -208,6 +208,8 @@ fi
 #uncomment next line if wishing to always access by http://ip as the root
 #sudo sed -i "s:root /var/www;:root /var/www$rpicamdirEsc;:g" $aconf 
 sudo mv /etc/nginx/sites-available/*default* etc/nginx/sites-available/ >/dev/null 2>&1
+#remove link file as nginx now errors if link invalid
+sudo rm /etc/nginx/sites-enabled/*default* >/dev/null 2>&1
 
 if [ "$user" == "" ]; then
    sed -i "s/auth_basic\ .*/auth_basic \"Off\";/g" $aconf
