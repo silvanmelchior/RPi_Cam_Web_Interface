@@ -1,5 +1,5 @@
 #User buttons definitions
-#maximum of six buttons
+#maximum of twelve buttons
 #button name,macro,button styles,other attributes
 Button One,button1.sh,btn btn-danger btn-lg,style="width:50%" autofocus
 #Warning Button,button2.sh,btn btn-warning btn-lg,style="width:50%"

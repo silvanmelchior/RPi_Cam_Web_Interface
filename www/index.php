@@ -46,7 +46,7 @@
 		$data = file_get_contents("userbuttons");
 		$lines = explode("\n", $data);
 		foreach($lines as $line) {
-			if (strlen($line) && (substr($line, 0, 1) != '#') && $buttonCount < 6) {
+			if (strlen($line) && (substr($line, 0, 1) != '#') && $buttonCount < 12) {
 				$index = explode(",",$line);
 				if ($index !== false) {
 					$buttonName = $index[0];
