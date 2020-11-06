@@ -82,12 +82,13 @@ function set_preset(value) {
   document.getElementById("MP4Box_fps").value = values[3];
   document.getElementById("image_width").value = values[4];
   document.getElementById("image_height").value = values[5];
+  document.getElementById("fps_divider").value = values[6];
   
   set_res();
 }
 
 function set_res() {
-  send_cmd("px " + document.getElementById("video_width").value + " " + document.getElementById("video_height").value + " " + document.getElementById("video_fps").value + " " + document.getElementById("MP4Box_fps").value + " " + document.getElementById("image_width").value + " " + document.getElementById("image_height").value);
+  send_cmd("px " + document.getElementById("video_width").value + " " + document.getElementById("video_height").value + " " + document.getElementById("video_fps").value + " " + document.getElementById("MP4Box_fps").value + " " + document.getElementById("image_width").value + " " + document.getElementById("image_height").value + " " + document.getElementById("fps_divider").value);
   update_preview_delay();
   updatePreview(true);
 }

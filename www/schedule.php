@@ -405,7 +405,7 @@ function cmdHelp() {
              echo "<tr><td>vi</td><td>number</td><td>set video split interval in seconds. 0=Off</td></tr>";
              echo "<tr><td>an</td><td>text</td><td>set annotation</td></tr>";
              echo "<tr><td>ab</td><td>0/1</td><td>annotation background</td></tr>";
-             echo "<tr><td>px</td><td>AAAA BBBB CC DD EEEE FFFF</td><td>set video+img resolution  video = AxB px, C fps, boxed with D fps, image = ExF px)</td></tr>";
+             echo "<tr><td>px</td><td>AAAA BBBB CC DD EEEE FFFF GG</td><td>set video+img resolution  video = AxB px, C fps, divider G,boxed with D fps, image = ExF px)</td></tr>";
              echo "<tr><td>as</td><td>number</td><td>set text size (v3 only)  0-99</td></tr>";
              echo "<tr><td>at</td><td>E YYY UUU VVV</td><td>set custom text colour (v3 only)</td></tr>";
              echo "<tr><td>ac</td><td>E YYY UUU VVV</td><td>set custom background colour (v3 only)</td></tr>";
