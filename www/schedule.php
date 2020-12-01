@@ -472,6 +472,7 @@ function cmdHelp() {
 		$cmds = explode(';', $cmdString);
 	    foreach ($cmds as $cmd) {
 		  if ($cmd != "") {
+			$cmd = trim($cmd);
 			writeLog("Send $cmd");
 			$fifo = fopen($schedulePars[SCHEDULE_FIFOOUT], "w");
 			fwrite($fifo, $cmd . "\n");
