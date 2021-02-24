@@ -5,12 +5,12 @@
    //Text labels here
    define('BTN_DOWNLOAD', 'Download');
    define('BTN_DELETE', 'Delete');
-   define('BTN_DELETE_CONFIRM', 'Are you sure to delete this file?');
+   define('BTN_DELETE_CONFIRM', 'Are you sure you want to delete this file?');
    define('BTN_CONVERT', 'Start Convert');
    define('BTN_DELETEALL', 'Delete All');
-   define('BTN_DELETEALL_CONFIRM', 'Are you sure to delete all items?');
+   define('BTN_DELETEALL_CONFIRM', 'Are you sure you want to delete all items?');
    define('BTN_DELETESEL', 'Delete Selected');
-   define('BTN_DELETESEL_CONFIRM', 'Are you sure to delete selected items?');
+   define('BTN_DELETESEL_CONFIRM', 'Are you sure you want to delete selected items?');
    define('BTN_SELECTALL', 'Select All');
    define('BTN_SELECTNONE', 'Deselect');
    define('BTN_GETZIP', 'Get Zip');
