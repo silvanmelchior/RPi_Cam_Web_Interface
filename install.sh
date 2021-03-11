@@ -222,6 +222,8 @@ fi
 if [[ "$phpversion" == "7.3" ]]; then
    sed -i "s/\/var\/run\/php5-fpm\.sock;/\/run\/php\/php7.3-fpm\.sock;/g" $aconf
 fi
+sudo sed -i -E "s/(listen.+?)80/\1$webport/g" $aconf
+sudo sed -i -E "s/root \/var\/www/root \/var\/www$rpicamdirEsc/" $aconf
 sudo mv $aconf /$aconf
 sudo chmod 644 /$aconf
 if [ ! -e /etc/nginx/sites-enabled/rpicam ]; then
