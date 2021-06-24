@@ -422,7 +422,7 @@ function diskUsage() {
          echo "<option value='$tf'  $selected>$tfStr</option>";
       }
       if ($timeFilter >= $timeFilterMax) $selected = "selected"; else $selected = "";
-      $tfStr = $timeFilterMax * 24 . '+ hours old';
+      $tfStr = ($timeFilterMax-2) * 24 . '+ hours old';
       echo "<option value='$timeFilterMax'  $selected>$tfStr</option>";
       echo '</select>';
 	  echo '<br>';
