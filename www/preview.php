@@ -337,7 +337,7 @@
             } else {
                $timeD = $nowTime - $fTime;
                if ($timeFilter == $timeFilterMax) {
-                  $include = ($timeD >= 86400 * ($timeFilter-1));
+                  $include = ($timeD >= 86400 * ($timeFilter - 2));
                } else {
                   $include = ($timeD >= (86400 * ($timeFilter - 2))) && ($timeD < (($timeFilter - 1) * 86400));
                }
