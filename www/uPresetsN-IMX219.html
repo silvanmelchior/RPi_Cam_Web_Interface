@@ -1,15 +1,17 @@
 <option value="1920 1080 30 30 3280 2464">Select option...</option>
 <option value="1920 1080 30 30 3280 2464">N-IMX219-30fps-Full HD 1080p 16:9</option>
-<option value="3280 2464 15 15 3280 2464">N-IMX219-15fps-Full Chip 2959 X 1944 4:3</option>
 <option value="1640 1232 40 40 3280 2464">N-IMX219-40fps-Max View 1640 X 1232 4:3</option>
 <option value="1640 922 40 40 3280 2464">N-IMX219-40fps-Max View 1640 X 922 16:9</option>
-<option value="1280 720 90 90 3280 2464">N-IMX219-90fps-HD 720p 16:9</option>
+<option value="1280 720 60 60 3280 2464">N-IMX219-90fps-HD 720p 16:9</option>
 <option value="640 480 90 90 3280 2464">N-IMX219-90fps-SD TV 640p 4:3</option>
 <option value="1920 1080 01 30 3280 2464">Full HD Timelapse (x30) 1080p 16:9</option>
 
-
 # Version 2.x (IMX219)
 # H264 Encoder Limits are 1920 X 1080 based on the GPU - Exploring Higher Frame Rate options and how that might be recordable - They just don't record video and the button does not work.
+# Automatic Error occurs when you set capture resolutions above 1920(H) or larger then 1080(V) - Removed <option value="3280 2464 15 15 3280 2464">N-IMX219-15fps-Full Chip 2959 X 1944 4:3</option>
+# Error MSG - "Error in RaspiMJPEG: Restart RaspiMJPEG (./RPi_CAm_Web_Interface_Installer.sh start) or the whole RPi."
+# How does 1640 X 1232 work?  It does I just don't know how - How high could you go as I thought 1080(V) was the max for the GPU encode
+#720P changed to 60fps as that recorded - 90fps did not work - This may require a RasPi 3 - I am using the original CPU/GPU Combo
 
 # Mode	Size	Aspect Ratio	Frame rates	FOV	Binning
 # 0	automatic selection
