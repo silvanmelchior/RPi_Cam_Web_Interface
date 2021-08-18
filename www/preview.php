@@ -139,12 +139,14 @@
          case 'updateSizeOrder':
             if(!empty($_POST['previewSize'])) {
                $previewSize = $_POST['previewSize'];
-               if ($previewSize < 100 || $previewSize > 1920) $previewSize = 640;
+               $previewSize = max($previewSize,100);
+			   $previewSize = min($previewSize, 1920);
                setcookie("previewSize", $previewSize, time() + (86400 * 365), "/");
             }        
             if(!empty($_POST['thumbSize'])) {
                $thumbSize = $_POST['thumbSize'];
-               if ($thumbSize < 32 || $thumbSize > 320) $thumbSize = 96;
+               $thumbSize = max($thumbSize, 32);
+			   $thumbSize = min($thumbSize, 320);
                setcookie("thumbSize", $thumbSize, time() + (86400 * 365), "/");
             }        
             break;
