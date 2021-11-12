@@ -42,6 +42,21 @@ if [ $(dpkg-query -W -f='${Status}' "dialog" 2>/dev/null | grep -c "ok installed
   sudo apt-get install -y dialog
 fi
 
+#Legacy support Bullseye
+read -d . VERSION < /etc/debian_version
+echo $VERSION
+if [ $VERSION  -eq 10 ]; then
+   phpversion=7.3
+elif [ $VERSION -eq 11 ]; then
+   phpversion=7.4
+   sudo sed -i 's/^camera_auto_detect=1/#camera_auto_detect=1/g' /boot/config.txt
+   sudo grep -qxF 'start_x=1' /boot/config.txt || sudo echo 'start_x=1' >> /boot/config.txt
+   sudo grep -qxF 'gpu_mem=256' /boot/config.txt || sudo echo 'gpu_mem=256' >> /boot/config.txt
+   sudo mkdir -p /opt/vc/bin
+else
+   phpversion=7.0
+fi
+
 # Terminal colors
 color_red="tput setaf 1"
 color_green="tput setaf 2"
@@ -52,7 +67,6 @@ versionfile="./www/config.php"
 version=$(cat $versionfile | grep "'APP_VERSION'" | cut -d "'" -f4)
 backtitle="Copyright (c) 2015, Bob Tidey. RPi Cam $version"
 jpglink="no"
-phpversion=7.3
 
 # Config options located in ./config.txt. In first run script makes that file for you.
 if [ ! -e ./config.txt ]; then
