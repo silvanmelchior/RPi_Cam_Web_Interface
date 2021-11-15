@@ -233,7 +233,9 @@ else
    sed -i "s/auth_basic\ .*/auth_basic \"Restricted\";/g" $aconf
    sed -i "s/#auth_basic_user_file/\ auth_basic_user_file/g" $aconf
 fi
-if [[ "$phpversion" == "7.3" ]]; then
+if [[ "$phpversion" == "7.4" ]]; then
+   sed -i "s/\/var\/run\/php5-fpm\.sock;/\/run\/php\/php7.4-fpm\.sock;/g" $aconf
+elif [[ "$phpversion" == "7.3" ]]; then
    sed -i "s/\/var\/run\/php5-fpm\.sock;/\/run\/php\/php7.3-fpm\.sock;/g" $aconf
 fi
 sudo sed -i -E "s/(listen.+?)80/\1$webport/g" $aconf
