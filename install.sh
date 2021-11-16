@@ -78,7 +78,7 @@ if [ ! -e ./config.txt ]; then
       sudo echo "webpasswd=\"\"" >> ./config.txt
       sudo echo "autostart=\"yes\"" >> ./config.txt
       sudo echo "jpglink=\"no\"" >> ./config.txt
-      sudo echo "phpversion=\"7.3\"" >> ./config.txt
+      sudo echo "phpversion=\"$phpversion\"" >> ./config.txt
       sudo echo "" >> ./config.txt
       sudo chmod 664 ./config.txt
 fi
