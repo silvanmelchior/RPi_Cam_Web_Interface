@@ -84,7 +84,8 @@ video_split 0
 #MP4Box Off=leave as raw h264, background=box in background
 MP4Box background
 MP4Box_fps 25
-MP4Box_cmd (set -e;MP4Box -fps %i -add %s %s > /dev/null 2>&1;rm "%s";) &
+#MP4Box_cmd (set -e;MP4Box -fps %i -add %s %s > /dev/null 2>&1;rm "%s";) &
+MP4Box_cmd (set -e;FPS=%i;TNAME='%s';FNAME='%s';LOGS="$TNAME.log";rm -f "$FNAME";if MP4Box -fps $FPS -add "$TNAME" "$FNAME" > "$LOGS" 2>&1;then touch -r "$TNAME" "$FNAME"; rm "$TNAME" "$LOGS";else mv "$TNAME" "$TNAME.bad";fi;) &
 #
 # Image Options
 #
