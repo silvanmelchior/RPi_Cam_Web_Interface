@@ -3,7 +3,7 @@
 	define('LBASE_DIR',dirname(__FILE__));
 	//Global defines and utility functions
 	// version string 
-	define('APP_VERSION', 'v6.6.20');
+	define('APP_VERSION', 'v6.6.21');
 
 	// name of this application
 	define('APP_NAME', 'RPi Cam Control');
@@ -199,13 +199,24 @@
 				$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
 				if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile");
 			}
-			if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
-				$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
-				if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
-			}
-			if ($t == 'v' && file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264")) {
-				$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264");
-				if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.h264");
+			if ($t == 'v') {
+				$rFile = substr($tFile,0, strrpos($tFile, '.'));
+				if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat")) {
+					$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+					if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$tFile.dat");
+				}
+				if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264")) {
+					$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264");
+					if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264");
+				}
+				if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264.bad")) {
+					$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264.bad");
+					if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264.bad");
+				}
+				if (file_exists(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264.log")) {
+					$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264.log");
+					if ($del) unlink(LBASE_DIR . '/' . MEDIA_PATH . "/$rFile.h264.log");
+				}
 			}
 		}
 		$size += filesize_n(LBASE_DIR . '/' . MEDIA_PATH . "/$d");
