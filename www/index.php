@@ -26,6 +26,7 @@
    $options_mf = array('Off' => '0', 'On' => '1');
    $options_cn = array('First' => '1', 'Second' => '2');
    $options_st = array('Off' => '0', 'On' => '1');
+   $options_hp = array('Off' => '0', 'On' => '1');
    
    function initCamPos() {
       $tr = fopen("pipan_bak.txt", "r");
@@ -530,6 +531,10 @@
                            <td>
                               <?php makeInput('log_size', 6, null, 'number'); ?><input type="button" value="OK" onclick="send_cmd('ls ' + document.getElementById('log_size').value)">
                            </td>
+                        </tr>
+                        <tr>
+                           <td>HDMI Preview, default: 'off'</td>
+                           <td><select onchange="send_cmd('hp ' + this.value)"><?php makeOptions($options_hp, 'hdmi_preview'); ?></select></td>
                         </tr>
                      </table>
                   </div>
