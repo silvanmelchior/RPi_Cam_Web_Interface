@@ -449,6 +449,7 @@ function cmdHelp() {
              echo "<tr><td>st</td><td>0/1</td><td>Off/On Camera statistics</td></tr>";
              echo "<tr><td>qp</td><td>A BB CC</td><td>Set h264 encoding pars A=minimise_frag BB=initial_quant CC=encode_qp</td></tr>";
              echo "<tr><td>ls</td><td>number</td><td>Set Max log size. 0 disable logging</td></tr>";
+             echo "<tr><td>hp</td><td>number</td><td>Set hdmi_preview off/on</td></tr>";
            echo "</table>";
          echo "</div>";
        echo "</div>";
