@@ -504,7 +504,7 @@
                            </td>
                         </tr>
                         <tr>
-                           <td>Mininimise frag (0/1), default 0:<br>Init Quantisation, default 25:<br>Encoding qp, default 31:</td>
+                           <td>Minimise frag (0/1), default 0:<br>Init Quantisation, default 25:<br>Encoding qp, default 31:</td>
                            <td>
                               MF: <?php makeInput('minimise_frag', 4, null, 'number'); ?><br>
                               IQ: <?php makeInput('initial_quant', 4, null, 'number'); ?><br>
