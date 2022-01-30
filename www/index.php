@@ -474,7 +474,7 @@
                            </td>
                         </tr>
                         <tr>
-                           <td>Shutter speed (0...cameraMax uS), default 0:</td>
+                           <td>Shutter speed (0...CameraMax uS), default 0:</td>
                            <td><?php makeInput('shutter_speed', 8, null, 'number'); ?><input type="button" value="OK" onclick="send_cmd('ss ' + document.getElementById('shutter_speed').value)">
                            </td>
                         </tr>
