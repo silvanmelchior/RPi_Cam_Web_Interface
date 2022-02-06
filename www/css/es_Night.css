@@ -14,6 +14,19 @@ body {
 	color: #C0C0C0;
 }
 
+.panel-collapse {
+    background-color: #202020;
+    color: #C0C0C0;
+}
+.settingsTable input{
+    background-color: #202020;
+    color: #C0C0C0;
+}
+.settingsTable select{
+    background-color: #202020;
+    color: #C0C0C0;
+}
+
 fieldset {
    color:#808080;
 }
