@@ -207,11 +207,12 @@
    }
 
    if (isset($_POST['extrastyle'])) {
-      if (file_exists('css/' . $_POST['extrastyle'])) {
-         $fp = fopen(BASE_DIR . '/css/extrastyle.txt', "w");
-         fwrite($fp, $_POST['extrastyle']);
-         fclose($fp);
-      }
+	  $extra = $_POST['extrastyle'];
+      if ((strpos($extra, '/') === false) && file_exists('css/' . $extra)) {
+		 $fp = fopen(BASE_DIR . '/css/extrastyle.txt', "w");
+		 fwrite($fp, $extra);
+		 fclose($fp);
+	  }
    }
 
    function getDisplayStyle($context, $userLevel) {
