@@ -54,6 +54,13 @@ elif [ $VERSION -eq 11 ]; then
 #   sudo grep -qxF 'start_x=1' /boot/config.txt || sudo sed -i '$ a start_x=1' /boot/config.txt
 #   sudo grep -qxF 'gpu_mem=128' /boot/config.txt || sudo sed -i '$ a gpu_mem=128' /boot/config.txt
    sudo mkdir -p /opt/vc/bin
+elif [ $VERSION -eq 12 ]; then
+   phpversion=8.2
+#following is done by enable legacy camera in updates raspi-config
+#   sudo sed -i 's/^camera_auto_detect=1/#camera_auto_detect=1/g' /boot/config.txt
+#   sudo grep -qxF 'start_x=1' /boot/config.txt || sudo sed -i '$ a start_x=1' /boot/config.txt
+#   sudo grep -qxF 'gpu_mem=128' /boot/config.txt || sudo sed -i '$ a gpu_mem=128' /boot/config.txt
+   sudo mkdir -p /opt/vc/bin
 else
    phpversion=7.0
 fi
