@@ -14,3 +14,4 @@ etc/nginx/sites-available/default
 # settings
 etc/raspimjpeg/raspimjpeg
 bin/work
+bin/raspimjpeg.bak

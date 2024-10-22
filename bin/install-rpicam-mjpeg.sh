@@ -36,7 +36,7 @@ install_rpicam_mjpeg() {
 
     meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=enabled -Denable_qt=enabled -Denable_opencv=disabled -Denable_tflite=disabled
     meson compile -C build
-    sudo meson install -C build --destdir=/usr/local
+    sudo meson install -C build
 
     cd ..
 }
@@ -58,4 +58,4 @@ if [ -e ./raspimjpeg ]; then
     mv ./raspimjpeg ./raspimjpeg.bak
 fi
 
-ln -s /usr/local/bin/rpicam-mjpeg ./raspimjpeg
+ln -s `which rpicam-mjpeg` ./raspimjpeg
