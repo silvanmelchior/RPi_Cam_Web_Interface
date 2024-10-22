@@ -17,9 +17,7 @@ bin/install-rpicam-mjpeg.sh
 ```bash
 ./start.sh
 ```
-NOTE: When you run this command, you may encounter error: `bash: line 1: /usr/bin/raspimjpeg: cannot execute: required file not found`, this is due to historical reasons, which can be safely ignored.
-
-Finally, visit our program at: http://localhost/html/ and start using it!
+Now, visit our program at: http://localhost/html/ and start using it!
 
 -----
 
