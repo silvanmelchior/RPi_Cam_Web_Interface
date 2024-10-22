@@ -3,6 +3,7 @@ Installation
 
 ### Step 1: Install dependencies + [rpicam-mjpeg](https://github.com/consiliumsolutions/p05a-rpicam-apps)
 ```bash
+git clone git@github.com:consiliumsolutions/RPi_Cam_Web_Interface.git
 cd RPi_Cam_Web_Interface
 bin/install-rpicam-mjpeg.sh
 ```
