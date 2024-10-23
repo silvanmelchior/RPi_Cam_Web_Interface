@@ -2,7 +2,7 @@
 set -e
 
 LIBCAMERA_REMOTE=https://github.com/raspberrypi/libcamera.git
-RPICAM_APPS_REMOTE=git@github.com:consiliumsolutions/p05a-rpicam-apps.git
+RPICAM_APPS_REMOTE=https://github.com/Windermere-Technology/rpicam-mjpeg.git
 
 # Compile and install libcamera from source
 install_libcamera() {
