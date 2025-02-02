@@ -1,0 +1,96 @@
+/*! Modern.css classes dark viewing conditions */
+
+body {
+    background-color: #181F2C;
+    color: #ffffff;
+}
+
+
+
+.btn-default {
+    background-color: #404040;
+	color: #C0C0C0;
+}
+
+.panel-default{
+    background-color: #4D5A71;
+	color: #ffffff;
+    border-width: 0px;
+    border-radius: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.panel-default>.panel-heading {
+    background-color: #4D5A71;
+	color: #ffffff;
+    border-width: 0px;
+    border-radius: 15px;
+}
+
+.panel-collapse {
+    background-color: #1C2433;
+    color: #ffffff;
+}
+.settingsTable input{
+    background-color: #212A3B;
+    color: #586B90;
+    margin: 5px;
+    padding: 2px;
+    min-width: 60px;
+    border-color: #586B90;
+    border-width: 2px;
+    border-radius: 15px;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+.settingsTable select{
+    background-color: #212A3B;
+    color: #586B90;
+    margin: 5px;
+    border-color: #586B90;
+    border-radius: 15px;
+    border-width: 2px;
+    text-align: center;
+}
+
+fieldset {
+   color:#586B90;
+   background-color: #212A3B;
+   border-color: #586B90;
+   border-radius: 15px;
+   padding: 10px;
+}
+
+fieldset.fileicon {
+    border-color: #586B90;
+    border-width: 2px;
+ }
+
+
+input{
+    background-color: #212A3B;
+    color: #586B90;
+    margin: 5px;
+    padding: 2px;
+    min-width: 60px;
+    border-color: #586B90;
+    border-width: 2px;
+    border-radius: 15px;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+select{
+    background-color: #212A3B;
+    color: #586B90;
+    margin: 5px;
+    border-color: #586B90;
+    border-radius: 15px;
+    border-width: 2px;
+    text-align: center;
+}
+
+#background {
+	background-color: #131313;
+}
