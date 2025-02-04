@@ -157,6 +157,32 @@ else
    rpicamdirEsc=""
 fi
 
+install_gpac()
+{
+    # if gpac is already installed, do nothing
+    if `command -v gpac >/dev/null`; then
+        return
+    fi
+
+    # install via apt if available
+    if `sudo apt install -y gpac`; then
+        return
+    fi
+
+    # build from source
+    work=$(mktemp -d)
+    pushd $work
+
+    sudo apt install build-essential pkg-config g++ git cmake yasm
+    git clone https://github.com/gpac/gpac.git gpac
+    cd gpac
+    ./configure
+    make
+    sudo make install
+
+    popd
+}
+
 fn_stop ()
 { # This is function stop
         sudo killall raspimjpeg 2>/dev/null
@@ -373,16 +399,19 @@ else
    phpv=php$phpversion
 fi
 
+install_gpac
+if [ $? -ne 0 ]; then exit; fi
+
 if [ "$webserver" == "apache" ]; then
-   sudo apt-get install -y apache2 $phpv $phpv-cli libapache2-mod-$phpv gpac motion zip gstreamer1.0-tools
+   sudo apt-get install -y apache2 $phpv $phpv-cli libapache2-mod-$phpv motion zip gstreamer1.0-tools
    if [ $? -ne 0 ]; then exit; fi
    fn_apache
 elif [ "$webserver" == "nginx" ]; then
-   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common php-apcu apache2-utils gpac motion zip gstreamer1.0-tools
+   sudo apt-get install -y nginx $phpv-fpm $phpv-cli $phpv-common php-apcu apache2-utils motion zip gstreamer1.0-tools
    if [ $? -ne 0 ]; then exit; fi
    fn_nginx
 elif [ "$webserver" == "lighttpd" ]; then
-   sudo apt-get install -y  lighttpd $phpv-cli $phpv-common $phpv-cgi $phpv gpac motion zip gstreamer1.0-tools
+   sudo apt-get install -y  lighttpd $phpv-cli $phpv-common $phpv-cgi $phpv motion zip gstreamer1.0-tools
    if [ $? -ne 0 ]; then exit; fi
    fn_lighttpd
 fi
